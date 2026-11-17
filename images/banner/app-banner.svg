@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="1200" height="400">
+  <rect width="1200" height="400" rx="24" fill="#1B5E35"/>
+  <circle cx="1050" cy="200" r="160" fill="#4CAF50" opacity="0.3"/>
+  <text x="1050" y="225" font-size="120" text-anchor="middle">📱</text>
+  <text x="80" y="120" font-family="'Poppins', sans-serif" font-size="14" font-weight="700" fill="#A5D66A">FRESHCART MOBILE APP</text>
+  <text x="80" y="180" font-family="'Poppins', sans-serif" font-size="40" font-weight="800" fill="#ffffff">Shop Groceries Anytime, Anywhere</text>
+  <text x="80" y="225" font-family="'Poppins', sans-serif" font-size="18" fill="#E8F5E9">Get exclusive app-only coupons, live GPS order tracking, and 15-minute express delivery.</text>
+  <text x="80" y="320" font-family="'Poppins', sans-serif" font-size="20" fill="#FFD54F" font-weight="600">⚡ Use code APP100 for ₹100 cashback on your first app order</text>
+</svg>

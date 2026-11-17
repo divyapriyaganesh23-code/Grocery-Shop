@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreshCart - Fresh Groceries Delivered to Your Door</title>
+  <!-- Favicon -->
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <!-- Top Notification Bar -->
+  <div class="top-bar">
+    <div class="container">
+      <div class="top-bar-left">
+        <span><i class="fas fa-truck-fast"></i> Free Delivery on all grocery orders above ₹500!</span>
+        <span><i class="fas fa-clock"></i> Express 2-Hour Delivery Available</span>
+      </div>
+      <div class="top-bar-right">
+        <span><i class="fas fa-phone-volume"></i> Support: +91 98765 43210</span>
+        <a href="contact.html"><i class="fas fa-location-dot"></i> Bengaluru, India</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Navigation Header -->
+  <header class="main-header">
+    <div class="container header-container">
+      <!-- Brand Logo -->
+      <a href="index.html" class="brand-logo">
+        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+        <span>Fresh</span>Cart
+      </a>
+
+      <!-- Header Search Bar -->
+      <div class="header-search">
+        <form>
+          <input type="text" placeholder="Search fresh fruits, vegetables, dairy, grains..." aria-label="Search products">
+          <button type="submit" aria-label="Search"><i class="fas fa-magnifying-glass"></i></button>
+        </form>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="products.html" class="nav-link">Products</a>
+        <a href="products.html?category=fruits" class="nav-link">Categories</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <a href="login.html" class="action-btn" title="Account / Sign In">
+          <i class="far fa-user"></i>
+        </a>
+        <a href="cart.html" class="action-btn" title="Shopping Cart">
+          <i class="fas fa-basket-shopping"></i>
+          <span class="badge-count cart-count-badge" style="display: none;">0</span>
+        </a>
+        <button class="mobile-toggle" aria-label="Open mobile menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Slide Drawer -->
+  <div class="drawer-overlay"></div>
+  <aside class="mobile-drawer">
+    <div class="drawer-header">
+      <a href="index.html" class="brand-logo" style="font-size: 1.35rem;">
+        <div class="logo-icon" style="width: 32px; height: 32px; font-size: 1rem;"><i class="fas fa-leaf"></i></div>
+        <span>Fresh</span>Cart
+      </a>
+      <button class="drawer-close" aria-label="Close menu"><i class="fas fa-times"></i></button>
+    </div>
+
+    <!-- Drawer Search -->
+    <div class="drawer-search" style="margin-bottom: 20px;">
+      <form class="header-search" style="display: block;">
+        <div style="display: flex; background: var(--bg-cream); border: 1px solid var(--border-color); border-radius: 999px; padding: 4px 8px 4px 14px;">
+          <input type="text" placeholder="Search groceries..." style="width: 100%; background: transparent;">
+          <button type="submit" style="background: var(--primary); color: white; width: 32px; height: 32px; border-radius: 50%;"><i class="fas fa-search"></i></button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Drawer Links -->
+    <nav class="drawer-nav">
+      <a href="index.html" class="active"><i class="fas fa-home" style="margin-right: 10px; color: var(--primary);"></i> Home</a>
+      <a href="about.html"><i class="fas fa-info-circle" style="margin-right: 10px; color: var(--primary);"></i> About Us</a>
+      <a href="products.html"><i class="fas fa-boxes-stacked" style="margin-right: 10px; color: var(--primary);"></i> All Products</a>
+      <a href="cart.html"><i class="fas fa-basket-shopping" style="margin-right: 10px; color: var(--primary);"></i> Shopping Cart (<span class="cart-count-badge">0</span>)</a>
+      <a href="contact.html"><i class="fas fa-envelope" style="margin-right: 10px; color: var(--primary);"></i> Contact Us</a>
+      <a href="login.html"><i class="fas fa-user-circle" style="margin-right: 10px; color: var(--primary);"></i> Sign In / Register</a>
+    </nav>
+
+    <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-light); font-size: 0.85rem; color: var(--text-muted);">
+      <p><i class="fas fa-phone"></i> +91 98765 43210</p>
+      <p style="margin-top: 6px;"><i class="fas fa-truck"></i> Fast 2-Hour Delivery</p>
+    </div>
+  </aside>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-card">
+        <div class="hero-content">
+          <div class="hero-tag">
+            <i class="fas fa-seedling"></i> 100% Certified Organic &amp; Farm Fresh
+          </div>
+          <h1 class="hero-title">
+            Fresh Groceries,
+            <span>Delivered to Your Door.</span>
+          </h1>
+          <p class="hero-desc">
+            Hand-picked organic fruits, farm-fresh vegetables, dairy, artisanal bakery items, and daily household essentials delivered straight from farmers to your kitchen in just 2 hours.
+          </p>
+          <div class="hero-actions">
+            <a href="products.html" class="btn btn-secondary btn-lg">
+              <i class="fas fa-bag-shopping"></i> Shop Now
+            </a>
+            <a href="#special-offers" class="btn btn-outline btn-lg" style="border-color: #ffffff; color: #ffffff;">
+              <i class="fas fa-tag"></i> Today's Deals
+            </a>
+          </div>
+
+          <div class="hero-features">
+            <div class="hero-feat-item">
+              <i class="fas fa-bolt"></i> 2-Hour Delivery
+            </div>
+            <div class="hero-feat-item">
+              <i class="fas fa-apple-whole"></i> 100% Farm Fresh
+            </div>
+            <div class="hero-feat-item">
+              <i class="fas fa-tags"></i> Best Market Price
+            </div>
+            <div class="hero-feat-item">
+              <i class="fas fa-arrows-rotate"></i> Easy Returns
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="hero-img-wrap">
+            <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80" alt="Fresh Organic Vegetables and Fruits" onerror="this.onerror=null; this.src='images/banner/hero-banner.svg';">
+          </div>
+
+          <!-- Floating Badges -->
+          <div class="floating-badge floating-badge-1">
+            <div class="fb-icon fb-green"><i class="fas fa-leaf"></i></div>
+            <div class="fb-text">
+              <h4>100% Organic</h4>
+              <p>Chemical &amp; Pesticide Free</p>
+            </div>
+          </div>
+
+          <div class="floating-badge floating-badge-2">
+            <div class="fb-icon fb-orange"><i class="fas fa-clock"></i></div>
+            <div class="fb-text">
+              <h4>2-Hour Express</h4>
+              <p>Safe Temperature Delivery</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Product Categories -->
+  <section class="categories-section">
+    <div class="container">
+      <div class="section-title-wrap">
+        <span class="section-badge">Explore Categories</span>
+        <h2 class="section-title">Shop by Category</h2>
+        <p class="section-subtitle">Discover our handpicked categories featuring daily essentials, organic harvests, and premium pantry staples.</p>
+      </div>
+
+      <div class="categories-grid">
+        <a href="products.html?category=fruits" class="category-card">
+          <div class="cat-icon-wrap">
+            <img src="images/categories/fruits.svg" alt="Fresh Fruits">
+          </div>
+          <h4 class="cat-name">Fruits</h4>
+          <span class="cat-count">4 Products</span>
+        </a>
+
+        <a href="products.html?category=vegetables" class="category-card">
+          <div class="cat-icon-wrap">
+            <img src="images/categories/vegetables.svg" alt="Green Vegetables">
+          </div>
+          <h4 class="cat-name">Vegetables</h4>
+          <span class="cat-count">4 Products</span>
+        </a>
+
+        <a href="products.html?category=dairy" class="category-card">
+          <div class="cat-icon-wrap">
+            <img src="images/categories/dairy.svg" alt="Dairy Products">
+          </div>
+          <h4 class="cat-name">Dairy</h4>
+          <span class="cat-count">4 Products</span>
+        </a>
+
+        <a href="products.html?category=bakery" class="category-card">
+          <div class="cat-icon-wrap">
+            <img src="images/categories/bakery.svg" alt="Bakery Items">
+          </div>
+          <h4 class="cat-name">Bakery</h4>
+          <span class="cat-count">4 Products</span>
+        </a>
+
+        <a href="products.html?category=snacks" class="category-card">
+          <div class="cat-icon-wrap">
+            <img src="images/categories/snacks.svg" alt="Snacks &amp; Munchies">
+          </div>
+          <h4 class="cat-name">Snacks</h4>
+          <span class="cat-count">4 Products</span>
+        </a>
+
+        <a href="products.html?category=beverages" class="category-card">
+          <div class="cat-icon-wrap">
+            <img src="images/categories/beverages.svg" alt="Cold Beverages">
+          </div>
+          <h4 class="cat-name">Beverages</h4>
+          <span class="cat-count">4 Products</span>
+        </a>
+
+        <a href="products.html?category=rice" class="category-card">
+          <div class="cat-icon-wrap">
+            <img src="images/categories/grains.svg" alt="Rice &amp; Grains">
+          </div>
+          <h4 class="cat-name">Rice &amp; Grains</h4>
+          <span class="cat-count">4 Products</span>
+        </a>
+
+        <a href="products.html?category=household" class="category-card">
+          <div class="cat-icon-wrap">
+            <img src="images/categories/household.svg" alt="Household Essentials">
+          </div>
+          <h4 class="cat-name">Household</h4>
+          <span class="cat-count">4 Products</span>
+        </a>
+
+        <a href="products.html?category=spices" class="category-card">
+          <div class="cat-icon-wrap">
+            <img src="images/categories/spices.svg" alt="Aromatic Spices">
+          </div>
+          <h4 class="cat-name">Spices</h4>
+          <span class="cat-count">4 Products</span>
+        </a>
+
+        <a href="products.html?category=personal%20care" class="category-card">
+          <div class="cat-icon-wrap">
+            <img src="images/categories/personal.svg" alt="Personal Care">
+          </div>
+          <h4 class="cat-name">Personal Care</h4>
+          <span class="cat-count">3 Products</span>
+        </a>
+
+        <a href="products.html?category=frozen%20foods" class="category-card">
+          <div class="cat-icon-wrap">
+            <img src="images/categories/frozen.svg" alt="Frozen Foods">
+          </div>
+          <h4 class="cat-name">Frozen Foods</h4>
+          <span class="cat-count">3 Products</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Popular Products Section -->
+  <section class="products-section">
+    <div class="container">
+      <div class="section-title-wrap">
+        <span class="section-badge">Customer Favorites</span>
+        <h2 class="section-title">Popular Grocery Products</h2>
+        <p class="section-subtitle">Top-rated items loved and frequently re-ordered by over 20,000+ satisfied households.</p>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="tabs-nav">
+        <button class="tab-btn active" data-cat="all">All Products</button>
+        <button class="tab-btn" data-cat="fruits">Fruits</button>
+        <button class="tab-btn" data-cat="vegetables">Vegetables</button>
+        <button class="tab-btn" data-cat="dairy">Dairy Products</button>
+        <button class="tab-btn" data-cat="bakery">Bakery</button>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="products-grid" id="popular-products-grid">
+        <!-- Dynamically rendered via products.js -->
+      </div>
+
+      <div style="text-align: center; margin-top: 40px;">
+        <a href="products.html" class="btn btn-primary btn-lg">
+          View All 32 Products <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Today's Special Offers -->
+  <section class="offers-section" id="special-offers">
+    <div class="container">
+      <!-- Deals Countdown Banner -->
+      <div class="deals-banner">
+        <div class="deals-info">
+          <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">
+            ⚡ Flash Deals of the Day
+          </span>
+          <h3 style="margin-top: 8px;">Up to 30% OFF On Selected Produce!</h3>
+          <p>Hurry! These special farm-to-table promotional prices expire at midnight.</p>
+        </div>
+
+        <div class="countdown-box">
+          <div class="countdown-item">
+            <div class="countdown-num" id="deal-hours">08</div>
+            <div class="countdown-lbl">Hours</div>
+          </div>
+          <span style="font-size: 1.5rem; font-weight: 800; color: white;">:</span>
+          <div class="countdown-item">
+            <div class="countdown-num" id="deal-mins">45</div>
+            <div class="countdown-lbl">Mins</div>
+          </div>
+          <span style="font-size: 1.5rem; font-weight: 800; color: white;">:</span>
+          <div class="countdown-item">
+            <div class="countdown-num" id="deal-secs">20</div>
+            <div class="countdown-lbl">Secs</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Deals Grid -->
+      <div class="products-grid" id="deals-products-grid">
+        <!-- Dynamically populated via products.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us Section -->
+  <section class="why-us-section">
+    <div class="container">
+      <div class="section-title-wrap">
+        <span class="section-badge">The FreshCart Advantage</span>
+        <h2 class="section-title">Why Choose FreshCart?</h2>
+        <p class="section-subtitle">We are committed to delivering the highest quality groceries with speed, care, and sustainability.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-box">
+          <div class="feat-icon"><i class="fas fa-tractor"></i></div>
+          <h3 class="feat-title">Direct from Farms</h3>
+          <p class="feat-desc">We partner directly with certified organic farmers across India, cutting middlemen to ensure farm-gate freshness and fair prices.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feat-icon"><i class="fas fa-truck-fast"></i></div>
+          <h3 class="feat-title">2-Hour Express Delivery</h3>
+          <p class="feat-desc">Equipped with specialized cold-chain vans, our delivery personnel ensure produce reaches you crisp, chilled, and damage-free.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feat-icon"><i class="fas fa-certificate"></i></div>
+          <h3 class="feat-title">100% Quality Checked</h3>
+          <p class="feat-desc">Every piece of fruit, vegetable, and dairy undergoes a 3-stage quality inspection before being sealed in hygienic packaging.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feat-icon"><i class="fas fa-hand-holding-heart"></i></div>
+          <h3 class="feat-title">No Questions Asked Returns</h3>
+          <p class="feat-desc">Not completely satisfied with the freshness of an item? Return it right at your doorstep for an instant refund or replacement.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Customer Testimonials -->
+  <section class="testimonials-section">
+    <div class="container">
+      <div class="section-title-wrap">
+        <span class="section-badge">Real Reviews</span>
+        <h2 class="section-title">What Our Customers Say</h2>
+        <p class="section-subtitle">Read feedback from everyday home cooks, working professionals, and health enthusiasts who trust FreshCart.</p>
+      </div>
+
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div>
+            <div class="test-stars">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            </div>
+            <p class="test-text">"FreshCart has completely changed how our family shops for groceries. The Devgad mangoes and A2 Gir cow milk were fresher than anything we get in supermarkets. And the 2-hour delivery was prompt!"</p>
+          </div>
+          <div class="test-author">
+            <div class="test-avatar">AN</div>
+            <div>
+              <h4>Ananya Nair</h4>
+              <p>Indiranagar, Bengaluru</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div>
+            <div class="test-stars">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            </div>
+            <p class="test-text">"As a fitness enthusiast, finding truly pesticide-free broccoli and hydroponic spinach was always tough. FreshCart's quality is unmatched, and their unpolished pulses cook beautifully."</p>
+          </div>
+          <div class="test-author">
+            <div class="test-avatar">VK</div>
+            <div>
+              <h4>Vikram Kulkarni</h4>
+              <p>Koramangala, Bengaluru</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div>
+            <div class="test-stars">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+            </div>
+            <p class="test-text">"The sourdough bread and butter croissants taste like they were baked in a traditional French bakery. Plus the website is so clean, fast, and simple to order from."</p>
+          </div>
+          <div class="test-author">
+            <div class="test-avatar">SM</div>
+            <div>
+              <h4>Sneha Mukherjee</h4>
+              <p>Whitefield, Bengaluru</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Subscription Section -->
+  <section class="newsletter-section">
+    <div class="container">
+      <div class="newsletter-card">
+        <div class="newsletter-info">
+          <h3>Get ₹100 Off Your First Order!</h3>
+          <p>Subscribe to our weekly newsletter for exclusive member discounts, fresh seasonal recipes, and notification of flash harvest sales.</p>
+        </div>
+        <div class="newsletter-form-wrap">
+          <form class="newsletter-form">
+            <input type="email" placeholder="Enter your email address" required aria-label="Email Address">
+            <button type="submit">Subscribe Now</button>
+          </form>
+          <div class="newsletter-note">
+            <i class="fas fa-shield-alt"></i> No spam ever. You can unsubscribe with one click anytime.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Professional Footer -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Col 1: Brand Info -->
+        <div class="footer-col footer-brand">
+          <a href="index.html" class="brand-logo" style="color: #ffffff;">
+            <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+            <span>Fresh</span>Cart
+          </a>
+          <p>
+            FreshCart is India's premier online grocery platform connecting responsible organic farmers with conscious consumers. Freshness delivered within 2 hours.
+          </p>
+          <div class="footer-social">
+            <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+            <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="products.html">All Products</a>
+            <a href="cart.html">View Cart</a>
+            <a href="contact.html">Contact Support</a>
+            <a href="login.html">My Account</a>
+          </div>
+        </div>
+
+        <!-- Col 3: Categories -->
+        <div class="footer-col">
+          <h4>Grocery Categories</h4>
+          <div class="footer-links">
+            <a href="products.html?category=fruits">Fresh Fruits</a>
+            <a href="products.html?category=vegetables">Green Vegetables</a>
+            <a href="products.html?category=dairy">Dairy &amp; Eggs</a>
+            <a href="products.html?category=bakery">Artisan Bakery</a>
+            <a href="products.html?category=beverages">Healthy Beverages</a>
+            <a href="products.html?category=household">Household Essentials</a>
+          </div>
+        </div>
+
+        <!-- Col 4: Contact & Hours -->
+        <div class="footer-col">
+          <h4>Store Information</h4>
+          <div class="footer-contact-list">
+            <div class="contact-item">
+              <i class="fas fa-location-dot"></i>
+              <span>#42, Green Park Boulevard, HSR Layout Sector 2, Bengaluru, Karnataka - 560102</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-phone"></i>
+              <span>+91 98765 43210 (Toll Free)</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-envelope"></i>
+              <span>orders@freshcart.com</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-clock"></i>
+              <span>Open 7 Days: 6:00 AM – 11:00 PM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="footer-bottom">
+        <div>
+          &copy; 2026 FreshCart Retail Pvt. Ltd. All rights reserved. Built with pure HTML5, CSS3 &amp; Vanilla JavaScript.
+        </div>
+        <div class="payment-badges" title="Accepted Payment Methods">
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fab fa-google-pay"></i>
+          <i class="fas fa-qrcode"></i>
+          <i class="fas fa-shield-halved"></i>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

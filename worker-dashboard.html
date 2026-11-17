@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop Worker Portal - Order Fulfillment &amp; Packing - FreshCart</title>
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body style="background: #F4F6F8;">
+
+  <!-- Top Notification Bar -->
+  <div class="top-bar">
+    <div class="container">
+      <div class="top-bar-left">
+        <span><i class="fas fa-boxes-packing" style="color: #64B5F6;"></i> <strong>FreshCart Fulfilment &amp; Kitchen Packing Station</strong></span>
+      </div>
+      <div class="top-bar-right">
+        <span><i class="fas fa-clock"></i> Active Packing Queue</span>
+        <a href="index.html" target="_blank"><i class="fas fa-arrow-up-right-from-square"></i> Store Home</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="container header-container">
+      <a href="worker-dashboard.html" class="brand-logo">
+        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+        <span>Fresh</span>Cart <small style="font-size: 0.75rem; font-weight: 700; background: #E1F5FE; color: #0288D1; padding: 2px 8px; border-radius: 999px; margin-left: 6px;">WORKER</small>
+      </a>
+
+      <div style="font-size: 0.95rem; font-weight: 700; color: #0288D1; display: flex; align-items: center; gap: 8px;">
+        <i class="fas fa-dolly"></i> Packing Station Terminal
+      </div>
+
+      <div class="header-actions">
+        <div id="header-user-wrapper"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Worker Dashboard Main Content -->
+  <main class="container dashboard-page">
+    <div class="dashboard-header-bar">
+      <div class="dashboard-title-box">
+        <h1>Order Fulfillment &amp; Packing Queue</h1>
+        <p>Pick items from temperature-controlled shelves, verify quantities, and check off products into delivery bags.</p>
+      </div>
+
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <button class="btn btn-outline btn-sm" onclick="location.reload()">
+          <i class="fas fa-rotate"></i> Refresh Queue
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Filter Tabs -->
+    <div class="dashboard-tabs">
+      <button class="dash-tab-btn active" data-tab="active">
+        <i class="fas fa-box-open"></i> Active Packing Orders <span class="tab-count-badge" id="worker-active-count">0</span>
+      </button>
+      <button class="dash-tab-btn" data-tab="completed">
+        <i class="fas fa-check-double"></i> Ready / Completed Today <span class="tab-count-badge" id="worker-completed-count">0</span>
+      </button>
+    </div>
+
+    <!-- Active Tasks Section -->
+    <div id="worker-active-section">
+      <div class="worker-tasks-grid" id="worker-tasks-container">
+        <!-- Dynamically rendered packing cards -->
+      </div>
+    </div>
+
+    <!-- Completed Tasks Section -->
+    <div id="worker-completed-section" style="display: none;">
+      <div class="dashboard-card" style="padding: 24px;">
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--primary); margin-bottom: 16px;">
+          <i class="fas fa-clipboard-check"></i> Orders Dispatched to Delivery Fleet
+        </h3>
+        <div class="dashboard-table-wrap">
+          <table class="dashboard-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Phone</th>
+                <th>Delivery Address</th>
+                <th>Items Count</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="worker-completed-tbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container" style="text-align: center;">
+      <p>&copy; 2026 FreshCart Retail Pvt. Ltd. Fulfillment &amp; Packing Station Terminal.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    // Security Guard: Only Worker and Owner allowed
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof checkRoleAccessGuard === 'function') {
+        const allowed = checkRoleAccessGuard(['worker', 'owner']);
+        if (!allowed) return;
+      }
+      initWorkerDashboard();
+    });
+
+    let activeWorkerTab = 'active';
+
+    function initWorkerDashboard() {
+      renderWorkerTasks();
+      initWorkerTabSwitching();
+
+      // Listen for order updates
+      window.addEventListener('freshcart_orders_updated', () => {
+        renderWorkerTasks();
+      });
+
+      // Update timer countdown every 15 seconds
+      setInterval(renderWorkerTasks, 15000);
+    }
+
+    function initWorkerTabSwitching() {
+      const tabBtns = document.querySelectorAll('.dash-tab-btn');
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeWorkerTab = btn.getAttribute('data-tab');
+
+          if (activeWorkerTab === 'active') {
+            document.getElementById('worker-active-section').style.display = 'block';
+            document.getElementById('worker-completed-section').style.display = 'none';
+          } else {
+            document.getElementById('worker-active-section').style.display = 'none';
+            document.getElementById('worker-completed-section').style.display = 'block';
+          }
+          renderWorkerTasks();
+        });
+      });
+    }
+
+    function renderWorkerTasks() {
+      const orders = getAllOrdersFromStorage();
+      const container = document.getElementById('worker-tasks-container');
+      const completedTbody = document.getElementById('worker-completed-tbody');
+      if (!container) return;
+
+      const activeOrders = orders.filter(o => 
+        o.status !== ORDER_STATUS.DELIVERED && o.status !== ORDER_STATUS.CANCELLED
+      );
+
+      const completedOrders = orders.filter(o => 
+        o.status === ORDER_STATUS.READY || o.status === ORDER_STATUS.DELIVERED
+      );
+
+      document.getElementById('worker-active-count').textContent = activeOrders.length;
+      document.getElementById('worker-completed-count').textContent = completedOrders.length;
+
+      // Render Active Cards
+      if (activeOrders.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: white; border-radius: 12px; border: 1px solid var(--border-color);">
+            <div style="font-size: 3rem; margin-bottom: 12px;">🎉</div>
+            <h3 style="font-size: 1.4rem; color: var(--primary); margin-bottom: 6px;">All Orders Packed!</h3>
+            <p style="color: var(--text-muted);">The packing queue is clear. New incoming orders will appear here automatically.</p>
+          </div>
+        `;
+      } else {
+        container.innerHTML = activeOrders.map(order => {
+          const now = Date.now();
+          const deadline = new Date(order.deadlineAt).getTime();
+          const diffMins = Math.round((deadline - now) / 60000);
+          const isOverdue = diffMins <= 0;
+          const isUrgent = diffMins > 0 && diffMins <= 10;
+
+          const receivedStr = new Date(order.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+
+          // Packing progress calculation
+          const totalItems = order.items.length;
+          const packedCount = order.items.filter(i => i.packed).length;
+          const allPacked = totalItems > 0 && packedCount === totalItems;
+
+          // Action buttons based on status
+          let actionButtonsHtml = '';
+          if (order.status === ORDER_STATUS.NEW) {
+            actionButtonsHtml = `
+              <button class="btn btn-primary btn-block btn-sm" onclick="workerSetStatus('${order.id}', '${ORDER_STATUS.ACCEPTED}')">
+                <i class="fas fa-hand-holding-hand"></i> Accept Order
+              </button>
+            `;
+          } else if (order.status === ORDER_STATUS.ACCEPTED) {
+            actionButtonsHtml = `
+              <button class="btn btn-primary btn-block btn-sm" onclick="workerSetStatus('${order.id}', '${ORDER_STATUS.PREPARING}')">
+                <i class="fas fa-dolly"></i> Start Preparing
+              </button>
+            `;
+          } else if (order.status === ORDER_STATUS.PREPARING || order.status === ORDER_STATUS.PACKING) {
+            actionButtonsHtml = `
+              <button class="btn btn-secondary btn-block btn-sm" onclick="workerMarkAllPacked('${order.id}')" ${allPacked ? '' : ''}>
+                <i class="fas fa-check-double"></i> Mark All Items Packed
+              </button>
+            `;
+          } else if (order.status === ORDER_STATUS.PACKED) {
+            actionButtonsHtml = `
+              <button class="btn btn-primary btn-block btn-sm" style="background: #00838F;" onclick="workerSetStatus('${order.id}', '${ORDER_STATUS.READY}')">
+                <i class="fas fa-motorcycle"></i> Mark Ready for Delivery
+              </button>
+            `;
+          } else if (order.status === ORDER_STATUS.READY) {
+            actionButtonsHtml = `
+              <div style="text-align: center; font-size: 0.85rem; color: var(--success); font-weight: 700;">
+                <i class="fas fa-circle-check"></i> Waiting for Driver Pickup
+              </div>
+            `;
+          }
+
+          return `
+            <div class="packing-card ${isOverdue ? 'overdue' : (isUrgent ? 'urgent' : '')}">
+              <div class="packing-card-header">
+                <div>
+                  <div class="packing-order-id">${order.id}</div>
+                  <span class="order-status-badge status-${order.status.toLowerCase().replace(/\s+/g, '-')}">
+                    ${order.status}
+                  </span>
+                </div>
+                <div style="text-align: right;">
+                  ${isOverdue ? `<span class="flag-overdue"><i class="fas fa-clock"></i> OVERDUE (${Math.abs(diffMins)}m)</span>` : 
+                    (isUrgent ? `<span class="flag-urgent"><i class="fas fa-bolt"></i> URGENT (${diffMins}m left)</span>` :
+                    `<span style="font-size: 0.8rem; color: var(--text-muted);"><i class="fas fa-stopwatch"></i> ${diffMins} mins left</span>`)}
+                  <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Recv: ${receivedStr}</div>
+                </div>
+              </div>
+
+              <!-- Customer info -->
+              <div class="packing-customer-info">
+                <p><strong><i class="fas fa-user"></i> Customer:</strong> ${order.customerName}</p>
+                <p><strong><i class="fas fa-phone"></i> Contact:</strong> <a href="tel:${order.phone}" style="color: var(--primary); font-weight: 600;">${order.phone}</a></p>
+                <p><strong><i class="fas fa-location-dot"></i> Delivery:</strong> ${order.address}</p>
+                <p><strong><i class="fas fa-truck-fast"></i> Slot:</strong> ${order.slot}</p>
+                ${order.specialInstructions ? `<p style="color: #E65100; margin-top: 6px;"><strong><i class="fas fa-comment-dots"></i> Note:</strong> ${order.specialInstructions}</p>` : ''}
+              </div>
+
+              <!-- Checklist Header -->
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <h4 style="font-size: 0.88rem; font-weight: 700; color: var(--text-dark);">
+                  Grocery Checklist (${packedCount}/${totalItems} Packed)
+                </h4>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Check off items:</span>
+              </div>
+
+              <!-- Interactive Packing Checklist -->
+              <div class="packing-checklist">
+                ${order.items.map((item, idx) => `
+                  <div class="packing-item-row ${item.packed ? 'is-packed' : ''}">
+                    <label>
+                      <input type="checkbox" ${item.packed ? 'checked' : ''} onchange="workerToggleItem('${order.id}', ${idx}, this.checked)">
+                      <span class="item-name"><strong>${item.name}</strong> <small style="color: var(--text-muted);">(${item.unit})</small></span>
+                    </label>
+                    <strong style="color: var(--primary); font-size: 0.95rem; padding-left: 8px;">× ${item.quantity}</strong>
+                  </div>
+                `).join('')}
+              </div>
+
+              <!-- Actions -->
+              <div class="packing-action-btns">
+                ${actionButtonsHtml}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Render Completed Table
+      if (completedTbody) {
+        if (completedOrders.length === 0) {
+          completedTbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">No completed orders yet.</td></tr>`;
+        } else {
+          completedTbody.innerHTML = completedOrders.map(o => `
+            <tr>
+              <td><strong>${o.id}</strong></td>
+              <td>${o.customerName}</td>
+              <td>${o.phone}</td>
+              <td style="font-size: 0.82rem;">${o.address}</td>
+              <td>${o.items.length} items (${o.items.reduce((s, i) => s + i.quantity, 0)} units)</td>
+              <td>
+                <span class="order-status-badge status-${o.status.toLowerCase().replace(/\s+/g, '-')}">${o.status}</span>
+              </td>
+            </tr>
+          `).join('');
+        }
+      }
+    }
+
+    // Toggle Item Packed Checkbox
+    window.workerToggleItem = function(orderId, itemIndex, isChecked) {
+      toggleOrderItemPacked(orderId, itemIndex, isChecked);
+      renderWorkerTasks();
+    };
+
+    // Transition Order Status
+    window.workerSetStatus = function(orderId, newStatus) {
+      updateOrderStatus(orderId, newStatus);
+      showToast('Status Updated', `Order ${orderId} moved to ${newStatus}.`, 'success');
+      renderWorkerTasks();
+    };
+
+    // Mark All Items Packed
+    window.workerMarkAllPacked = function(orderId) {
+      const order = getOrderById(orderId);
+      if (order) {
+        order.items.forEach((item, idx) => {
+          toggleOrderItemPacked(orderId, idx, true);
+        });
+        updateOrderStatus(orderId, ORDER_STATUS.PACKED);
+        showToast('Order Packed', `All items packed for ${orderId}!`, 'success');
+        renderWorkerTasks();
+      }
+    };
+  </script>
+</body>
+</html>

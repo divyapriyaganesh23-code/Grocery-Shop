@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details - FreshCart</title>
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <!-- Top Notification Bar -->
+  <div class="top-bar">
+    <div class="container">
+      <div class="top-bar-left">
+        <span><i class="fas fa-truck-fast"></i> Free Delivery on all grocery orders above ₹500!</span>
+        <span><i class="fas fa-clock"></i> Express 2-Hour Delivery Available</span>
+      </div>
+      <div class="top-bar-right">
+        <span><i class="fas fa-phone-volume"></i> Support: +91 98765 43210</span>
+        <a href="contact.html"><i class="fas fa-location-dot"></i> Bengaluru, India</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="container header-container">
+      <a href="index.html" class="brand-logo">
+        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+        <span>Fresh</span>Cart
+      </a>
+
+      <div class="header-search">
+        <form>
+          <input type="text" placeholder="Search groceries..." aria-label="Search products">
+          <button type="submit" aria-label="Search"><i class="fas fa-magnifying-glass"></i></button>
+        </form>
+      </div>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="products.html" class="nav-link active">Products</a>
+        <a href="products.html?category=fruits" class="nav-link">Categories</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="login.html" class="action-btn" title="Account / Sign In"><i class="far fa-user"></i></a>
+        <a href="cart.html" class="action-btn" title="Shopping Cart">
+          <i class="fas fa-basket-shopping"></i>
+          <span class="badge-count cart-count-badge" style="display: none;">0</span>
+        </a>
+        <button class="mobile-toggle" aria-label="Open mobile menu"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Slide Drawer -->
+  <div class="drawer-overlay"></div>
+  <aside class="mobile-drawer">
+    <div class="drawer-header">
+      <a href="index.html" class="brand-logo" style="font-size: 1.35rem;">
+        <div class="logo-icon" style="width: 32px; height: 32px; font-size: 1rem;"><i class="fas fa-leaf"></i></div>
+        <span>Fresh</span>Cart
+      </a>
+      <button class="drawer-close"><i class="fas fa-times"></i></button>
+    </div>
+    <nav class="drawer-nav">
+      <a href="index.html"><i class="fas fa-home" style="margin-right: 10px; color: var(--primary);"></i> Home</a>
+      <a href="about.html"><i class="fas fa-info-circle" style="margin-right: 10px; color: var(--primary);"></i> About Us</a>
+      <a href="products.html" class="active"><i class="fas fa-boxes-stacked" style="margin-right: 10px; color: var(--primary);"></i> All Products</a>
+      <a href="cart.html"><i class="fas fa-basket-shopping" style="margin-right: 10px; color: var(--primary);"></i> Shopping Cart (<span class="cart-count-badge">0</span>)</a>
+      <a href="contact.html"><i class="fas fa-envelope" style="margin-right: 10px; color: var(--primary);"></i> Contact Us</a>
+      <a href="login.html"><i class="fas fa-user-circle" style="margin-right: 10px; color: var(--primary);"></i> Sign In / Register</a>
+    </nav>
+  </aside>
+
+  <!-- Breadcrumbs Bar -->
+  <div style="background: var(--card-white); border-bottom: 1px solid var(--border-color); padding: 14px 0; margin-bottom: 30px;">
+    <div class="container">
+      <div class="breadcrumbs" style="color: var(--text-muted);">
+        <a href="index.html" style="color: var(--primary); font-weight: 600;">Home</a>
+        <i class="fas fa-chevron-right" style="font-size: 0.75rem;"></i>
+        <a href="products.html" style="color: var(--primary); font-weight: 600;">Products</a>
+        <i class="fas fa-chevron-right" style="font-size: 0.75rem;"></i>
+        <a href="#" id="breadcrumb-cat" style="color: var(--primary); font-weight: 600;">Category</a>
+        <i class="fas fa-chevron-right" style="font-size: 0.75rem;"></i>
+        <span id="breadcrumb-product" style="color: var(--text-dark); font-weight: 600;">Product</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Product Details Container -->
+  <div class="container" id="product-details-container">
+    <!-- Dynamically rendered via initProductDetailsPage() in products.js -->
+  </div>
+
+  <!-- Related Products Section -->
+  <section class="container" style="margin-bottom: 70px;">
+    <div class="section-title-wrap" style="text-align: left; margin-bottom: 24px;">
+      <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--primary);">You May Also Like</h3>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">Similar fresh items from this category.</p>
+    </div>
+    <div class="products-grid" id="related-products-grid">
+      <!-- Dynamically filled with 4 related items -->
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-brand">
+          <a href="index.html" class="brand-logo" style="color: #ffffff;">
+            <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+            <span>Fresh</span>Cart
+          </a>
+          <p>
+            FreshCart is India's premier online grocery platform connecting responsible organic farmers with conscious consumers. Freshness delivered within 2 hours.
+          </p>
+          <div class="footer-social">
+            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-x-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="products.html">All Products</a>
+            <a href="cart.html">View Cart</a>
+            <a href="contact.html">Contact Support</a>
+            <a href="login.html">My Account</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Grocery Categories</h4>
+          <div class="footer-links">
+            <a href="products.html?category=fruits">Fresh Fruits</a>
+            <a href="products.html?category=vegetables">Green Vegetables</a>
+            <a href="products.html?category=dairy">Dairy &amp; Eggs</a>
+            <a href="products.html?category=bakery">Artisan Bakery</a>
+            <a href="products.html?category=beverages">Healthy Beverages</a>
+            <a href="products.html?category=household">Household Essentials</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Store Information</h4>
+          <div class="footer-contact-list">
+            <div class="contact-item">
+              <i class="fas fa-location-dot"></i>
+              <span>#42, Green Park Boulevard, HSR Layout Sector 2, Bengaluru, Karnataka - 560102</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-phone"></i>
+              <span>+91 98765 43210 (Toll Free)</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-envelope"></i>
+              <span>orders@freshcart.com</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-clock"></i>
+              <span>Open 7 Days: 6:00 AM – 11:00 PM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 FreshCart Retail Pvt. Ltd. All rights reserved.</div>
+        <div class="payment-badges">
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fab fa-google-pay"></i>
+          <i class="fas fa-qrcode"></i>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Official Tax Invoice - FreshCart</title>
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body style="background: #F4F6F8;">
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="container header-container">
+      <a href="index.html" class="brand-logo">
+        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+        <span>Fresh</span>Cart
+      </a>
+
+      <div style="font-size: 0.95rem; font-weight: 700; color: var(--primary);">
+        <i class="fas fa-receipt"></i> Customer Bill &amp; Tax Invoice
+      </div>
+
+      <div class="header-actions">
+        <div id="header-user-wrapper"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Invoice Wrapper -->
+  <main class="container invoice-wrapper">
+    <!-- Action Buttons Bar -->
+    <div class="invoice-actions-bar">
+      <a href="products.html" class="btn btn-outline btn-sm">
+        <i class="fas fa-arrow-left"></i> Continue Shopping
+      </a>
+
+      <div style="display: flex; gap: 10px;">
+        <button class="btn btn-outline btn-sm" onclick="downloadTextInvoice()">
+          <i class="fas fa-download"></i> Download Bill (.txt)
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="window.print()">
+          <i class="fas fa-print"></i> Print Invoice
+        </button>
+      </div>
+    </div>
+
+    <!-- Official Printable Invoice Box -->
+    <div class="invoice-box" id="printable-invoice">
+      <!-- Invoice Header Grid -->
+      <div class="invoice-header-grid">
+        <div>
+          <div class="brand-logo" style="margin-bottom: 8px;">
+            <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+            <span>Fresh</span>Cart
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+            <strong>FreshCart Retail Private Limited</strong><br>
+            #42, Green Park Boulevard, HSR Layout Sector 2<br>
+            Bengaluru, Karnataka - 560102<br>
+            GSTIN: <strong>29AAACF1234F1Z8</strong> | FSSAI: 11221334000123<br>
+            Support: +91 98765 43210 | orders@freshcart.com
+          </p>
+        </div>
+
+        <div class="invoice-meta">
+          <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">TAX INVOICE</span>
+          <h2 class="invoice-number-title" id="inv-number">INV-2026-XXXXXX</h2>
+          <p style="font-size: 0.88rem; margin-top: 4px;">
+            <strong>Order ID:</strong> <span id="inv-order-id">FC-XXXXXX</span><br>
+            <strong>Date &amp; Time:</strong> <span id="inv-datetime">--</span><br>
+            <strong>Order Status:</strong> <span id="inv-status-badge" class="order-status-badge">--</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Bill To & Ship To Details -->
+      <div class="invoice-parties-grid">
+        <div>
+          <h4>Billed To &amp; Customer Details</h4>
+          <p>
+            <strong style="font-size: 1rem;" id="inv-cust-name">Customer Name</strong><br>
+            Phone: <span id="inv-cust-phone">--</span><br>
+            Email: <span id="inv-cust-email">--</span>
+          </p>
+        </div>
+
+        <div>
+          <h4>Delivery Destination &amp; Slot</h4>
+          <p>
+            <span id="inv-cust-address">--</span><br>
+            Delivery Slot: <strong id="inv-cust-slot">--</strong><br>
+            Payment Mode: <strong id="inv-payment-method">--</strong> (<span id="inv-payment-status" style="color: var(--success); font-weight: 700;">--</span>)
+          </p>
+        </div>
+      </div>
+
+      <!-- Itemized Products Table -->
+      <table class="invoice-table">
+        <thead>
+          <tr>
+            <th style="width: 50px;">#</th>
+            <th>Item Description</th>
+            <th>Unit Price</th>
+            <th style="text-align: center;">Qty</th>
+            <th style="text-align: right;">Total Amount (₹)</th>
+          </tr>
+        </thead>
+        <tbody id="inv-items-tbody">
+          <!-- Dynamically populated -->
+        </tbody>
+      </table>
+
+      <!-- Totals & Taxes Breakdown -->
+      <table class="invoice-totals-table">
+        <tr>
+          <td>Subtotal (Taxable):</td>
+          <td style="text-align: right;"><strong id="inv-subtotal">₹0</strong></td>
+        </tr>
+        <tr id="inv-discount-row" style="display: none; color: var(--success);">
+          <td>Promo Discount:</td>
+          <td style="text-align: right;"><strong id="inv-discount">- ₹0</strong></td>
+        </tr>
+        <tr>
+          <td>Delivery &amp; Handling:</td>
+          <td style="text-align: right;" id="inv-delivery">FREE</td>
+        </tr>
+        <tr>
+          <td>GST (5% applicable):</td>
+          <td style="text-align: right;"><strong id="inv-tax">₹0</strong></td>
+        </tr>
+        <tr class="invoice-grand-total">
+          <td>Final Payable Amount:</td>
+          <td style="text-align: right;" id="inv-grand-total">₹0</td>
+        </tr>
+      </table>
+
+      <!-- Footer Notes & Terms -->
+      <div class="invoice-footer-notes">
+        <p><strong>Thank you for choosing FreshCart!</strong> All organic produce is farm checked and temperature packed. For queries, contact support@freshcart.com.</p>
+        <p style="margin-top: 4px; font-size: 0.75rem;">This is a computer-generated tax invoice and requires no physical signature.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container" style="text-align: center;">
+      <p>&copy; 2026 FreshCart Retail Pvt. Ltd. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    let currentInvoiceOrder = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      let orderId = urlParams.get('orderId');
+
+      const allOrders = getAllOrdersFromStorage();
+      if (!orderId && allOrders.length > 0) {
+        orderId = allOrders[0].id;
+      }
+
+      const order = getOrderById(orderId);
+      if (!order) {
+        document.getElementById('printable-invoice').innerHTML = `
+          <div style="text-align: center; padding: 60px 20px;">
+            <i class="fas fa-file-circle-question" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 12px;"></i>
+            <h3>Invoice Not Found</h3>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">No matching invoice was found for ID: ${orderId || 'N/A'}</p>
+            <a href="products.html" class="btn btn-primary">Continue Shopping</a>
+          </div>
+        `;
+        return;
+      }
+
+      currentInvoiceOrder = order;
+      renderInvoiceDetails(order);
+    });
+
+    function renderInvoiceDetails(order) {
+      document.title = `Tax Invoice ${order.invoiceNumber} - FreshCart`;
+
+      document.getElementById('inv-number').textContent = order.invoiceNumber;
+      document.getElementById('inv-order-id').textContent = order.id;
+
+      const dateStr = new Date(order.createdAt).toLocaleString('en-IN', {
+        dateStyle: 'medium',
+        timeStyle: 'short'
+      });
+      document.getElementById('inv-datetime').textContent = dateStr;
+
+      const statusBadge = document.getElementById('inv-status-badge');
+      statusBadge.textContent = order.status;
+      statusBadge.className = `order-status-badge status-${order.status.toLowerCase().replace(/\s+/g, '-')}`;
+
+      document.getElementById('inv-cust-name').textContent = order.customerName;
+      document.getElementById('inv-cust-phone').textContent = order.phone;
+      document.getElementById('inv-cust-email').textContent = order.email;
+      document.getElementById('inv-cust-address').textContent = order.address;
+      document.getElementById('inv-cust-slot').textContent = order.slot;
+      document.getElementById('inv-payment-method').textContent = order.paymentMethod;
+      document.getElementById('inv-payment-status').textContent = order.paymentStatus;
+
+      // Line items
+      const tbody = document.getElementById('inv-items-tbody');
+      tbody.innerHTML = order.items.map((item, idx) => `
+        <tr>
+          <td>${idx + 1}</td>
+          <td>
+            <strong>${item.name}</strong><br>
+            <small style="color: var(--text-muted);">${item.unit}</small>
+          </td>
+          <td>₹${item.price}</td>
+          <td style="text-align: center;">${item.quantity}</td>
+          <td style="text-align: right;"><strong>₹${item.lineTotal || (item.price * item.quantity)}</strong></td>
+        </tr>
+      `).join('');
+
+      // Totals
+      document.getElementById('inv-subtotal').textContent = `₹${order.subtotal}`;
+
+      if (order.discount > 0) {
+        const discRow = document.getElementById('inv-discount-row');
+        discRow.style.display = 'table-row';
+        document.getElementById('inv-discount').textContent = `- ₹${order.discount} (${order.couponCode || 'PROMO'})`;
+      }
+
+      document.getElementById('inv-delivery').textContent = order.deliveryFee === 0 ? 'FREE' : `₹${order.deliveryFee}`;
+      document.getElementById('inv-tax').textContent = `₹${order.tax}`;
+      document.getElementById('inv-grand-total').textContent = `₹${order.grandTotal}`;
+    }
+
+    // Download text invoice
+    window.downloadTextInvoice = function() {
+      if (!currentInvoiceOrder) return;
+      const o = currentInvoiceOrder;
+
+      let text = `====================================================\n`;
+      text += `                  FRESHCART RETAIL                 \n`;
+      text += `           TAX INVOICE & CASH RECEIPT              \n`;
+      text += `====================================================\n`;
+      text += `Invoice Number: ${o.invoiceNumber}\n`;
+      text += `Order ID:       ${o.id}\n`;
+      text += `Date & Time:    ${new Date(o.createdAt).toLocaleString('en-IN')}\n`;
+      text += `Order Status:   ${o.status}\n`;
+      text += `----------------------------------------------------\n`;
+      text += `CUSTOMER DETAILS:\n`;
+      text += `Name:    ${o.customerName}\n`;
+      text += `Phone:   ${o.phone}\n`;
+      text += `Address: ${o.address}\n`;
+      text += `Slot:    ${o.slot}\n`;
+      text += `Payment: ${o.paymentMethod} (${o.paymentStatus})\n`;
+      text += `----------------------------------------------------\n`;
+      text += `ITEMIZED ORDER DETAILS:\n`;
+      o.items.forEach((item, i) => {
+        text += `${i + 1}. ${item.name} (${item.unit}) x ${item.quantity} = Rs. ${item.lineTotal || (item.price * item.quantity)}\n`;
+      });
+      text += `----------------------------------------------------\n`;
+      text += `Subtotal:      Rs. ${o.subtotal}\n`;
+      if (o.discount > 0) {
+        text += `Discount:     -Rs. ${o.discount} (${o.couponCode})\n`;
+      }
+      text += `Delivery Fee:  ${o.deliveryFee === 0 ? 'FREE' : 'Rs. ' + o.deliveryFee}\n`;
+      text += `GST (5%):      Rs. ${o.tax}\n`;
+      text += `GRAND TOTAL:   Rs. ${o.grandTotal}\n`;
+      text += `====================================================\n`;
+      text += `Thank you for shopping fresh with FreshCart!\n`;
+      text += `GSTIN: 29AAACF1234F1Z8 | Bangalore, India\n`;
+
+      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `FreshCart-Invoice-${o.id}.txt`;
+      link.click();
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Owner Portal &amp; Management Dashboard - FreshCart</title>
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body style="background: #F4F6F8;">
+
+  <!-- Top Notification Bar -->
+  <div class="top-bar">
+    <div class="container">
+      <div class="top-bar-left">
+        <span><i class="fas fa-crown" style="color: #FFD54F;"></i> <strong>FreshCart Store Owner Control Center</strong></span>
+        <span><i class="fas fa-store"></i> Store Status: <strong style="color: #A5D66A;">ONLINE &amp; ACTIVE</strong></span>
+      </div>
+      <div class="top-bar-right">
+        <span><i class="fas fa-clock"></i> Local Time: Bengaluru (IST)</span>
+        <a href="index.html" target="_blank"><i class="fas fa-arrow-up-right-from-square"></i> Open Customer Storefront</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="container header-container">
+      <a href="owner-dashboard.html" class="brand-logo">
+        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+        <span>Fresh</span>Cart <small style="font-size: 0.75rem; font-weight: 700; background: #FFF8E1; color: #E65100; padding: 2px 8px; border-radius: 999px; margin-left: 6px;">OWNER</small>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="owner-dashboard.html" class="nav-link active">Dashboard</a>
+        <a href="worker-dashboard.html" class="nav-link">Worker Portal</a>
+        <a href="products.html" class="nav-link">Storefront Catalog</a>
+      </nav>
+
+      <div class="header-actions">
+        <div id="header-user-wrapper"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Dashboard Container -->
+  <main class="container dashboard-page">
+    <!-- Header Title Bar -->
+    <div class="dashboard-header-bar">
+      <div class="dashboard-title-box">
+        <h1>Store Management Dashboard</h1>
+        <p>Real-time orders workflow, live inventory stock control, sales analytics, and catalog management.</p>
+      </div>
+
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <button class="btn btn-outline btn-sm" onclick="location.reload()">
+          <i class="fas fa-rotate"></i> Refresh Data
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="openAddProductModal()">
+          <i class="fas fa-plus-circle"></i> Add New Product
+        </button>
+      </div>
+    </div>
+
+    <!-- Top Key Metrics Cards -->
+    <div class="dashboard-stats-grid">
+      <!-- Total Sales -->
+      <div class="stat-card">
+        <div class="stat-icon stat-green"><i class="fas fa-indian-rupee-sign"></i></div>
+        <div class="stat-info">
+          <span class="stat-label">Total Gross Sales</span>
+          <span class="stat-value" id="stat-total-sales">₹0</span>
+          <span class="stat-subtext" id="stat-sales-sub">From all customer orders</span>
+        </div>
+      </div>
+
+      <!-- Total Orders -->
+      <div class="stat-card">
+        <div class="stat-icon stat-blue"><i class="fas fa-boxes-stacked"></i></div>
+        <div class="stat-info">
+          <span class="stat-label">Total Orders</span>
+          <span class="stat-value" id="stat-total-orders">0</span>
+          <span class="stat-subtext">All-time lifetime orders</span>
+        </div>
+      </div>
+
+      <!-- Pending / In-Progress -->
+      <div class="stat-card">
+        <div class="stat-icon stat-orange"><i class="fas fa-clock"></i></div>
+        <div class="stat-info">
+          <span class="stat-label">Active / Pending</span>
+          <span class="stat-value" id="stat-pending-orders">0</span>
+          <span class="stat-subtext" style="color: #E65100;">Needs preparation/dispatch</span>
+        </div>
+      </div>
+
+      <!-- Completed Orders -->
+      <div class="stat-card">
+        <div class="stat-icon stat-purple"><i class="fas fa-circle-check"></i></div>
+        <div class="stat-info">
+          <span class="stat-label">Delivered Orders</span>
+          <span class="stat-value" id="stat-completed-orders">0</span>
+          <span class="stat-subtext" style="color: var(--success);">100% fulfilled</span>
+        </div>
+      </div>
+
+      <!-- Low Stock Alert -->
+      <div class="stat-card">
+        <div class="stat-icon stat-red"><i class="fas fa-triangle-exclamation"></i></div>
+        <div class="stat-info">
+          <span class="stat-label">Low Stock Alerts</span>
+          <span class="stat-value" id="stat-low-stock">0</span>
+          <span class="stat-subtext" style="color: #C62828;">≤ 5 items remaining</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="dashboard-tabs">
+      <button class="dash-tab-btn active" data-pane="pane-orders">
+        <i class="fas fa-receipt"></i> Orders Management <span class="tab-count-badge" id="tab-badge-orders">0</span>
+      </button>
+      <button class="dash-tab-btn" data-pane="pane-inventory">
+        <i class="fas fa-boxes-packing"></i> Products &amp; Stock Inventory <span class="tab-count-badge" id="tab-badge-products">0</span>
+      </button>
+      <button class="dash-tab-btn" data-pane="pane-categories">
+        <i class="fas fa-tags"></i> Categories Management
+      </button>
+      <button class="dash-tab-btn" data-pane="pane-reports">
+        <i class="fas fa-chart-pie"></i> Sales &amp; Revenue Reports
+      </button>
+      <button class="dash-tab-btn" data-pane="pane-settings">
+        <i class="fas fa-sliders"></i> Store Prep Settings
+      </button>
+    </div>
+
+    <!-- PANE 1: ORDERS MANAGEMENT -->
+    <div class="dashboard-tab-pane active" id="pane-orders">
+      <div class="dashboard-card">
+        <div class="card-header-actions">
+          <h3><i class="fas fa-list-check"></i> Live Customer Orders</h3>
+          
+          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <!-- Status Filter -->
+            <select id="filter-order-status" class="sort-select" style="font-size: 0.85rem;">
+              <option value="ALL">All Order Statuses</option>
+              <option value="New Order">New Order</option>
+              <option value="Accepted">Accepted</option>
+              <option value="Preparing">Preparing</option>
+              <option value="Packing">Packing</option>
+              <option value="Packed">Packed</option>
+              <option value="Ready for Delivery">Ready for Delivery</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+
+            <!-- Search order / customer -->
+            <input type="text" id="search-orders-input" placeholder="Search Order ID, Customer, Phone..." style="background: var(--bg-cream); border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 12px; font-size: 0.85rem; width: 220px;">
+          </div>
+        </div>
+
+        <div class="dashboard-table-wrap">
+          <table class="dashboard-table">
+            <thead>
+              <tr>
+                <th>Order &amp; Date</th>
+                <th>Customer &amp; Phone</th>
+                <th>Delivery Address</th>
+                <th>Items &amp; Total</th>
+                <th>Payment</th>
+                <th>Time &amp; Deadline</th>
+                <th>Current Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="owner-orders-tbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANE 2: PRODUCTS & STOCK INVENTORY -->
+    <div class="dashboard-tab-pane" id="pane-inventory">
+      <div class="dashboard-card">
+        <div class="card-header-actions">
+          <h3><i class="fas fa-boxes-stacked"></i> Grocery Catalog &amp; Real-Time Stock</h3>
+          
+          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <select id="filter-inv-category" class="sort-select" style="font-size: 0.85rem;">
+              <option value="ALL">All Categories</option>
+              <option value="Fruits">Fruits</option>
+              <option value="Vegetables">Vegetables</option>
+              <option value="Dairy">Dairy</option>
+              <option value="Bakery">Bakery</option>
+              <option value="Snacks">Snacks</option>
+              <option value="Beverages">Beverages</option>
+              <option value="Rice and Grains">Rice and Grains</option>
+              <option value="Spices">Spices</option>
+              <option value="Personal Care">Personal Care</option>
+              <option value="Household Essentials">Household Essentials</option>
+              <option value="Frozen Foods">Frozen Foods</option>
+            </select>
+
+            <select id="filter-inv-stock" class="sort-select" style="font-size: 0.85rem;">
+              <option value="ALL">All Stock Levels</option>
+              <option value="LOW">Low Stock Only (≤ 5)</option>
+              <option value="OUT">Out of Stock Only (0)</option>
+              <option value="IN">In Stock Only (> 5)</option>
+            </select>
+
+            <input type="text" id="search-inv-input" placeholder="Search product..." style="background: var(--bg-cream); border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 12px; font-size: 0.85rem; width: 180px;">
+
+            <button class="btn btn-primary btn-sm" onclick="openAddProductModal()">
+              <i class="fas fa-plus"></i> Add Product
+            </button>
+          </div>
+        </div>
+
+        <div class="dashboard-table-wrap">
+          <table class="dashboard-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price (₹)</th>
+                <th>Stock Level</th>
+                <th>Status</th>
+                <th>Origin &amp; Shelf Life</th>
+                <th>Quick Stock Adjust</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="owner-inventory-tbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANE 3: CATEGORIES MANAGEMENT -->
+    <div class="dashboard-tab-pane" id="pane-categories">
+      <div class="dashboard-card" style="padding: 24px;">
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--primary); margin-bottom: 20px;">
+          <i class="fas fa-tags"></i> Store Grocery Categories (11 Active)
+        </h3>
+
+        <div class="categories-grid" id="owner-categories-grid">
+          <!-- Dynamically populated with category cards and product count -->
+        </div>
+      </div>
+    </div>
+
+    <!-- PANE 4: SALES REPORTS & ANALYTICS -->
+    <div class="dashboard-tab-pane" id="pane-reports">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+        <div class="dashboard-card" style="padding: 24px;">
+          <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--primary); margin-bottom: 16px;">
+            <i class="fas fa-chart-column"></i> Revenue by Grocery Category
+          </h3>
+          <div id="category-sales-report" style="display: flex; flex-direction: column; gap: 12px;">
+            <!-- Dynamically populated bars -->
+          </div>
+        </div>
+
+        <div class="dashboard-card" style="padding: 24px;">
+          <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--primary); margin-bottom: 16px;">
+            <i class="fas fa-trophy"></i> Top 5 Best-Selling Grocery Items
+          </h3>
+          <div id="bestseller-items-report" style="display: flex; flex-direction: column; gap: 10px;">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANE 5: STORE PREP SETTINGS -->
+    <div class="dashboard-tab-pane" id="pane-settings">
+      <div class="dashboard-card" style="max-width: 600px; padding: 30px;">
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--primary); margin-bottom: 12px;">
+          <i class="fas fa-sliders"></i> Order Preparation &amp; Time Controls
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">
+          Configure how deadlines and packing timers are assigned to new incoming grocery orders.
+        </p>
+
+        <form id="store-settings-form">
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label for="cfg-prep-time">Default Order Preparation Time (Minutes) *</label>
+            <input type="number" id="cfg-prep-time" min="10" max="120" value="25" style="width: 100%; background: var(--bg-cream); border: 1.5px solid var(--border-color); border-radius: 8px; padding: 10px 14px;" required>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Standard kitchen packing window for shop workers.</span>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 24px;">
+            <label for="cfg-tax-rate">Applicable Grocery GST Rate (%)</label>
+            <input type="number" id="cfg-tax-rate" min="0" max="28" value="5" style="width: 100%; background: var(--bg-cream); border: 1.5px solid var(--border-color); border-radius: 8px; padding: 10px 14px;" readonly>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Configured essential grocery GST rate (5%).</span>
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-floppy-disk"></i> Save Settings
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- ADD / EDIT PRODUCT MODAL -->
+  <div class="modal-overlay" id="product-modal">
+    <div class="modal-box" style="max-width: 650px; text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-light); padding-bottom: 12px;">
+        <h3 id="product-modal-title" style="color: var(--primary); font-size: 1.35rem; font-weight: 800;">Add New Grocery Product</h3>
+        <button type="button" onclick="closeProductModal()" style="font-size: 1.2rem; color: var(--text-muted);"><i class="fas fa-times"></i></button>
+      </div>
+
+      <form id="product-form">
+        <input type="hidden" id="pm-id">
+
+        <div class="form-grid">
+          <div class="form-group col-full">
+            <label for="pm-name">Product Name *</label>
+            <input type="text" id="pm-name" placeholder="e.g. Organic Alphonso Mangoes" required>
+          </div>
+
+          <div class="form-group">
+            <label for="pm-category">Category *</label>
+            <select id="pm-category" required>
+              <option value="Fruits">Fruits</option>
+              <option value="Vegetables">Vegetables</option>
+              <option value="Dairy">Dairy</option>
+              <option value="Bakery">Bakery</option>
+              <option value="Snacks">Snacks</option>
+              <option value="Beverages">Beverages</option>
+              <option value="Rice and Grains">Rice and Grains</option>
+              <option value="Spices">Spices</option>
+              <option value="Personal Care">Personal Care</option>
+              <option value="Household Essentials">Household Essentials</option>
+              <option value="Frozen Foods">Frozen Foods</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="pm-unit">Unit of Measure *</label>
+            <input type="text" id="pm-unit" placeholder="e.g. 1 kg, 500 g, 1 Litre" required>
+          </div>
+
+          <div class="form-group">
+            <label for="pm-price">Selling Price (₹) *</label>
+            <input type="number" id="pm-price" min="1" step="1" placeholder="e.g. 180" required>
+          </div>
+
+          <div class="form-group">
+            <label for="pm-original-price">Original / MRP (₹)</label>
+            <input type="number" id="pm-original-price" min="1" step="1" placeholder="e.g. 220">
+          </div>
+
+          <div class="form-group">
+            <label for="pm-stock">Initial Stock Quantity *</label>
+            <input type="number" id="pm-stock" min="0" step="1" placeholder="e.g. 25" required>
+          </div>
+
+          <div class="form-group">
+            <label for="pm-badge">Promotional Badge</label>
+            <select id="pm-badge">
+              <option value="">No Badge</option>
+              <option value="ORGANIC">ORGANIC</option>
+              <option value="BESTSELLER">BESTSELLER</option>
+              <option value="SALE">SALE</option>
+            </select>
+          </div>
+
+          <div class="form-group col-full">
+            <label for="pm-desc">Product Description</label>
+            <textarea id="pm-desc" rows="3" placeholder="Brief freshness description, nutritional highlights..."></textarea>
+          </div>
+
+          <div class="form-group col-full">
+            <label for="pm-image">Image URL</label>
+            <input type="url" id="pm-image" placeholder="https://images.unsplash.com/photo-...">
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; border-top: 1px solid var(--border-light); padding-top: 16px;">
+          <button type="button" class="btn btn-outline" onclick="closeProductModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="pm-submit-btn">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ORDER DETAILS MODAL FOR OWNER -->
+  <div class="modal-overlay" id="order-details-modal">
+    <div class="modal-box" style="max-width: 680px; text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border-light); padding-bottom: 12px;">
+        <div>
+          <h3 style="color: var(--primary); font-size: 1.3rem; font-weight: 800;">Order Details: <span id="odm-id"></span></h3>
+          <span id="odm-invoice-badge" style="font-size: 0.8rem; color: var(--text-muted);"></span>
+        </div>
+        <button type="button" onclick="closeOrderDetailsModal()" style="font-size: 1.2rem; color: var(--text-muted);"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div id="odm-body" style="font-size: 0.9rem;">
+        <!-- Dynamically rendered -->
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; border-top: 1px solid var(--border-light); padding-top: 16px;">
+        <a href="#" id="odm-invoice-link" target="_blank" class="btn btn-outline btn-sm">
+          <i class="fas fa-file-invoice"></i> View Official Invoice
+        </a>
+        <button type="button" class="btn btn-primary btn-sm" onclick="closeOrderDetailsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container" style="text-align: center;">
+      <p>&copy; 2026 FreshCart Retail Pvt. Ltd. Owner Administration &amp; Inventory Engine.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    // Security & Role Guard: Only Owner allowed
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof checkRoleAccessGuard === 'function') {
+        const allowed = checkRoleAccessGuard(['owner']);
+        if (!allowed) return;
+      }
+      initOwnerDashboard();
+    });
+
+    function initOwnerDashboard() {
+      renderStats();
+      renderOrdersTable();
+      renderInventoryTable();
+      renderCategoriesGrid();
+      renderReports();
+      initSettingsForm();
+      initTabSwitching();
+    }
+
+    // Tab Switching
+    function initTabSwitching() {
+      const tabBtns = document.querySelectorAll('.dash-tab-btn');
+      const panes = document.querySelectorAll('.dashboard-tab-pane');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => b.classList.remove('active'));
+          panes.forEach(p => p.classList.remove('active'));
+
+          btn.classList.add('active');
+          const targetPane = document.getElementById(btn.getAttribute('data-pane'));
+          if (targetPane) targetPane.classList.add('active');
+        });
+      });
+    }
+
+    // Render Stats
+    function renderStats() {
+      const orders = getAllOrdersFromStorage();
+      const products = getAllProducts();
+
+      let totalSales = 0;
+      let pendingCount = 0;
+      let completedCount = 0;
+
+      orders.forEach(o => {
+        if (o.status !== ORDER_STATUS.CANCELLED) {
+          totalSales += o.grandTotal || 0;
+        }
+        if (o.status === ORDER_STATUS.DELIVERED) {
+          completedCount++;
+        } else if (o.status !== ORDER_STATUS.CANCELLED) {
+          pendingCount++;
+        }
+      });
+
+      const lowStockCount = products.filter(p => p.stock <= (p.lowStockThreshold || 5)).length;
+
+      document.getElementById('stat-total-sales').textContent = `₹${totalSales.toLocaleString('en-IN')}`;
+      document.getElementById('stat-total-orders').textContent = orders.length;
+      document.getElementById('stat-pending-orders').textContent = pendingCount;
+      document.getElementById('stat-completed-orders').textContent = completedCount;
+      document.getElementById('stat-low-stock').textContent = lowStockCount;
+
+      document.getElementById('tab-badge-orders').textContent = orders.length;
+      document.getElementById('tab-badge-products').textContent = products.length;
+    }
+
+    // Render Orders Table
+    function renderOrdersTable() {
+      const tbody = document.getElementById('owner-orders-tbody');
+      if (!tbody) return;
+
+      const statusFilter = document.getElementById('filter-order-status').value;
+      const searchVal = document.getElementById('search-orders-input').value.trim().toLowerCase();
+
+      let orders = getAllOrdersFromStorage();
+
+      if (statusFilter !== 'ALL') {
+        orders = orders.filter(o => o.status === statusFilter);
+      }
+
+      if (searchVal) {
+        orders = orders.filter(o => 
+          o.id.toLowerCase().includes(searchVal) ||
+          o.customerName.toLowerCase().includes(searchVal) ||
+          o.phone.includes(searchVal)
+        );
+      }
+
+      if (orders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 30px; color: var(--text-muted);">No matching orders found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = orders.map(order => {
+        const dateStr = new Date(order.createdAt).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+        const now = Date.now();
+        const deadline = new Date(order.deadlineAt).getTime();
+        const isOverdue = now > deadline && order.status !== ORDER_STATUS.DELIVERED && order.status !== ORDER_STATUS.CANCELLED;
+
+        let statusClass = 'status-new-order';
+        if (order.status === ORDER_STATUS.ACCEPTED) statusClass = 'status-accepted';
+        else if (order.status === ORDER_STATUS.PREPARING) statusClass = 'status-preparing';
+        else if (order.status === ORDER_STATUS.PACKING) statusClass = 'status-packing';
+        else if (order.status === ORDER_STATUS.PACKED) statusClass = 'status-packed';
+        else if (order.status === ORDER_STATUS.READY) statusClass = 'status-ready-for-delivery';
+        else if (order.status === ORDER_STATUS.DELIVERED) statusClass = 'status-delivered';
+        else if (order.status === ORDER_STATUS.CANCELLED) statusClass = 'status-cancelled';
+
+        return `
+          <tr>
+            <td>
+              <strong>${order.id}</strong><br>
+              <small style="color: var(--text-muted);">${dateStr}</small>
+            </td>
+            <td>
+              <strong>${order.customerName}</strong><br>
+              <small><i class="fas fa-phone"></i> ${order.phone}</small>
+            </td>
+            <td style="max-width: 200px; font-size: 0.82rem;">
+              ${order.address}
+            </td>
+            <td>
+              <strong>₹${order.grandTotal}</strong><br>
+              <small style="color: var(--text-muted);">${order.items.length} items (${order.items.reduce((sum, i) => sum + i.quantity, 0)} units)</small>
+            </td>
+            <td>
+              <span style="font-size: 0.82rem; font-weight: 600; color: ${order.paymentStatus.includes('Paid') ? 'var(--success)' : '#E65100'};">
+                ${order.paymentStatus}
+              </span>
+            </td>
+            <td>
+              ${isOverdue ? `<span class="flag-overdue"><i class="fas fa-exclamation-triangle"></i> OVERDUE</span><br>` : ''}
+              <small style="color: var(--text-muted); font-size: 0.8rem;">Prep: ${order.prepTimeMinutes || 25}m</small>
+            </td>
+            <td>
+              <!-- Live Order Status Selector Dropdown -->
+              <select onchange="handleOrderStatusChange('${order.id}', this.value)" style="padding: 4px 8px; border-radius: 999px; font-size: 0.78rem; font-weight: 700;" class="${statusClass}">
+                <option value="${ORDER_STATUS.NEW}" ${order.status === ORDER_STATUS.NEW ? 'selected' : ''}>New Order</option>
+                <option value="${ORDER_STATUS.ACCEPTED}" ${order.status === ORDER_STATUS.ACCEPTED ? 'selected' : ''}>Accepted</option>
+                <option value="${ORDER_STATUS.PREPARING}" ${order.status === ORDER_STATUS.PREPARING ? 'selected' : ''}>Preparing</option>
+                <option value="${ORDER_STATUS.PACKING}" ${order.status === ORDER_STATUS.PACKING ? 'selected' : ''}>Packing</option>
+                <option value="${ORDER_STATUS.PACKED}" ${order.status === ORDER_STATUS.PACKED ? 'selected' : ''}>Packed</option>
+                <option value="${ORDER_STATUS.READY}" ${order.status === ORDER_STATUS.READY ? 'selected' : ''}>Ready for Delivery</option>
+                <option value="${ORDER_STATUS.DELIVERED}" ${order.status === ORDER_STATUS.DELIVERED ? 'selected' : ''}>Delivered</option>
+                <option value="${ORDER_STATUS.CANCELLED}" ${order.status === ORDER_STATUS.CANCELLED ? 'selected' : ''}>Cancelled</option>
+              </select>
+            </td>
+            <td>
+              <div class="table-action-btns">
+                <button class="btn btn-sm btn-outline" onclick="openOrderDetailsModal('${order.id}')" title="View Order Details">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <a href="invoice.html?orderId=${order.id}" target="_blank" class="btn btn-sm btn-outline" title="View Tax Invoice">
+                  <i class="fas fa-print"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Status Change Handler with immediate feedback & sync
+    window.handleOrderStatusChange = function(orderId, newStatus) {
+      const ok = updateOrderStatus(orderId, newStatus);
+      if (ok) {
+        showToast('Order Updated', `${orderId} status changed to ${newStatus}`, 'success');
+        renderStats();
+        renderOrdersTable();
+      }
+    };
+
+    // Filter Listeners
+    document.getElementById('filter-order-status').addEventListener('change', renderOrdersTable);
+    document.getElementById('search-orders-input').addEventListener('input', renderOrdersTable);
+
+    // Render Inventory Table
+    function renderInventoryTable() {
+      const tbody = document.getElementById('owner-inventory-tbody');
+      if (!tbody) return;
+
+      const catFilter = document.getElementById('filter-inv-category').value;
+      const stockFilter = document.getElementById('filter-inv-stock').value;
+      const searchVal = document.getElementById('search-inv-input').value.trim().toLowerCase();
+
+      let products = getAllProducts();
+
+      if (catFilter !== 'ALL') {
+        products = products.filter(p => p.category.toLowerCase() === catFilter.toLowerCase());
+      }
+
+      if (stockFilter === 'LOW') {
+        products = products.filter(p => p.stock <= (p.lowStockThreshold || 5) && p.stock > 0);
+      } else if (stockFilter === 'OUT') {
+        products = products.filter(p => p.stock === 0);
+      } else if (stockFilter === 'IN') {
+        products = products.filter(p => p.stock > 5);
+      }
+
+      if (searchVal) {
+        products = products.filter(p => p.name.toLowerCase().includes(searchVal));
+      }
+
+      tbody.innerHTML = products.map(product => {
+        let stockBadge = '<span class="stock-pill stock-in"><i class="fas fa-check"></i> In Stock</span>';
+        if (product.stock === 0) {
+          stockBadge = '<span class="stock-pill stock-out"><i class="fas fa-ban"></i> Out of Stock</span>';
+        } else if (product.stock <= (product.lowStockThreshold || 5)) {
+          stockBadge = `<span class="stock-pill stock-low"><i class="fas fa-triangle-exclamation"></i> Low (${product.stock})</span>`;
+        }
+
+        return `
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="${product.image}" alt="" style="width: 38px; height: 38px; border-radius: 6px; object-fit: contain; background: var(--bg-cream);" onerror="this.onerror=null; this.src='${product.localImage}';">
+                <div>
+                  <strong>${product.name}</strong><br>
+                  <small style="color: var(--text-muted);">${product.unit}</small>
+                </div>
+              </div>
+            </td>
+            <td><span class="role-badge role-customer">${product.category}</span></td>
+            <td><strong>₹${product.price}</strong></td>
+            <td>
+              <strong style="font-size: 1.05rem; color: ${product.stock <= 5 ? '#E65100' : 'var(--text-dark)'};">${product.stock}</strong> units
+            </td>
+            <td>${stockBadge}</td>
+            <td style="font-size: 0.82rem; color: var(--text-muted);">${product.origin} | ${product.shelfLife}</td>
+            <td>
+              <div style="display: flex; gap: 4px;">
+                <button class="btn btn-sm btn-outline" style="padding: 2px 8px; font-size: 0.75rem;" onclick="quickAdjustStock(${product.id}, 5)">+5</button>
+                <button class="btn btn-sm btn-outline" style="padding: 2px 8px; font-size: 0.75rem;" onclick="quickAdjustStock(${product.id}, 10)">+10</button>
+                <button class="btn btn-sm btn-outline" style="padding: 2px 8px; font-size: 0.75rem; color: var(--danger); border-color: var(--danger);" onclick="quickAdjustStock(${product.id}, -1)">-1</button>
+              </div>
+            </td>
+            <td>
+              <div class="table-action-btns">
+                <button class="btn btn-sm btn-outline" onclick="openEditProductModal(${product.id})" title="Edit Product">
+                  <i class="fas fa-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-outline" style="color: var(--danger); border-color: var(--danger);" onclick="handleDeleteProduct(${product.id})" title="Delete Product">
+                  <i class="fas fa-trash-can"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Quick stock adjuster
+    window.quickAdjustStock = function(id, delta) {
+      const prod = getProductById(id);
+      if (prod) {
+        const newStock = Math.max(0, prod.stock + delta);
+        updateProductStock(id, newStock);
+        showToast('Stock Updated', `${prod.name} stock adjusted to ${newStock}`, 'info');
+        renderInventoryTable();
+        renderStats();
+      }
+    };
+
+    // Delete Product
+    window.handleDeleteProduct = function(id) {
+      const prod = getProductById(id);
+      if (confirm(`Are you sure you want to delete "${prod.name}" from the store catalog?`)) {
+        deleteProductFromCatalog(id);
+        showToast('Product Removed', `Product #${id} deleted.`, 'info');
+        renderInventoryTable();
+        renderStats();
+      }
+    };
+
+    document.getElementById('filter-inv-category').addEventListener('change', renderInventoryTable);
+    document.getElementById('filter-inv-stock').addEventListener('change', renderInventoryTable);
+    document.getElementById('search-inv-input').addEventListener('input', renderInventoryTable);
+
+    // Render Categories Grid
+    function renderCategoriesGrid() {
+      const grid = document.getElementById('owner-categories-grid');
+      if (!grid) return;
+
+      const categories = [
+        { name: "Fruits", icon: "🍎", file: "fruits.svg" },
+        { name: "Vegetables", icon: "🥦", file: "vegetables.svg" },
+        { name: "Dairy", icon: "🥛", file: "dairy.svg" },
+        { name: "Bakery", icon: "🍞", file: "bakery.svg" },
+        { name: "Snacks", icon: "🥨", file: "snacks.svg" },
+        { name: "Beverages", icon: "🧃", file: "beverages.svg" },
+        { name: "Rice and Grains", icon: "🌾", file: "grains.svg" },
+        { name: "Spices", icon: "🌶️", file: "spices.svg" },
+        { name: "Personal Care", icon: "🧴", file: "personal.svg" },
+        { name: "Household Essentials", icon: "🧼", file: "household.svg" },
+        { name: "Frozen Foods", icon: "🧊", file: "frozen.svg" }
+      ];
+
+      const products = getAllProducts();
+
+      grid.innerHTML = categories.map(cat => {
+        const count = products.filter(p => p.category.toLowerCase().includes(cat.name.toLowerCase())).length;
+        return `
+          <div class="category-card" style="cursor: default;">
+            <div class="cat-icon-wrap">
+              <img src="images/categories/${cat.file}" alt="${cat.name}">
+            </div>
+            <h4 class="cat-name">${cat.name}</h4>
+            <span class="cat-count">${count} Products in Stock</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Render Reports
+    function renderReports() {
+      const orders = getAllOrdersFromStorage();
+      const catSales = {};
+      const itemSales = {};
+
+      orders.forEach(o => {
+        if (o.status !== ORDER_STATUS.CANCELLED) {
+          o.items.forEach(i => {
+            const prod = getProductById(i.id);
+            const cat = prod ? prod.category : 'General';
+            catSales[cat] = (catSales[cat] || 0) + (i.lineTotal || (i.price * i.quantity));
+            itemSales[i.name] = (itemSales[i.name] || 0) + i.quantity;
+          });
+        }
+      });
+
+      // Render category sales bars
+      const reportDiv = document.getElementById('category-sales-report');
+      if (reportDiv) {
+        const catKeys = Object.keys(catSales).sort((a, b) => catSales[b] - catSales[a]);
+        const maxVal = Math.max(...Object.values(catSales), 1);
+
+        if (catKeys.length === 0) {
+          reportDiv.innerHTML = `<p style="color: var(--text-muted);">No sales data available yet.</p>`;
+        } else {
+          reportDiv.innerHTML = catKeys.map(cat => {
+            const val = catSales[cat];
+            const pct = Math.round((val / maxVal) * 100);
+            return `
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px;">
+                  <strong>${cat}</strong>
+                  <span>₹${val.toLocaleString('en-IN')}</span>
+                </div>
+                <div style="height: 8px; background: var(--bg-cream); border-radius: 4px; overflow: hidden;">
+                  <div style="height: 100%; width: ${pct}%; background: var(--primary); border-radius: 4px;"></div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      // Render bestsellers
+      const bestDiv = document.getElementById('bestseller-items-report');
+      if (bestDiv) {
+        const sortedItems = Object.keys(itemSales).sort((a, b) => itemSales[b] - itemSales[a]).slice(0, 5);
+        if (sortedItems.length === 0) {
+          bestDiv.innerHTML = `<p style="color: var(--text-muted);">No items ordered yet.</p>`;
+        } else {
+          bestDiv.innerHTML = sortedItems.map((name, idx) => `
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--bg-cream); border-radius: 8px;">
+              <span style="font-weight: 600;"><span style="color: var(--primary); font-weight: 800; margin-right: 8px;">#${idx + 1}</span> ${name}</span>
+              <strong style="color: var(--primary);">${itemSales[name]} units sold</strong>
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    // Store Settings Form
+    function initSettingsForm() {
+      const form = document.getElementById('store-settings-form');
+      const prepInput = document.getElementById('cfg-prep-time');
+      const settings = getStoreSettings();
+
+      if (prepInput) prepInput.value = settings.defaultPrepMinutes || 25;
+
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const newPrep = parseInt(prepInput.value, 10) || 25;
+          saveStoreSettings({ ...settings, defaultPrepMinutes: newPrep });
+          showToast('Settings Saved', `Default preparation time set to ${newPrep} mins.`, 'success');
+        });
+      }
+    }
+
+    // Add / Edit Product Modal Handlers
+    window.openAddProductModal = function() {
+      document.getElementById('product-modal-title').textContent = 'Add New Grocery Product';
+      document.getElementById('pm-id').value = '';
+      document.getElementById('product-form').reset();
+      document.getElementById('product-modal').classList.add('active');
+    };
+
+    window.openEditProductModal = function(id) {
+      const prod = getProductById(id);
+      if (!prod) return;
+
+      document.getElementById('product-modal-title').textContent = `Edit Product #${prod.id}: ${prod.name}`;
+      document.getElementById('pm-id').value = prod.id;
+      document.getElementById('pm-name').value = prod.name;
+      document.getElementById('pm-category').value = prod.category;
+      document.getElementById('pm-unit').value = prod.unit;
+      document.getElementById('pm-price').value = prod.price;
+      document.getElementById('pm-original-price').value = prod.originalPrice || prod.price;
+      document.getElementById('pm-stock').value = prod.stock;
+      document.getElementById('pm-badge').value = prod.badge || '';
+      document.getElementById('pm-desc').value = prod.description || '';
+      document.getElementById('pm-image').value = prod.image || '';
+
+      document.getElementById('product-modal').classList.add('active');
+    };
+
+    window.closeProductModal = function() {
+      document.getElementById('product-modal').classList.remove('active');
+    };
+
+    // Product Form Submit
+    document.getElementById('product-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const id = document.getElementById('pm-id').value;
+      const productData = {
+        name: document.getElementById('pm-name').value.trim(),
+        category: document.getElementById('pm-category').value,
+        unit: document.getElementById('pm-unit').value.trim(),
+        price: parseFloat(document.getElementById('pm-price').value),
+        originalPrice: parseFloat(document.getElementById('pm-original-price').value || document.getElementById('pm-price').value),
+        stock: parseInt(document.getElementById('pm-stock').value, 10),
+        badge: document.getElementById('pm-badge').value,
+        description: document.getElementById('pm-desc').value.trim(),
+        image: document.getElementById('pm-image').value.trim()
+      };
+
+      if (id) {
+        updateProductInCatalog(id, productData);
+        showToast('Product Updated', `Updated product #${id} successfully.`, 'success');
+      } else {
+        addProductToCatalog(productData);
+        showToast('Product Added', `Added "${productData.name}" to inventory.`, 'success');
+      }
+
+      closeProductModal();
+      renderInventoryTable();
+      renderCategoriesGrid();
+      renderStats();
+    });
+
+    // Order Details Modal
+    window.openOrderDetailsModal = function(orderId) {
+      const order = getOrderById(orderId);
+      if (!order) return;
+
+      document.getElementById('odm-id').textContent = order.id;
+      document.getElementById('odm-invoice-badge').textContent = order.invoiceNumber;
+      document.getElementById('odm-invoice-link').href = `invoice.html?orderId=${order.id}`;
+
+      const odmBody = document.getElementById('odm-body');
+      odmBody.innerHTML = `
+        <div style="background: var(--bg-cream); padding: 14px; border-radius: 8px; margin-bottom: 16px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <div><strong>Customer:</strong> ${order.customerName}</div>
+            <div><strong>Phone:</strong> ${order.phone}</div>
+            <div><strong>Email:</strong> ${order.email}</div>
+            <div><strong>Slot:</strong> ${order.slot}</div>
+            <div style="grid-column: span 2;"><strong>Address:</strong> ${order.address}</div>
+            ${order.specialInstructions ? `<div style="grid-column: span 2; color: #E65100;"><strong>Instructions:</strong> ${order.specialInstructions}</div>` : ''}
+          </div>
+        </div>
+
+        <h4 style="margin-bottom: 10px; font-weight: 700;">Ordered Grocery Products:</h4>
+        <div style="max-height: 200px; overflow-y: auto; border: 1px solid var(--border-light); border-radius: 8px; margin-bottom: 16px;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+            <thead>
+              <tr style="background: #FAFAFA; border-bottom: 1px solid var(--border-light); text-align: left;">
+                <th style="padding: 8px 12px;">Item</th>
+                <th style="padding: 8px 12px;">Unit Price</th>
+                <th style="padding: 8px 12px;">Qty</th>
+                <th style="padding: 8px 12px;">Packed?</th>
+                <th style="padding: 8px 12px; text-align: right;">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${order.items.map(item => `
+                <tr style="border-bottom: 1px solid var(--border-light);">
+                  <td style="padding: 8px 12px;"><strong>${item.name}</strong> <small style="color:var(--text-muted);">(${item.unit})</small></td>
+                  <td style="padding: 8px 12px;">₹${item.price}</td>
+                  <td style="padding: 8px 12px;">${item.quantity}</td>
+                  <td style="padding: 8px 12px;">${item.packed ? '<span style="color:var(--success); font-weight:700;">✓ Packed</span>' : '<span style="color:var(--text-muted);">Pending</span>'}</td>
+                  <td style="padding: 8px 12px; text-align: right;"><strong>₹${item.lineTotal || (item.price * item.quantity)}</strong></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; font-weight: 800; font-size: 1.1rem; color: var(--primary);">
+          <span>Total Payable:</span>
+          <span>₹${order.grandTotal} (${order.paymentStatus})</span>
+        </div>
+      `;
+
+      document.getElementById('order-details-modal').classList.add('active');
+    };
+
+    window.closeOrderDetailsModal = function() {
+      document.getElementById('order-details-modal').classList.remove('active');
+    };
+  </script>
+</body>
+</html>

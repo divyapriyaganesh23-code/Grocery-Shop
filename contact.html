@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - FreshCart Customer Support</title>
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <!-- Top Notification Bar -->
+  <div class="top-bar">
+    <div class="container">
+      <div class="top-bar-left">
+        <span><i class="fas fa-truck-fast"></i> Free Delivery on all grocery orders above ₹500!</span>
+        <span><i class="fas fa-clock"></i> Express 2-Hour Delivery Available</span>
+      </div>
+      <div class="top-bar-right">
+        <span><i class="fas fa-phone-volume"></i> Support: +91 98765 43210</span>
+        <a href="contact.html"><i class="fas fa-location-dot"></i> Bengaluru, India</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="container header-container">
+      <a href="index.html" class="brand-logo">
+        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+        <span>Fresh</span>Cart
+      </a>
+
+      <div class="header-search">
+        <form>
+          <input type="text" placeholder="Search groceries..." aria-label="Search products">
+          <button type="submit" aria-label="Search"><i class="fas fa-magnifying-glass"></i></button>
+        </form>
+      </div>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="products.html" class="nav-link">Products</a>
+        <a href="products.html?category=fruits" class="nav-link">Categories</a>
+        <a href="contact.html" class="nav-link active">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="login.html" class="action-btn" title="Account / Sign In"><i class="far fa-user"></i></a>
+        <a href="cart.html" class="action-btn" title="Shopping Cart">
+          <i class="fas fa-basket-shopping"></i>
+          <span class="badge-count cart-count-badge" style="display: none;">0</span>
+        </a>
+        <button class="mobile-toggle" aria-label="Open mobile menu"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Slide Drawer -->
+  <div class="drawer-overlay"></div>
+  <aside class="mobile-drawer">
+    <div class="drawer-header">
+      <a href="index.html" class="brand-logo" style="font-size: 1.35rem;">
+        <div class="logo-icon" style="width: 32px; height: 32px; font-size: 1rem;"><i class="fas fa-leaf"></i></div>
+        <span>Fresh</span>Cart
+      </a>
+      <button class="drawer-close"><i class="fas fa-times"></i></button>
+    </div>
+    <nav class="drawer-nav">
+      <a href="index.html"><i class="fas fa-home" style="margin-right: 10px; color: var(--primary);"></i> Home</a>
+      <a href="about.html"><i class="fas fa-info-circle" style="margin-right: 10px; color: var(--primary);"></i> About Us</a>
+      <a href="products.html"><i class="fas fa-boxes-stacked" style="margin-right: 10px; color: var(--primary);"></i> All Products</a>
+      <a href="cart.html"><i class="fas fa-basket-shopping" style="margin-right: 10px; color: var(--primary);"></i> Shopping Cart (<span class="cart-count-badge">0</span>)</a>
+      <a href="contact.html" class="active"><i class="fas fa-envelope" style="margin-right: 10px; color: var(--primary);"></i> Contact Us</a>
+      <a href="login.html"><i class="fas fa-user-circle" style="margin-right: 10px; color: var(--primary);"></i> Sign In / Register</a>
+    </nav>
+  </aside>
+
+  <!-- Page Banner -->
+  <section class="page-banner">
+    <div class="container">
+      <h1>We Are Here to Help You</h1>
+      <div class="breadcrumbs">
+        <a href="index.html">Home</a>
+        <i class="fas fa-chevron-right" style="font-size: 0.75rem;"></i>
+        <span>Contact Us</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <div class="container">
+    <div class="contact-layout">
+      <!-- Left: Contact Details Card -->
+      <div class="contact-info-card">
+        <div>
+          <span class="section-badge" style="background: rgba(255,255,255,0.2); color: #ffffff; border: 1px solid rgba(255,255,255,0.3);">
+            Get in Touch
+          </span>
+          <h3>Customer Support &amp; Store Inquiries</h3>
+          <p>Have a question regarding your order delivery, product quality, or farm sourcing? Our responsive support team is active 7 days a week.</p>
+
+          <div class="contact-details-list">
+            <div class="cd-item">
+              <div class="cd-icon"><i class="fas fa-phone-volume"></i></div>
+              <div class="cd-text">
+                <h5>Call Us Directly</h5>
+                <p>+91 98765 43210 (Toll Free)</p>
+                <p>Mon - Sun: 6:00 AM - 11:00 PM</p>
+              </div>
+            </div>
+
+            <div class="cd-item">
+              <div class="cd-icon"><i class="fas fa-envelope-open-text"></i></div>
+              <div class="cd-text">
+                <h5>Email Us</h5>
+                <p>orders@freshcart.com (Order inquiries)</p>
+                <p>support@freshcart.com (General support)</p>
+              </div>
+            </div>
+
+            <div class="cd-item">
+              <div class="cd-icon"><i class="fas fa-map-location-dot"></i></div>
+              <div class="cd-text">
+                <h5>Headquarters &amp; Central Hub</h5>
+                <p>#42, Green Park Boulevard, HSR Layout Sector 2</p>
+                <p>Bengaluru, Karnataka - 560102, India</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.15); margin-top: 30px;">
+          <h5 style="color: white; margin-bottom: 10px;">Connect With Us</h5>
+          <div class="footer-social">
+            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-x-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Contact Form -->
+      <div class="contact-form-card">
+        <h3>Send Us a Message</h3>
+        <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 0.95rem;">
+          Fill out the form below and one of our dedicated customer service representatives will reach out to you within 2 hours.
+        </p>
+
+        <form id="contact-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="contact-name">Your Full Name *</label>
+              <input type="text" id="contact-name" placeholder="e.g. Rahul Sharma" required>
+              <span class="field-error">Please enter at least 3 characters.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="contact-email">Email Address *</label>
+              <input type="email" id="contact-email" placeholder="e.g. rahul@example.com" required>
+              <span class="field-error">Please enter a valid email address.</span>
+            </div>
+
+            <div class="form-group col-full">
+              <label for="contact-subject">Subject *</label>
+              <select id="contact-subject" required>
+                <option value="">Select subject category</option>
+                <option value="order">Order Tracking &amp; Delivery</option>
+                <option value="quality">Product Freshness &amp; Quality Feedback</option>
+                <option value="refund">Returns &amp; Refund Request</option>
+                <option value="farmer">Farmer Partnership / Supplier Inquiry</option>
+                <option value="other">Other General Feedback</option>
+              </select>
+              <span class="field-error">Please choose a subject.</span>
+            </div>
+
+            <div class="form-group col-full">
+              <label for="contact-message">Message *</label>
+              <textarea id="contact-message" rows="5" placeholder="How can we help you today? Please include order number if applicable." required></textarea>
+              <span class="field-error">Please write a message with at least 10 characters.</span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg btn-block">
+            <i class="fas fa-paper-plane"></i> Send Message
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Google Maps Placeholder Section -->
+    <section class="map-section">
+      <div class="section-title-wrap">
+        <span class="section-badge">Store Location</span>
+        <h2 class="section-title">Visit Our Flagship Experience Store</h2>
+        <p class="section-subtitle">Walk in to hand-select fresh farm harvest, taste artisanal breads, or pick up your online click-and-collect orders.</p>
+      </div>
+
+      <div class="map-container">
+        <!-- Styled Map Canvas / Graphic Placeholder -->
+        <div class="map-placeholder-content">
+          <i class="fas fa-map-pin"></i>
+          <h3 style="font-size: 1.3rem; margin-bottom: 6px; color: var(--primary);">FreshCart Flagship Store &amp; Fulfillment Center</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 14px;">Green Park Boulevard, HSR Layout, Bengaluru, Karnataka</p>
+          <a href="https://maps.google.com" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+            <i class="fas fa-diamond-turn-right"></i> Get Directions on Google Maps
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Accordion Section -->
+    <section class="faq-section">
+      <div class="section-title-wrap">
+        <span class="section-badge">Frequently Asked Questions</span>
+        <h2 class="section-title">Got Questions? We Have Answers</h2>
+        <p class="section-subtitle">Quick answers to common questions about our delivery, returns, and organic certifications.</p>
+      </div>
+
+      <div class="faq-accordion">
+        <div class="faq-item active">
+          <div class="faq-question">
+            <span>How does the 2-Hour Express Delivery work?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            Our climate-controlled fulfillment micro-hubs are strategically located within 5 km of every serviceable neighborhood. When your order is placed, automated pickers pack your items in under 15 minutes, and our cold-chain delivery riders dispatch directly to your address.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Are all vegetables and fruits 100% organic?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            Yes! All our fresh produce is sourced from certified organic farms tested in accordance with NPOP (National Programme for Organic Production) standards. We never use carbide ripening agents, synthetic wax coatings, or harmful chemical preservatives.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>What happens if an item arrives damaged or not fresh?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            We adhere to a strict "No Questions Asked" doorstep return policy. You can inspect your produce upon delivery and hand back any item you are not thrilled with to the delivery agent. The refund is credited back immediately.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>What payment methods do you support?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            We accept Cash on Delivery (COD), UPI (Google Pay, PhonePe, Paytm), all major Credit & Debit cards (Visa, Mastercard, RuPay), and Internet Banking.
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-brand">
+          <a href="index.html" class="brand-logo" style="color: #ffffff;">
+            <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+            <span>Fresh</span>Cart
+          </a>
+          <p>
+            FreshCart is India's premier online grocery platform connecting responsible organic farmers with conscious consumers. Freshness delivered within 2 hours.
+          </p>
+          <div class="footer-social">
+            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-x-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="products.html">All Products</a>
+            <a href="cart.html">View Cart</a>
+            <a href="contact.html">Contact Support</a>
+            <a href="login.html">My Account</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Grocery Categories</h4>
+          <div class="footer-links">
+            <a href="products.html?category=fruits">Fresh Fruits</a>
+            <a href="products.html?category=vegetables">Green Vegetables</a>
+            <a href="products.html?category=dairy">Dairy &amp; Eggs</a>
+            <a href="products.html?category=bakery">Artisan Bakery</a>
+            <a href="products.html?category=beverages">Healthy Beverages</a>
+            <a href="products.html?category=household">Household Essentials</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Store Information</h4>
+          <div class="footer-contact-list">
+            <div class="contact-item">
+              <i class="fas fa-location-dot"></i>
+              <span>#42, Green Park Boulevard, HSR Layout Sector 2, Bengaluru, Karnataka - 560102</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-phone"></i>
+              <span>+91 98765 43210 (Toll Free)</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-envelope"></i>
+              <span>orders@freshcart.com</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-clock"></i>
+              <span>Open 7 Days: 6:00 AM – 11:00 PM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 FreshCart Retail Pvt. Ltd. All rights reserved.</div>
+        <div class="payment-badges">
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fab fa-google-pay"></i>
+          <i class="fas fa-qrcode"></i>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

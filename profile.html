@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Profile &amp; Order History - FreshCart</title>
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body style="background: #F8F8F0;">
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="container">
+      <div class="top-bar-left">
+        <span><i class="fas fa-truck-fast"></i> Free Delivery on all grocery orders above ₹500!</span>
+      </div>
+      <div class="top-bar-right">
+        <span><i class="fas fa-phone-volume"></i> Support: +91 98765 43210</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="container header-container">
+      <a href="index.html" class="brand-logo">
+        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+        <span>Fresh</span>Cart
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="products.html" class="nav-link">Products</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <div id="header-user-wrapper"></div>
+        <a href="cart.html" class="action-btn" title="Shopping Cart">
+          <i class="fas fa-basket-shopping"></i>
+          <span class="badge-count cart-count-badge" style="display: none;">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Banner -->
+  <section class="page-banner">
+    <div class="container">
+      <h1>My Account &amp; Order Tracking</h1>
+      <div class="breadcrumbs">
+        <a href="index.html">Home</a>
+        <i class="fas fa-chevron-right" style="font-size: 0.75rem;"></i>
+        <span>Customer Account</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Profile Layout Container -->
+  <main class="container" style="margin-bottom: 70px;">
+    <div class="profile-layout">
+      <!-- Left Sidebar: Profile Summary Card -->
+      <aside class="profile-sidebar-card">
+        <div class="profile-avatar-circle" id="prof-avatar-letter">A</div>
+        <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--primary);" id="prof-sidebar-name">Customer Name</h2>
+        <span class="role-badge role-customer" style="margin: 6px 0 16px;">Verified Customer</span>
+        <p style="font-size: 0.85rem; color: var(--text-muted);" id="prof-sidebar-email">customer@freshcart.com</p>
+
+        <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 10px;">
+          <a href="#orders-section" class="btn btn-outline btn-block btn-sm">
+            <i class="fas fa-receipt"></i> View My Orders
+          </a>
+          <button class="btn btn-outline btn-block btn-sm" onclick="logoutUser()" style="border-color: var(--danger); color: var(--danger);">
+            <i class="fas fa-arrow-right-from-bracket"></i> Sign Out
+          </button>
+        </div>
+      </aside>
+
+      <!-- Right: Main Content Area -->
+      <section class="profile-main-content">
+        <!-- Edit Profile Form -->
+        <div style="margin-bottom: 40px; padding-bottom: 30px; border-bottom: 1.5px solid var(--border-light);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--primary);">
+              <i class="fas fa-user-pen"></i> Personal Profile Information
+            </h3>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Real-time synchronized with LocalStorage</span>
+          </div>
+
+          <form id="edit-profile-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="prof-name">Full Name *</label>
+                <input type="text" id="prof-name" required>
+                <span class="field-error">Please enter at least 3 characters.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="prof-phone">Phone Number (10 Digits) *</label>
+                <input type="tel" id="prof-phone" pattern="[6-9][0-9]{9}" required>
+                <span class="field-error">Please enter a valid 10-digit phone number.</span>
+              </div>
+
+              <div class="form-group col-full">
+                <label for="prof-email">Email Address (Account Identifier)</label>
+                <input type="email" id="prof-email" readonly style="background: var(--bg-cream); color: var(--text-muted); cursor: not-allowed;">
+              </div>
+
+              <div class="form-group col-full">
+                <label for="prof-address">Default Delivery Address *</label>
+                <textarea id="prof-address" rows="3" placeholder="House/Flat No., Street, Landmark, PIN Code" required></textarea>
+                <span class="field-error">Please enter a complete delivery address.</span>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-sm" style="margin-top: 10px;">
+              <i class="fas fa-floppy-disk"></i> Save Profile Changes
+            </button>
+          </form>
+        </div>
+
+        <!-- Orders & Live Tracking Section -->
+        <div id="orders-section">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--primary);">
+              <i class="fas fa-truck-ramp-box"></i> My Orders &amp; Live Tracking
+            </h3>
+            <a href="products.html" class="btn btn-primary btn-sm">
+              <i class="fas fa-plus"></i> Order More Groceries
+            </a>
+          </div>
+
+          <div id="customer-orders-list">
+            <!-- Dynamically populated order tracking cards -->
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container" style="text-align: center;">
+      <p>&copy; 2026 FreshCart Retail Pvt. Ltd. Customer Account Center.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = getCurrentUser();
+      if (!user) {
+        showToast('Login Required', 'Please sign in to view your profile.', 'info');
+        setTimeout(() => { window.location.href = 'login.html'; }, 600);
+        return;
+      }
+
+      populateProfileDetails(user);
+      renderCustomerOrders(user);
+      initProfileForm(user);
+
+      // Listen for order status updates
+      window.addEventListener('freshcart_orders_updated', () => {
+        renderCustomerOrders(getCurrentUser());
+      });
+    });
+
+    function populateProfileDetails(user) {
+      document.getElementById('prof-sidebar-name').textContent = user.name;
+      document.getElementById('prof-sidebar-email').textContent = user.email;
+      document.getElementById('prof-avatar-letter').textContent = user.name ? user.name.charAt(0).toUpperCase() : 'U';
+
+      document.getElementById('prof-name').value = user.name || '';
+      document.getElementById('prof-email').value = user.email || '';
+      document.getElementById('prof-phone').value = user.phone || '';
+      document.getElementById('prof-address').value = user.address || '';
+    }
+
+    function initProfileForm(user) {
+      const form = document.getElementById('edit-profile-form');
+      const nameInput = document.getElementById('prof-name');
+      const phoneInput = document.getElementById('prof-phone');
+      const addrInput = document.getElementById('prof-address');
+
+      nameInput.addEventListener('input', () => setFieldValidation(nameInput, nameInput.value.trim().length >= 3, 'Name must be at least 3 characters.'));
+      phoneInput.addEventListener('input', () => setFieldValidation(phoneInput, /^[6-9]\d{9}$/.test(phoneInput.value.trim()), 'Enter a valid 10-digit mobile number.'));
+      addrInput.addEventListener('input', () => setFieldValidation(addrInput, addrInput.value.trim().length >= 5, 'Please provide full address.'));
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const isNameValid = nameInput.value.trim().length >= 3;
+        const isPhoneValid = /^[6-9]\d{9}$/.test(phoneInput.value.trim());
+        const isAddrValid = addrInput.value.trim().length >= 5;
+
+        setFieldValidation(nameInput, isNameValid, 'Name must be at least 3 characters.');
+        setFieldValidation(phoneInput, isPhoneValid, 'Enter a valid 10-digit mobile number.');
+        setFieldValidation(addrInput, isAddrValid, 'Please provide full address.');
+
+        if (!isNameValid || !isPhoneValid || !isAddrValid) {
+          showToast('Validation Error', 'Please correct the highlighted fields.', 'error');
+          return;
+        }
+
+        const success = updateCurrentProfile({
+          name: nameInput.value.trim(),
+          phone: phoneInput.value.trim(),
+          address: addrInput.value.trim()
+        });
+
+        if (success) {
+          showToast('Profile Updated', 'Your profile details have been saved.', 'success');
+          populateProfileDetails(getCurrentUser());
+        }
+      });
+    }
+
+    // Render Customer Order History with 5-Step Visual Stepper
+    function renderCustomerOrders(user) {
+      const container = document.getElementById('customer-orders-list');
+      if (!container) return;
+
+      const orders = getCustomerOrders(user.email || user.id);
+
+      if (orders.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 40px 20px; background: var(--bg-cream); border-radius: 12px; border: 1px dashed var(--border-color);">
+            <div style="font-size: 2.5rem; margin-bottom: 10px;">🧺</div>
+            <h4 style="font-size: 1.15rem; color: var(--primary); margin-bottom: 6px;">No Orders Placed Yet</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">Explore our fresh organic harvest and daily kitchen essentials.</p>
+            <a href="products.html" class="btn btn-primary btn-sm">Shop Groceries Now</a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = orders.map(order => {
+        const dateStr = new Date(order.createdAt).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+
+        // Calculate active step for stepper
+        let stepIndex = 1;
+        if (order.status === ORDER_STATUS.ACCEPTED) stepIndex = 2;
+        else if (order.status === ORDER_STATUS.PREPARING || order.status === ORDER_STATUS.PACKING || order.status === ORDER_STATUS.PACKED) stepIndex = 3;
+        else if (order.status === ORDER_STATUS.READY) stepIndex = 4;
+        else if (order.status === ORDER_STATUS.DELIVERED) stepIndex = 5;
+        else if (order.status === ORDER_STATUS.CANCELLED) stepIndex = 0;
+
+        const isCancellable = order.status === ORDER_STATUS.NEW || order.status === ORDER_STATUS.ACCEPTED;
+
+        return `
+          <div class="order-tracking-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid var(--border-light); padding-bottom: 12px;">
+              <div>
+                <strong style="font-size: 1.1rem; color: var(--primary);">${order.id}</strong>
+                <span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 8px;">(${order.invoiceNumber})</span>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">Placed on: ${dateStr}</div>
+              </div>
+              <div style="text-align: right;">
+                <span class="order-status-badge status-${order.status.toLowerCase().replace(/\s+/g, '-')}">
+                  ${order.status}
+                </span>
+                <div style="font-size: 0.95rem; font-weight: 800; color: var(--primary); margin-top: 4px;">₹${order.grandTotal}</div>
+              </div>
+            </div>
+
+            <!-- 5-Step Order Progress Stepper -->
+            ${order.status !== ORDER_STATUS.CANCELLED ? `
+              <div class="order-tracking-stepper">
+                <div class="tracking-step ${stepIndex >= 1 ? (stepIndex === 1 ? 'active' : 'completed') : ''}">
+                  <div class="step-circle"><i class="fas fa-check"></i></div>
+                  <span class="step-label">Placed</span>
+                </div>
+                <div class="tracking-step ${stepIndex >= 2 ? (stepIndex === 2 ? 'active' : 'completed') : ''}">
+                  <div class="step-circle"><i class="fas fa-thumbs-up"></i></div>
+                  <span class="step-label">Accepted</span>
+                </div>
+                <div class="tracking-step ${stepIndex >= 3 ? (stepIndex === 3 ? 'active' : 'completed') : ''}">
+                  <div class="step-circle"><i class="fas fa-box-open"></i></div>
+                  <span class="step-label">Packing</span>
+                </div>
+                <div class="tracking-step ${stepIndex >= 4 ? (stepIndex === 4 ? 'active' : 'completed') : ''}">
+                  <div class="step-circle"><i class="fas fa-motorcycle"></i></div>
+                  <span class="step-label">Out for Delivery</span>
+                </div>
+                <div class="tracking-step ${stepIndex >= 5 ? 'completed' : ''}">
+                  <div class="step-circle"><i class="fas fa-house"></i></div>
+                  <span class="step-label">Delivered</span>
+                </div>
+              </div>
+            ` : `
+              <div style="background: #FFEBEE; color: #C62828; padding: 12px; border-radius: 8px; margin: 16px 0; font-size: 0.85rem; font-weight: 600;">
+                <i class="fas fa-ban"></i> This order was cancelled. Items have been restored to store inventory.
+              </div>
+            `}
+
+            <!-- Order Items Preview -->
+            <div style="background: var(--bg-cream); border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; font-size: 0.85rem;">
+              <p style="margin-bottom: 6px;"><strong>Delivery Destination:</strong> ${order.address}</p>
+              <p style="margin-bottom: 6px;"><strong>Slot:</strong> ${order.slot}</p>
+              <div style="color: var(--text-dark);">
+                <strong>Items:</strong> ${order.items.map(i => `${i.name} (×${i.quantity})`).join(', ')}
+              </div>
+            </div>
+
+            <!-- Actions Bar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <a href="invoice.html?orderId=${order.id}" class="btn btn-outline btn-sm">
+                <i class="fas fa-file-invoice"></i> View Official Invoice
+              </a>
+
+              ${isCancellable ? `
+                <button class="btn btn-outline btn-sm" style="border-color: var(--danger); color: var(--danger);" onclick="cancelCustomerOrder('${order.id}')">
+                  <i class="fas fa-xmark"></i> Cancel Order
+                </button>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Cancel order handler
+    window.cancelCustomerOrder = function(orderId) {
+      if (confirm(`Are you sure you want to cancel order ${orderId}? Restocked items will be returned to store inventory.`)) {
+        updateOrderStatus(orderId, ORDER_STATUS.CANCELLED);
+        showToast('Order Cancelled', `Order ${orderId} has been cancelled.`, 'info');
+        renderCustomerOrders(getCurrentUser());
+      }
+    };
+  </script>
+</body>
+</html>
