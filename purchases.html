@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Purchase Orders & Stock Received - FreshCart Owner Portal</title>
+  
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/owner.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <div class="owner-layout">
+    <aside class="owner-sidebar">
+      <a href="owner-dashboard.html" class="owner-brand">
+        <i class="fas fa-leaf" style="color:var(--accent);"></i>
+        <span>Fresh</span>Cart <span style="font-size:0.75rem; background:#2E7D32; padding:2px 6px; border-radius:4px;">ADMIN</span>
+      </a>
+
+      <ul class="owner-nav-list">
+        <li><a href="owner-dashboard.html" class="owner-nav-link"><i class="fas fa-gauge-high"></i> Dashboard</a></li>
+        <li><a href="manage-orders.html" class="owner-nav-link"><i class="fas fa-clipboard-list"></i> Order Management</a></li>
+        <li><a href="manage-employees.html" class="owner-nav-link"><i class="fas fa-users-gear"></i> Employee Master</a></li>
+        <li><a href="manage-products.html" class="owner-nav-link"><i class="fas fa-apple-whole"></i> Product Catalog</a></li>
+        <li><a href="inventory.html" class="owner-nav-link"><i class="fas fa-boxes-stacked"></i> Stock Inventory</a></li>
+        <li><a href="suppliers.html" class="owner-nav-link"><i class="fas fa-truck-field"></i> Supplier Directory</a></li>
+        <li><a href="purchases.html" class="owner-nav-link active"><i class="fas fa-receipt"></i> Purchase Orders</a></li>
+        <li><a href="attendance.html" class="owner-nav-link"><i class="fas fa-business-time"></i> Attendance Log</a></li>
+        <li><a href="expenses.html" class="owner-nav-link"><i class="fas fa-money-bill-transfer"></i> Operating Expenses</a></li>
+        <li><a href="reports.html" class="owner-nav-link"><i class="fas fa-chart-line"></i> Profit & Sales Reports</a></li>
+        <li><a href="manage-returns.html" class="owner-nav-link"><i class="fas fa-rotate-left"></i> Returns & Approvals</a></li>
+        <li><a href="invoices.html" class="owner-nav-link"><i class="fas fa-file-invoice"></i> Invoices Archive</a></li>
+        <li style="margin-top:20px; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;">
+          <a href="javascript:void(0)" class="owner-nav-link text-danger" onclick="AuthEngine.logout('owner-login.html')"><i class="fas fa-arrow-right-from-bracket"></i> Sign Out</a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="owner-main-stage">
+      <div class="owner-topbar">
+        <div>
+          <h1 style="font-size:1.8rem; font-weight:800; color:#113820; margin:0 0 4px;">Purchase Orders & Stock Received</h1>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin:0;">Record incoming vendor consignments, capture wholesale cost prices, and replenish shelves.</p>
+        </div>
+
+        <button class="btn btn-primary" onclick="openNewPurchaseModal()" style="background:#113820; border-color:#113820; font-weight:700;">
+          <i class="fas fa-plus"></i> Record Inward Purchase
+        </button>
+      </div>
+
+      <div class="admin-table-card">
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>PO Number</th>
+                <th>Supplier</th>
+                <th>Invoice Ref</th>
+                <th>Purchase Date</th>
+                <th>Items Consigned</th>
+                <th>Total Invoiced</th>
+                <th>Payment</th>
+                <th>Verification Notes</th>
+              </tr>
+            </thead>
+            <tbody id="purchases-tbody">
+              <!-- Populated by script -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- New Purchase Modal -->
+  <div id="new-purchase-modal" class="fresh-modal-backdrop" style="display:none;">
+    <div class="fresh-modal-dialog" style="max-width:540px;">
+      <div class="fresh-modal-header" style="background:#113820; color:white;">
+        <h3 style="color:white; margin:0;"><i class="fas fa-receipt"></i> Record Inward Stock Consignment</h3>
+        <button class="modal-close-btn" style="color:white;" onclick="closeNewPurchaseModal()">&times;</button>
+      </div>
+      <div class="fresh-modal-body">
+        <form id="purchase-form" onsubmit="handleSavePurchase(event)">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+            <div class="form-group">
+              <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Select Supplier *</label>
+              <select id="po-supplier-select" class="form-control" style="width:100%; padding:8px 12px; border:1px solid #ccc; border-radius:6px;">
+                <!-- Populated by script -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Supplier Invoice Ref #</label>
+              <input type="text" id="po-invoice" class="form-control" placeholder="INV-SUP-9921" style="width:100%; padding:8px 12px; border:1px solid #ccc; border-radius:6px;">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:12px;">
+            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Select Product to Restock *</label>
+            <select id="po-product-select" class="form-control" style="width:100%; padding:8px 12px; border:1px solid #ccc; border-radius:6px;">
+              <!-- Populated by script -->
+            </select>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+            <div class="form-group">
+              <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Quantity Received *</label>
+              <input type="number" id="po-qty" class="form-control" min="1" value="25" required style="width:100%; padding:8px 12px; border:1px solid #ccc; border-radius:6px;">
+            </div>
+            <div class="form-group">
+              <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Wholesale Unit Cost (₹) *</label>
+              <input type="number" id="po-cost" class="form-control" min="1" value="100" required style="width:100%; padding:8px 12px; border:1px solid #ccc; border-radius:6px;">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:16px;">
+            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Inspection & Batch Notes</label>
+            <input type="text" id="po-notes" class="form-control" placeholder="Cold chain checked, quality A+ grade" style="width:100%; padding:8px 12px; border:1px solid #ccc; border-radius:6px;">
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:10px;">
+            <button type="button" class="btn btn-outline" onclick="closeNewPurchaseModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary" style="background:#113820; border-color:#113820;">Save & Increment Physical Stock</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/inventory.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    let productsList = [];
+    let suppliersList = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = window.AuthEngine ? AuthEngine.getCurrentUser() : null;
+      if (!user || user.role !== 'owner') {
+        window.location.href = 'owner-login.html';
+        return;
+      }
+
+      productsList = typeof getProductsFromStorage === 'function' ? getProductsFromStorage() : [];
+      suppliersList = InventoryEngine.getSuppliers();
+      renderPurchases();
+    });
+
+    function renderPurchases() {
+      const purchases = InventoryEngine.getPurchases();
+      const tbody = document.getElementById('purchases-tbody');
+      tbody.innerHTML = purchases.map(p => `
+        <tr>
+          <td style="font-weight:700; color:#113820;">${p.id}</td>
+          <td>
+            <div style="font-weight:700; color:#252525;">${p.supplierName}</div>
+            <small style="color:#777;">ID: ${p.supplierId}</small>
+          </td>
+          <td>${p.invoiceNumber || '-'}</td>
+          <td>${p.purchaseDate}</td>
+          <td>
+            <ul style="margin:0; padding-left:14px; font-size:0.82rem; color:#555;">
+              ${p.items.map(i => `<li>${i.productName} &times; ${i.quantity} @ ₹${i.unitCost}</li>`).join('')}
+            </ul>
+          </td>
+          <td style="font-weight:800; color:#1B5E35; font-size:1.05rem;">₹${Number(p.totalAmount).toFixed(2)}</td>
+          <td><span class="badge badge-success">${p.paymentStatus || 'Paid'}</span></td>
+          <td style="font-size:0.82rem; color:#666;">${p.notes || '-'}</td>
+        </tr>
+      `).join('');
+    }
+
+    function openNewPurchaseModal() {
+      const supSelect = document.getElementById('po-supplier-select');
+      supSelect.innerHTML = suppliersList.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+
+      const prodSelect = document.getElementById('po-product-select');
+      prodSelect.innerHTML = productsList.map(p => `<option value="${p.id}">${p.name} (Current Stock: ${p.stock})</option>`).join('');
+
+      document.getElementById('new-purchase-modal').style.display = 'flex';
+    }
+
+    function closeNewPurchaseModal() {
+      document.getElementById('new-purchase-modal').style.display = 'none';
+    }
+
+    function handleSavePurchase(e) {
+      e.preventDefault();
+      const supId = document.getElementById('po-supplier-select').value;
+      const supplier = suppliersList.find(s => s.id === supId);
+      const prodId = Number(document.getElementById('po-product-select').value);
+      const product = productsList.find(p => Number(p.id) === prodId);
+      const qty = Number(document.getElementById('po-qty').value);
+      const cost = Number(document.getElementById('po-cost').value);
+      const invoice = document.getElementById('po-invoice').value;
+      const notes = document.getElementById('po-notes').value;
+
+      const totalAmount = qty * cost;
+
+      const newPurchase = InventoryEngine.recordPurchase({
+        supplierId: supId,
+        supplierName: supplier ? supplier.name : 'Vendor',
+        invoiceNumber: invoice,
+        purchaseDate: new Date().toISOString().split('T')[0],
+        items: [
+          {
+            productId: prodId,
+            productName: product ? product.name : 'Grocery Product',
+            quantity: qty,
+            unitCost: cost,
+            lineTotal: totalAmount
+          }
+        ],
+        totalAmount: totalAmount,
+        notes: notes
+      });
+
+      alert(`Purchase #${newPurchase.id} recorded! ${qty} units added to physical stock.`);
+      closeNewPurchaseModal();
+      window.location.reload();
+    }
+  </script>
+</body>
+</html>

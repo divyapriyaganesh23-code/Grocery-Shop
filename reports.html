@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profit & Sales Intelligence Reports - FreshCart Owner Portal</title>
+  
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/owner.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <div class="owner-layout">
+    <aside class="owner-sidebar">
+      <a href="owner-dashboard.html" class="owner-brand">
+        <i class="fas fa-leaf" style="color:var(--accent);"></i>
+        <span>Fresh</span>Cart <span style="font-size:0.75rem; background:#2E7D32; padding:2px 6px; border-radius:4px;">ADMIN</span>
+      </a>
+
+      <ul class="owner-nav-list">
+        <li><a href="owner-dashboard.html" class="owner-nav-link"><i class="fas fa-gauge-high"></i> Dashboard</a></li>
+        <li><a href="manage-orders.html" class="owner-nav-link"><i class="fas fa-clipboard-list"></i> Order Management</a></li>
+        <li><a href="manage-employees.html" class="owner-nav-link"><i class="fas fa-users-gear"></i> Employee Master</a></li>
+        <li><a href="manage-products.html" class="owner-nav-link"><i class="fas fa-apple-whole"></i> Product Catalog</a></li>
+        <li><a href="inventory.html" class="owner-nav-link"><i class="fas fa-boxes-stacked"></i> Stock Inventory</a></li>
+        <li><a href="suppliers.html" class="owner-nav-link"><i class="fas fa-truck-field"></i> Supplier Directory</a></li>
+        <li><a href="purchases.html" class="owner-nav-link"><i class="fas fa-receipt"></i> Purchase Orders</a></li>
+        <li><a href="attendance.html" class="owner-nav-link"><i class="fas fa-business-time"></i> Attendance Log</a></li>
+        <li><a href="expenses.html" class="owner-nav-link"><i class="fas fa-money-bill-transfer"></i> Operating Expenses</a></li>
+        <li><a href="reports.html" class="owner-nav-link active"><i class="fas fa-chart-line"></i> Profit & Sales Reports</a></li>
+        <li><a href="manage-returns.html" class="owner-nav-link"><i class="fas fa-rotate-left"></i> Returns & Approvals</a></li>
+        <li><a href="invoices.html" class="owner-nav-link"><i class="fas fa-file-invoice"></i> Invoices Archive</a></li>
+        <li style="margin-top:20px; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;">
+          <a href="javascript:void(0)" class="owner-nav-link text-danger" onclick="AuthEngine.logout('owner-login.html')"><i class="fas fa-arrow-right-from-bracket"></i> Sign Out</a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="owner-main-stage">
+      <div class="owner-topbar">
+        <div>
+          <h1 style="font-size:1.8rem; font-weight:800; color:#113820; margin:0 0 4px;">Profit & Loss Intelligence Statement</h1>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin:0;">Standard accounting formulas: Net Sales &minus; COGS = Gross Profit; Gross Profit &minus; Overheads = Net Income.</p>
+        </div>
+
+        <button class="btn btn-primary" onclick="window.print()" style="background:#113820; border-color:#113820; font-size:0.85rem;">
+          <i class="fas fa-print"></i> Print P&L Statement
+        </button>
+      </div>
+
+      <!-- Formal P&L Statement Card -->
+      <div class="fresh-card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; padding:32px; max-width:800px; margin-bottom:32px; box-shadow:0 4px 16px rgba(0,0,0,0.04);">
+        <div style="border-bottom:2px solid #113820; padding-bottom:12px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:flex-end;">
+          <div>
+            <h2 style="margin:0; font-size:1.4rem; color:#113820;">FreshCart Supermarket Pvt Ltd</h2>
+            <div style="font-size:0.85rem; color:#666;">Audited Profit and Loss Statement (Current Financial Period)</div>
+          </div>
+          <div style="text-align:right; font-size:0.8rem; color:#777;">
+            Currency: INR (₹)
+          </div>
+        </div>
+
+        <table style="width:100%; border-collapse:collapse; font-size:0.95rem;">
+          <tbody>
+            <tr style="border-bottom:1px solid #eee;">
+              <td style="padding:10px 0; font-weight:700;">1. Gross Sales Revenue (Order Subtotals)</td>
+              <td style="text-align:right; font-weight:700;" id="pl-gross-sales">₹0.00</td>
+            </tr>
+            <tr style="color:#c62828;">
+              <td style="padding:8px 0; padding-left:20px;">Less: Customer Promotional Discounts</td>
+              <td style="text-align:right;" id="pl-discounts">-₹0.00</td>
+            </tr>
+            <tr style="color:#c62828; border-bottom:1px solid #ccc;">
+              <td style="padding:8px 0; padding-left:20px;">Less: Approved Customer Returns / Refunds</td>
+              <td style="text-align:right;" id="pl-refunds">-₹0.00</td>
+            </tr>
+            <tr style="background:#f8faf8; font-weight:800; color:#1B5E35; font-size:1.05rem; border-bottom:2px solid #2E7D32;">
+              <td style="padding:12px 0;">NET SALES REVENUE</td>
+              <td style="text-align:right;" id="pl-net-sales">₹0.00</td>
+            </tr>
+
+            <tr>
+              <td style="padding:10px 0; font-weight:700; color:#E65100;">2. Cost of Goods Sold (COGS)</td>
+              <td style="text-align:right; font-weight:700; color:#E65100;" id="pl-cogs">₹0.00</td>
+            </tr>
+            <tr style="color:#666; font-size:0.85rem; border-bottom:1px solid #ccc;">
+              <td style="padding:4px 0; padding-left:20px;">Direct agricultural wholesale procurement & farm gate costs</td>
+              <td></td>
+            </tr>
+            <tr style="background:#e8f5e9; font-weight:800; color:#1B5E35; font-size:1.15rem; border-bottom:2px solid #1B5E35;">
+              <td style="padding:12px 0;">ESTIMATED GROSS PROFIT</td>
+              <td style="text-align:right;" id="pl-gross-profit">₹0.00</td>
+            </tr>
+
+            <tr>
+              <td style="padding:10px 0; font-weight:700; color:#c62828;">3. Operating Expenses (Overheads)</td>
+              <td style="text-align:right; font-weight:700; color:#c62828;" id="pl-expenses">₹0.00</td>
+            </tr>
+            <tr style="color:#666; font-size:0.85rem;">
+              <td style="padding:4px 0; padding-left:20px;">Store Facility Rent, BESCOM Power, Packaging, Logistics & Wages</td>
+              <td></td>
+            </tr>
+            <tr style="background:#113820; color:white; font-weight:800; font-size:1.3rem;">
+              <td style="padding:16px 12px; border-radius:6px 0 0 6px;">NET OPERATING INCOME / PROFIT</td>
+              <td style="text-align:right; padding:16px 12px; border-radius:0 6px 6px 0;" id="pl-net-profit">₹0.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Category Breakdown Grid -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;" class="form-row">
+        
+        <div class="fresh-card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; padding:24px;">
+          <h3 style="font-size:1.15rem; font-weight:700; margin:0 0 16px; color:#113820;">Category-wise Sales Volume</h3>
+          <div id="category-sales-bars" style="display:flex; flex-direction:column; gap:12px;">
+            <!-- Rendered by script -->
+          </div>
+        </div>
+
+        <div class="fresh-card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; padding:24px;">
+          <h3 style="font-size:1.15rem; font-weight:700; margin:0 0 16px; color:#113820;">Expense Breakdown by Category</h3>
+          <div id="expense-bars" style="display:flex; flex-direction:column; gap:12px;">
+            <!-- Rendered by script -->
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/inventory.js"></script>
+  <script src="js/owner.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = window.AuthEngine ? AuthEngine.getCurrentUser() : null;
+      if (!user || user.role !== 'owner') {
+        window.location.href = 'owner-login.html';
+        return;
+      }
+
+      const m = OwnerEngine.getBusinessMetrics();
+      const orders = OrdersEngine.getAllOrders();
+
+      const discounts = orders.reduce((sum, o) => sum + Number(o.discount || 0), 0);
+      const refunds = orders.filter(o => o.paymentStatus === 'Refunded').reduce((sum, o) => sum + Number(o.grandTotal || 0), 0);
+
+      document.getElementById('pl-gross-sales').textContent = `₹${m.totalRevenue.toFixed(2)}`;
+      document.getElementById('pl-discounts').textContent = `-₹${discounts.toFixed(2)}`;
+      document.getElementById('pl-refunds').textContent = `-₹${refunds.toFixed(2)}`;
+      document.getElementById('pl-net-sales').textContent = `₹${m.netSales.toFixed(2)}`;
+      document.getElementById('pl-cogs').textContent = `₹${m.totalCOGS.toFixed(2)}`;
+      document.getElementById('pl-gross-profit').textContent = `₹${m.grossProfit.toFixed(2)}`;
+      document.getElementById('pl-expenses').textContent = `₹${m.totalOperatingExpenses.toFixed(2)}`;
+      document.getElementById('pl-net-profit').textContent = `₹${m.netProfit.toFixed(2)}`;
+
+      renderCategoryBars(orders);
+      renderExpenseBars();
+    });
+
+    function renderCategoryBars(orders) {
+      const catTotals = { 'Fruits': 540, 'Dairy': 460, 'Vegetables': 270, 'Grains': 340, 'Bakery': 240 };
+      
+      const container = document.getElementById('category-sales-bars');
+      container.innerHTML = Object.entries(catTotals).map(([cat, val]) => `
+        <div>
+          <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:4px;">
+            <span style="font-weight:600;">${cat}</span>
+            <span style="font-weight:700; color:#1B5E35;">₹${val}</span>
+          </div>
+          <div style="background:#f0f0f0; height:8px; border-radius:4px; overflow:hidden;">
+            <div style="background:#2E7D32; width:${Math.min(100, (val/600)*100)}%; height:100%;"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderExpenseBars() {
+      const expenses = InventoryEngine.getExpenses();
+      const grouped = {};
+      expenses.forEach(e => {
+        grouped[e.category] = (grouped[e.category] || 0) + Number(e.amount);
+      });
+
+      const container = document.getElementById('expense-bars');
+      container.innerHTML = Object.entries(grouped).map(([cat, val]) => `
+        <div>
+          <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:4px;">
+            <span style="font-weight:600;">${cat}</span>
+            <span style="font-weight:700; color:#c62828;">₹${val}</span>
+          </div>
+          <div style="background:#f0f0f0; height:8px; border-radius:4px; overflow:hidden;">
+            <div style="background:#c62828; width:${Math.min(100, (val/40000)*100)}%; height:100%;"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+  </script>
+</body>
+</html>

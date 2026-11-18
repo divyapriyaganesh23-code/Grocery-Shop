@@ -3,22 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checkout &amp; Place Order - FreshCart</title>
+  <title>Checkout & Delivery Scheduling - FreshCart</title>
+  
   <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/customer.css">
+  <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
   <!-- Top Notification Bar -->
   <div class="top-bar">
-    <div class="container">
-      <div class="top-bar-left">
-        <span><i class="fas fa-lock"></i> 100% Secure Checkout | Safe 2-Hour Contactless Delivery</span>
-      </div>
-      <div class="top-bar-right">
-        <span><i class="fas fa-phone-volume"></i> Customer Support: +91 98765 43210</span>
-      </div>
+    <div class="container" style="display:flex; justify-content:space-between; align-items:center; font-size:0.85rem;">
+      <div><i class="fas fa-truck-fast"></i> Guaranteed Delivery in FreshCart Thermal Insulated Eco-Bags</div>
+      <div>Support: +91 98765 43210</div>
     </div>
   </div>
 
@@ -30,230 +29,419 @@
         <span>Fresh</span>Cart
       </a>
 
-      <div style="font-size: 0.95rem; font-weight: 700; color: var(--primary);">
-        <i class="fas fa-shield-halved"></i> 256-Bit SSL Encrypted
+      <div style="font-weight:700; color:var(--primary); display:flex; align-items:center; gap:8px;">
+        <i class="fas fa-shield-halved"></i> 100% Secure Checkout
       </div>
 
       <div class="header-actions">
-        <div id="header-user-wrapper"></div>
         <a href="cart.html" class="action-btn" title="Back to Cart">
           <i class="fas fa-basket-shopping"></i>
-          <span class="badge-count cart-count-badge" style="display: none;">0</span>
+          <span class="badge-count cart-count-badge" style="display:none;">0</span>
         </a>
       </div>
     </div>
   </header>
 
-  <!-- Page Banner -->
-  <section class="page-banner">
-    <div class="container">
-      <h1>Checkout &amp; Delivery</h1>
-      <div class="breadcrumbs">
-        <a href="index.html">Home</a>
-        <i class="fas fa-chevron-right" style="font-size: 0.75rem;"></i>
-        <a href="cart.html">Cart</a>
-        <i class="fas fa-chevron-right" style="font-size: 0.75rem;"></i>
-        <span>Checkout</span>
-      </div>
+  <main class="container" style="padding: 40px 16px; max-width: 1100px;">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb" style="margin-bottom: 24px; font-size: 0.9rem; color: var(--text-muted);">
+      <a href="index.html" style="color: var(--primary); text-decoration:none;">Home</a> &gt; 
+      <a href="cart.html" style="color: var(--primary); text-decoration:none;">Cart</a> &gt; 
+      <span>Checkout</span>
     </div>
-  </section>
 
-  <!-- Main Checkout Content -->
-  <div class="container">
-    <div class="checkout-layout">
-      <!-- Left: Checkout Information Form -->
-      <div class="checkout-form-card">
-        <!-- Educational / Portfolio Demo Alert -->
-        <div class="demo-alert-banner">
-          <i class="fas fa-circle-info" style="font-size: 1.2rem;"></i>
-          <div>
-            <strong>Frontend Demonstration Notice:</strong> This website is an e-commerce UI demonstration. No actual monetary charge will take place. Placing an order generates a simulated delivery confirmation receipt.
-          </div>
-        </div>
-
-        <form id="checkout-form">
-          <!-- Step 1: Customer Contact -->
-          <h3 class="checkout-section-title">
-            <span style="width: 28px; height: 28px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">1</span>
-            Customer Details
-          </h3>
-
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="chk-name">Full Name *</label>
-              <input type="text" id="chk-name" placeholder="e.g. Ramesh Patel" value="Ramesh Patel" required>
-              <span class="field-error">Please enter at least 3 characters.</span>
+    <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px;" class="checkout-layout-grid">
+      
+      <!-- Left Column: Customer Details, Delivery Slot & Payment -->
+      <div class="checkout-form-column">
+        <form id="checkout-form" onsubmit="handleCheckoutSubmit(event)">
+          
+          <!-- Section 1: Customer Contact -->
+          <div class="fresh-card" style="background:white; border-radius:12px; padding:24px; border:1px solid #e2e8f0; margin-bottom:24px;">
+            <h3 style="font-size:1.2rem; font-weight:700; color:var(--primary); margin:0 0 16px; display:flex; align-items:center; gap:8px;">
+              <i class="fas fa-user"></i> 1. Contact Information
+            </h3>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;" class="form-row">
+              <div class="form-group">
+                <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Full Name *</label>
+                <input type="text" id="chk-name" class="form-control" placeholder="Recipient's Name" required style="width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:6px;">
+              </div>
+              <div class="form-group">
+                <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Mobile Number *</label>
+                <input type="tel" id="chk-phone" class="form-control" placeholder="10-digit phone number" required style="width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:6px;">
+              </div>
             </div>
-
-            <div class="form-group">
-              <label for="chk-phone">Mobile Phone (10 Digits) *</label>
-              <input type="tel" id="chk-phone" placeholder="e.g. 9876543210" pattern="[6-9][0-9]{9}" value="9876543210" required>
-              <span class="field-error">Please enter a valid 10-digit mobile number.</span>
-            </div>
-
-            <div class="form-group col-full">
-              <label for="chk-email">Email Address * (For order invoice)</label>
-              <input type="email" id="chk-email" placeholder="e.g. ramesh.patel@example.com" value="ramesh.patel@example.com" required>
-              <span class="field-error">Please enter a valid email address.</span>
+            <div class="form-group" style="margin-top:12px;">
+              <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Email (For invoice & delivery OTP)</label>
+              <input type="email" id="chk-email" class="form-control" placeholder="name@example.com" style="width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:6px;">
             </div>
           </div>
 
-          <!-- Step 2: Delivery Address -->
-          <h3 class="checkout-section-title" style="margin-top: 30px;">
-            <span style="width: 28px; height: 28px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">2</span>
-            Delivery Address
-          </h3>
-
-          <div class="form-grid">
-            <div class="form-group col-full">
-              <label for="chk-address">House / Flat No., Apartment Name, Street *</label>
-              <input type="text" id="chk-address" placeholder="Flat 402, Green Palm Residency, 14th Main Road" value="Flat 402, Green Palm Residency, 14th Main Road" required>
-              <span class="field-error">Please enter a complete street address.</span>
+          <!-- Section 2: Delivery Address -->
+          <div class="fresh-card" style="background:white; border-radius:12px; padding:24px; border:1px solid #e2e8f0; margin-bottom:24px;">
+            <h3 style="font-size:1.2rem; font-weight:700; color:var(--primary); margin:0 0 16px; display:flex; align-items:center; gap:8px;">
+              <i class="fas fa-location-dot"></i> 2. Delivery Address
+            </h3>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Street Address / Apartment / House No. *</label>
+              <textarea id="chk-address" class="form-control" rows="2" placeholder="e.g. Flat 402, Green Palm Residency, 14th Main Road" required style="width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:6px;"></textarea>
             </div>
-
-            <div class="form-group">
-              <label for="chk-landmark">Landmark (Optional)</label>
-              <input type="text" id="chk-landmark" placeholder="Near Apollo Pharmacy" value="Near Central Park">
-            </div>
-
-            <div class="form-group">
-              <label for="chk-city">City *</label>
-              <input type="text" id="chk-city" placeholder="Bengaluru" value="Bengaluru" required>
-              <span class="field-error">Please enter your city.</span>
-            </div>
-
-            <div class="form-group">
-              <label for="chk-state">State *</label>
-              <input type="text" id="chk-state" placeholder="Karnataka" value="Karnataka" required>
-              <span class="field-error">Please enter your state.</span>
-            </div>
-
-            <div class="form-group">
-              <label for="chk-pincode">PIN Code (6 Digits) *</label>
-              <input type="text" id="chk-pincode" placeholder="560102" pattern="[0-9]{6}" value="560102" required>
-              <span class="field-error">Please enter a valid 6-digit postal code.</span>
-            </div>
-
-            <div class="form-group col-full">
-              <label for="chk-slot">Preferred Delivery Slot *</label>
-              <select id="chk-slot" required>
-                <option value="express" selected>⚡ Express 2-Hour Delivery (Arrives Today)</option>
-                <option value="morning">Morning Slot (Tomorrow 7:00 AM - 9:00 AM)</option>
-                <option value="evening">Evening Slot (Tomorrow 5:00 PM - 8:00 PM)</option>
-              </select>
-            </div>
-
-            <div class="form-group col-full">
-              <label for="chk-instructions">Special Packing &amp; Delivery Instructions (For Shop Workers)</label>
-              <input type="text" id="chk-instructions" placeholder="e.g. Ring doorbell twice, keep fragile items in separate pouch" value="Ring bell twice. Please pack ripe produce.">
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;" class="form-row">
+              <div class="form-group">
+                <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Landmark</label>
+                <input type="text" id="chk-landmark" class="form-control" placeholder="Near BDA Complex" style="width:100%; padding:8px 12px; border:1px solid #ccc; border-radius:6px;">
+              </div>
+              <div class="form-group">
+                <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">City</label>
+                <input type="text" id="chk-city" class="form-control" value="Bengaluru" required style="width:100%; padding:8px 12px; border:1px solid #ccc; border-radius:6px;">
+              </div>
+              <div class="form-group">
+                <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Postal Code *</label>
+                <input type="text" id="chk-pincode" class="form-control" value="560102" required style="width:100%; padding:8px 12px; border:1px solid #ccc; border-radius:6px;">
+              </div>
             </div>
           </div>
 
-          <!-- Step 3: Payment Method -->
-          <h3 class="checkout-section-title" style="margin-top: 30px;">
-            <span style="width: 28px; height: 28px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">3</span>
-            Select Payment Method
-          </h3>
+          <!-- Section 3: Delivery Date & Slot Selection -->
+          <div class="fresh-card" style="background:white; border-radius:12px; padding:24px; border:1px solid #e2e8f0; margin-bottom:24px;">
+            <h3 style="font-size:1.2rem; font-weight:700; color:var(--primary); margin:0 0 16px; display:flex; align-items:center; gap:8px;">
+              <i class="fas fa-calendar-check"></i> 3. Schedule Delivery Date & Slot
+            </h3>
+            
+            <!-- Date Buttons -->
+            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:8px;">Choose Delivery Date:</label>
+            <div id="delivery-date-selector" style="display:flex; gap:10px; overflow-x:auto; padding-bottom:8px; margin-bottom:18px;">
+              <!-- Populated by script -->
+            </div>
 
-          <div class="payment-methods-grid">
-            <label class="payment-option-card selected">
-              <input type="radio" name="payment-method" value="Cash on Delivery (COD)" checked>
-              <div class="opt-info">
-                <h5>💵 Cash on Delivery</h5>
-                <p>Pay cash or UPI to delivery agent</p>
-              </div>
-            </label>
+            <!-- Time Slots Grid -->
+            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:8px;">Select Available Time Slot:</label>
+            <div id="delivery-slots-container" class="delivery-slot-grid">
+              <!-- Populated by script with capacity indicator -->
+            </div>
 
-            <label class="payment-option-card">
-              <input type="radio" name="payment-method" value="UPI / QR Code">
-              <div class="opt-info">
-                <h5>📱 UPI / QR Code</h5>
-                <p>Google Pay, PhonePe, Paytm</p>
-              </div>
-            </label>
-
-            <label class="payment-option-card">
-              <input type="radio" name="payment-method" value="Credit / Debit Card">
-              <div class="opt-info">
-                <h5>💳 Credit / Debit Card</h5>
-                <p>Visa, Mastercard, RuPay</p>
-              </div>
-            </label>
-
-            <label class="payment-option-card">
-              <input type="radio" name="payment-method" value="Net Banking">
-              <div class="opt-info">
-                <h5>🏦 Net Banking</h5>
-                <p>All major Indian banks</p>
-              </div>
-            </label>
+            <div class="form-group" style="margin-top:16px;">
+              <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Special Delivery Instructions</label>
+              <input type="text" id="chk-instructions" class="form-control" placeholder="e.g. Ring bell twice, leave with security guard, don't press buzzer" style="width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:6px;">
+            </div>
           </div>
 
-          <button type="submit" class="btn btn-primary btn-block btn-lg" id="btn-place-order" style="margin-top: 10px;">
-            <i class="fas fa-check-circle"></i> Place Grocery Order
+          <!-- Section 4: Payment Method Selection -->
+          <div class="fresh-card" style="background:white; border-radius:12px; padding:24px; border:1px solid #e2e8f0; margin-bottom:24px;">
+            <h3 style="font-size:1.2rem; font-weight:700; color:var(--primary); margin:0 0 16px; display:flex; align-items:center; gap:8px;">
+              <i class="fas fa-credit-card"></i> 4. Payment Method
+            </h3>
+            
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <label style="display:flex; align-items:flex-start; gap:12px; padding:14px; border:2px solid var(--border-color); border-radius:8px; cursor:pointer;" id="pay-opt-cod">
+                <input type="radio" name="payment_method" value="Cash on Delivery" checked style="margin-top:3px; accent-color:var(--primary);" onchange="updatePaymentSelectUI()">
+                <div>
+                  <div style="font-weight:700; color:var(--text-dark);"><i class="fas fa-money-bill-wave" style="color:var(--primary);"></i> Cash on Delivery (COD)</div>
+                  <small style="color:var(--text-muted); font-size:0.8rem;">Pay cash or UPI directly to fulfillment staff upon doorstep delivery after OTP verification.</small>
+                </div>
+              </label>
+
+              <label style="display:flex; align-items:flex-start; gap:12px; padding:14px; border:2px solid var(--border-color); border-radius:8px; cursor:pointer;" id="pay-opt-online">
+                <input type="radio" name="payment_method" value="Online Payment (Demo)" style="margin-top:3px; accent-color:var(--primary);" onchange="updatePaymentSelectUI()">
+                <div>
+                  <div style="font-weight:700; color:var(--text-dark); display:flex; align-items:center; gap:6px;">
+                    <i class="fas fa-globe" style="color:var(--secondary);"></i> Online Payment <span class="badge" style="background:#FFF3CD; color:#856404; font-size:0.75rem;">DEMO MODE</span>
+                  </div>
+                  <small style="color:var(--text-muted); font-size:0.8rem;">Simulate instant UPI, Google Pay, PhonePe, or Card checkout without real funds.</small>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" id="place-order-btn" class="btn btn-primary" style="width:100%; padding:16px; font-size:1.1rem; font-weight:700; border-radius:8px; display:flex; align-items:center; justify-content:center; gap:10px;">
+            <i class="fas fa-lock"></i> Confirm & Place Grocery Order
           </button>
         </form>
       </div>
 
-      <!-- Right: Order Summary Sidebar -->
-      <aside class="cart-summary-card">
-        <h3 class="summary-title">Order Items &amp; Bill</h3>
-        
-        <!-- Summary items list -->
-        <div id="checkout-items-summary" style="max-height: 280px; overflow-y: auto; padding-right: 6px;">
-          <!-- Dynamically populated via cart.js -->
+      <!-- Right Column: Order Summary & Bill Preview -->
+      <div class="checkout-summary-column">
+        <div class="fresh-card" style="background:white; border-radius:12px; padding:24px; border:1px solid #e2e8f0; position:sticky; top:100px;">
+          <h3 style="font-size:1.2rem; font-weight:700; color:var(--text-dark); margin:0 0 16px; border-bottom:1px solid #eee; padding-bottom:12px;">
+            Order Summary (<span id="summary-items-count">0</span> items)
+          </h3>
+
+          <div id="checkout-items-preview" style="max-height:220px; overflow-y:auto; margin-bottom:16px; padding-right:6px;">
+            <!-- Rendered by script -->
+          </div>
+
+          <div style="border-top:1px solid #eee; padding-top:14px; font-size:0.9rem;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px; color:#555;">
+              <span>Subtotal:</span>
+              <span id="chk-subtotal">₹0.00</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px; color:#2e7d32;" id="chk-discount-row">
+              <span>Promo Discount:</span>
+              <span id="chk-discount">-₹0.00</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px; color:#555;">
+              <span>Delivery Charges:</span>
+              <span id="chk-delivery-fee" style="font-weight:600; color:#2e7d32;">FREE</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px; color:#777; font-size:0.82rem;">
+              <span>Taxes (CGST 2.5% + SGST 2.5%):</span>
+              <span id="chk-taxes">₹0.00</span>
+            </div>
+            <hr style="border:0; border-top:1px dashed #ccc; margin:12px 0;">
+            <div style="display:flex; justify-content:space-between; font-size:1.3rem; font-weight:800; color:var(--primary);">
+              <span>Grand Total:</span>
+              <span id="chk-grand-total">₹0.00</span>
+            </div>
+          </div>
+
+          <div style="background:#e8f5e9; border-radius:8px; padding:12px; margin-top:20px; font-size:0.8rem; color:#1B5E35;">
+            <i class="fas fa-shield-halved"></i> <strong>Safe & Contactless Delivery</strong><br>
+            A 6-digit verification OTP will be sent to your tracking page to ensure secure handover.
+          </div>
         </div>
-
-        <!-- Totals summary -->
-        <div id="checkout-totals-summary">
-          <!-- Dynamically populated via cart.js -->
-        </div>
-
-        <div style="background: var(--bg-cream); border-radius: 8px; padding: 12px; margin-top: 20px; font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 10px;">
-          <i class="fas fa-truck-ramp-box" style="font-size: 1.4rem; color: var(--primary);"></i>
-          <span>Packed in eco-friendly biodegradable temperature-controlled insulation pouches.</span>
-        </div>
-      </aside>
-    </div>
-  </div>
-
-  <!-- Order Confirmation Modal -->
-  <div class="modal-overlay" id="order-confirmation-modal">
-    <div class="modal-box">
-      <div class="modal-success-icon">
-        <i class="fas fa-circle-check"></i>
-      </div>
-      <h2>Order Placed Successfully!</h2>
-      <p style="color: var(--text-muted); margin-bottom: 14px;">Thank you for shopping fresh with FreshCart. Your farm produce has been dispatched to packing.</p>
-      
-      <div>
-        <span class="order-id-badge">Order ID: <span id="modal-order-id">FC-849201</span></span>
-      </div>
-
-      <div class="modal-summary-box" id="modal-order-details">
-        <!-- Dynamically rendered order info -->
-      </div>
-
-      <div class="modal-actions">
-        <button class="btn btn-outline" onclick="window.print()">
-          <i class="fas fa-print"></i> Print Receipt
-        </button>
-        <button class="btn btn-primary" onclick="closeOrderModal()">
-          <i class="fas fa-home"></i> Back to Home
-        </button>
       </div>
     </div>
-  </div>
+  </main>
 
-  <!-- Footer -->
-  <footer class="main-footer">
-    <div class="container" style="text-align: center;">
-      <p>&copy; 2026 FreshCart Retail Pvt. Ltd. All rights reserved. Built with pure HTML5, CSS3 &amp; Vanilla JavaScript.</p>
+  <footer class="main-footer" style="margin-top:60px;">
+    <div class="container footer-bottom-container">
+      <p>&copy; 2026 FreshCart Supermarket Pvt Ltd. All rights reserved.</p>
+      <a href="index.html" style="color:#a5d6a7;">Back to Store</a>
     </div>
   </footer>
 
+  <script src="js/config.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/products.js"></script>
   <script src="js/cart.js"></script>
+  <script src="js/wishlist.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/checkout.js"></script>
+  <script src="js/inventory.js"></script>
   <script src="js/script.js"></script>
+
+  <script>
+    let selectedDateIso = '';
+    let selectedSlotId = null;
+    let selectedSlotText = '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Populate current user info if logged in
+      const user = window.AuthEngine ? AuthEngine.getCurrentUser() : null;
+      if (user) {
+        document.getElementById('chk-name').value = user.name || '';
+        document.getElementById('chk-phone').value = user.phone || '';
+        document.getElementById('chk-email').value = user.email || '';
+        if (user.address) document.getElementById('chk-address').value = user.address;
+      }
+
+      // 2. Render Delivery Date Pills
+      const dateSelector = document.getElementById('delivery-date-selector');
+      const dates = CheckoutEngine.getAvailableDates();
+      selectedDateIso = dates[0].isoDate;
+
+      dateSelector.innerHTML = dates.map((d, index) => `
+        <button type="button" class="btn ${index === 0 ? 'btn-primary' : 'btn-outline'}" style="white-space:nowrap; padding:8px 16px; font-size:0.85rem;" onclick="selectDate('${d.isoDate}', this)">
+          ${d.label}
+        </button>
+      `).join('');
+
+      renderSlotsForDate(selectedDateIso);
+
+      // 3. Render Cart Summary
+      renderCartPreview();
+
+      // 4. Attach validation
+      FormValidator.bindRealTime(document.getElementById('checkout-form'), {
+        '#chk-name': 'name',
+        '#chk-phone': 'phone',
+        '#chk-address': 'required'
+      });
+    });
+
+    function selectDate(isoDate, btn) {
+      selectedDateIso = isoDate;
+      document.querySelectorAll('#delivery-date-selector button').forEach(b => {
+        b.className = 'btn btn-outline';
+      });
+      btn.className = 'btn btn-primary';
+      renderSlotsForDate(isoDate);
+    }
+
+    function renderSlotsForDate(isoDate) {
+      const container = document.getElementById('delivery-slots-container');
+      const slots = CheckoutEngine.getSlotAvailability(isoDate);
+
+      // Default select first available slot
+      const firstAvailable = slots.find(s => s.isAvailable);
+      if (firstAvailable && (!selectedSlotId || !slots.some(s => s.id === selectedSlotId && s.isAvailable))) {
+        selectedSlotId = firstAvailable.id;
+        selectedSlotText = `${firstAvailable.label} (${firstAvailable.period})`;
+      }
+
+      container.innerHTML = slots.map(slot => `
+        <label class="slot-card-label ${slot.id === selectedSlotId ? 'selected' : ''} ${!slot.isAvailable ? 'disabled' : ''}">
+          <input type="radio" name="delivery_slot" value="${slot.id}" ${slot.id === selectedSlotId ? 'checked' : ''} ${!slot.isAvailable ? 'disabled' : ''} onchange="onSlotChange(${slot.id}, '${slot.label} (${slot.period})')" style="display:none;">
+          <div style="font-weight:700; font-size:0.9rem; color:var(--text-dark);">${slot.label}</div>
+          <small style="color:var(--text-muted); font-size:0.78rem;">${slot.period}</small>
+          <div class="slot-capacity-tag" style="color: ${slot.remaining <= 3 ? '#e53935' : 'var(--secondary)'};">
+            ${slot.isAvailable ? `${slot.remaining} slots remaining` : 'Capacity Full'}
+          </div>
+        </label>
+      `).join('');
+    }
+
+    function onSlotChange(id, text) {
+      selectedSlotId = id;
+      selectedSlotText = text;
+      document.querySelectorAll('.slot-card-label').forEach(l => l.classList.remove('selected'));
+      event.target.closest('.slot-card-label').classList.add('selected');
+    }
+
+    function updatePaymentSelectUI() {
+      const method = document.querySelector('input[name="payment_method"]:checked')?.value;
+      const codLabel = document.getElementById('pay-opt-cod');
+      const onlineLabel = document.getElementById('pay-opt-online');
+      
+      if (method === 'Cash on Delivery') {
+        codLabel.style.borderColor = 'var(--primary)';
+        onlineLabel.style.borderColor = 'var(--border-color)';
+      } else {
+        onlineLabel.style.borderColor = 'var(--primary)';
+        codLabel.style.borderColor = 'var(--border-color)';
+      }
+    }
+
+    function renderCartPreview() {
+      const items = typeof getCartItems === 'function' ? getCartItems() : [];
+      const previewContainer = document.getElementById('checkout-items-preview');
+      const countEl = document.getElementById('summary-items-count');
+
+      if (!items || items.length === 0) {
+        alert('Your cart is empty! Redirecting to products...');
+        window.location.href = 'products.html';
+        return;
+      }
+
+      countEl.textContent = items.reduce((sum, i) => sum + i.quantity, 0);
+
+      previewContainer.innerHTML = items.map(item => `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; font-size:0.85rem;">
+          <div style="max-width:180px;">
+            <div style="font-weight:600; color:#333;">${item.name}</div>
+            <small style="color:#777;">Qty: ${item.quantity} &times; ₹${item.price}</small>
+          </div>
+          <div style="font-weight:700; color:#1B5E35;">₹${(item.price * item.quantity).toFixed(2)}</div>
+        </div>
+      `).join('');
+
+      // Totals calculation
+      const subtotal = items.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+      const discount = typeof getAppliedDiscount === 'function' ? getAppliedDiscount(subtotal) : 0;
+      const deliveryFee = subtotal >= 500 ? 0 : 40;
+      const cgst = subtotal * 0.025;
+      const sgst = subtotal * 0.025;
+      const grandTotal = Math.max(0, subtotal - discount + deliveryFee + cgst + sgst);
+
+      document.getElementById('chk-subtotal').textContent = `₹${subtotal.toFixed(2)}`;
+      document.getElementById('chk-discount').textContent = `-₹${discount.toFixed(2)}`;
+      document.getElementById('chk-delivery-fee').textContent = deliveryFee === 0 ? 'FREE' : `₹${deliveryFee.toFixed(2)}`;
+      document.getElementById('chk-taxes').textContent = `₹${(cgst + sgst).toFixed(2)}`;
+      document.getElementById('chk-grand-total').textContent = `₹${grandTotal.toFixed(2)}`;
+
+      window._currentCheckoutData = {
+        subtotal,
+        discount,
+        deliveryFee,
+        cgst,
+        sgst,
+        grandTotal,
+        items
+      };
+    }
+
+    function handleCheckoutSubmit(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('chk-name').value.trim();
+      const phone = document.getElementById('chk-phone').value.trim();
+      const email = document.getElementById('chk-email').value.trim();
+      const address = document.getElementById('chk-address').value.trim();
+      const landmark = document.getElementById('chk-landmark').value.trim();
+      const city = document.getElementById('chk-city').value.trim();
+      const postalCode = document.getElementById('chk-pincode').value.trim();
+      const instructions = document.getElementById('chk-instructions').value.trim();
+      const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value || 'Cash on Delivery';
+
+      if (!FormValidator.patterns.phone.test(phone)) {
+        alert('Please enter a valid 10-digit mobile number.');
+        return;
+      }
+
+      if (!selectedSlotId) {
+        alert('Please select an available delivery slot.');
+        return;
+      }
+
+      const orderPayload = {
+        customerId: window.AuthEngine && AuthEngine.getCurrentUser() ? AuthEngine.getCurrentUser().id : 'usr_cust_001',
+        recipientName: name,
+        phone: phone,
+        customerEmail: email,
+        deliveryAddress: `${address}, Landmark: ${landmark || 'None'}, ${city} - ${postalCode}`,
+        landmark: landmark,
+        city: city,
+        postalCode: postalCode,
+        deliveryDate: selectedDateIso,
+        deliverySlotId: selectedSlotId,
+        deliverySlotText: selectedSlotText,
+        specialInstructions: instructions,
+        paymentMethod: paymentMethod,
+        subtotal: window._currentCheckoutData.subtotal,
+        discount: window._currentCheckoutData.discount,
+        deliveryFee: window._currentCheckoutData.deliveryFee,
+        cgst: window._currentCheckoutData.cgst,
+        sgst: window._currentCheckoutData.sgst,
+        grandTotal: window._currentCheckoutData.grandTotal,
+        items: window._currentCheckoutData.items
+      };
+
+      if (paymentMethod === 'Online Payment (Demo)') {
+        // Open simulation modal
+        CheckoutEngine.promptDemoPaymentModal(
+          { id: 'FC-TEMP', grandTotal: orderPayload.grandTotal },
+          (paymentResult) => {
+            orderPayload.paymentStatus = 'Paid (Online Demo)';
+            finishOrderPlacement(orderPayload);
+          },
+          (failureReason) => {
+            alert('Online payment was cancelled or failed. You may retry or choose Cash on Delivery.');
+          }
+        );
+      } else {
+        // Cash on delivery
+        orderPayload.paymentStatus = 'Pending (COD)';
+        finishOrderPlacement(orderPayload);
+      }
+    }
+
+    function finishOrderPlacement(payload) {
+      if (typeof OrdersEngine !== 'undefined') {
+        const created = OrdersEngine.createOrder(payload);
+        
+        // Clear cart
+        if (typeof clearCart === 'function') clearCart();
+
+        if (typeof showToast === 'function') {
+          showToast('Order Placed Successfully!', `Order #${created.id} confirmed. Tracking live status...`, 'success');
+        }
+
+        setTimeout(() => {
+          window.location.href = `order-tracking.html?orderId=${created.id}`;
+        }, 600);
+      }
+    }
+  </script>
 </body>
 </html>

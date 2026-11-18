@@ -1,0 +1,167 @@
+/* ==========================================================================
+   FreshCart - Worker Portal & Order Fulfillment Stylesheet
+   Styles for Task Checklist, Packing Station, Delivery Task Cards, 
+   OTP Verification, Availability Badges, and Attendance Punch.
+   ========================================================================== */
+
+.worker-app-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: calc(100vh - 120px);
+  background: #f4f6f8;
+}
+
+.worker-sidebar {
+  background: #ffffff;
+  border-right: 1px solid var(--border-color);
+  padding: 24px 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.worker-status-selector {
+  background: var(--bg-cream);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  margin-bottom: 24px;
+  border: 1px solid var(--border-color);
+}
+
+.worker-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.status-available { background: #e8f5e9; color: #2e7d32; }
+.status-busy { background: #fff3e0; color: #ef6c00; }
+.status-on-break { background: #e3f2fd; color: #1565c0; }
+.status-offline { background: #ffebee; color: #c62828; }
+
+.worker-main-content {
+  padding: 30px;
+  overflow-y: auto;
+}
+
+/* ---------- Packing Checklist ---------- */
+.packing-card {
+  background: white;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.packing-card-header {
+  background: #f8fafc;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.packing-items-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.packing-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid #f1f5f9;
+  transition: var(--transition-fast);
+}
+
+.packing-item-row:hover {
+  background: #f8fafc;
+}
+
+.packing-item-row.is-packed {
+  background: #f1f8e9;
+}
+
+.packing-item-row.is-packed .item-name {
+  text-decoration: line-through;
+  color: #78909c;
+}
+
+.packing-item-row.is-issue {
+  background: #ffebee;
+  border-left: 4px solid #c62828;
+}
+
+.packing-checkbox {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+/* ---------- Delivery Tasks & OTP Entry ---------- */
+.delivery-task-card {
+  background: white;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.otp-verification-box {
+  background: #fff8e1;
+  border: 1px dashed #ffb300;
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin-top: 12px;
+}
+
+.otp-digit-input {
+  font-family: monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-align: center;
+  padding: 8px 12px;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  width: 180px;
+  margin-right: 12px;
+}
+
+.otp-digit-input:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+/* ---------- Attendance Card ---------- */
+.attendance-punch-card {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 30px;
+  text-align: center;
+  border: 1px solid var(--border-color);
+  max-width: 480px;
+  margin: 0 auto 30px;
+  box-shadow: var(--shadow-sm);
+}
+
+.digital-clock {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: var(--primary);
+  font-family: monospace;
+  margin: 12px 0 20px;
+}

@@ -3,43 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FreshCart - Fresh Groceries Delivered to Your Door</title>
+  <title>FreshCart - Fresh Groceries, Delivered to Your Door</title>
+  <meta name="description" content="Shop 100% farm-fresh fruits, crisp vegetables, pure dairy, artisanal bakery, and supermarket staples with 2-hour doorstep delivery.">
+  
   <!-- Favicon -->
   <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  
   <!-- Stylesheets -->
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/customer.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
-  <!-- Top Notification Bar -->
+  <!-- 1. Promotional Announcement Bar -->
   <div class="top-bar">
-    <div class="container">
-      <div class="top-bar-left">
-        <span><i class="fas fa-truck-fast"></i> Free Delivery on all grocery orders above ₹500!</span>
-        <span><i class="fas fa-clock"></i> Express 2-Hour Delivery Available</span>
+    <div class="container" style="display:flex; justify-content:space-between; align-items:center; font-size:0.85rem;">
+      <div class="top-bar-left" style="display:flex; gap:18px;">
+        <span><i class="fas fa-truck-fast" style="color:var(--accent);"></i> Free Delivery on all grocery orders above ₹500!</span>
+        <span class="hide-mobile"><i class="fas fa-clock" style="color:var(--accent);"></i> Express 2-Hour Delivery Slots</span>
       </div>
-      <div class="top-bar-right">
+      <div class="top-bar-right" style="display:flex; gap:16px;">
         <span><i class="fas fa-phone-volume"></i> Support: +91 98765 43210</span>
-        <a href="contact.html"><i class="fas fa-location-dot"></i> Bengaluru, India</a>
+        <a href="contact.html" style="color:white; text-decoration:none;"><i class="fas fa-location-dot"></i> Bengaluru, IN</a>
       </div>
     </div>
   </div>
 
-  <!-- Main Navigation Header -->
+  <!-- 2. Main Navigation Header -->
   <header class="main-header">
     <div class="container header-container">
-      <!-- Brand Logo -->
+      <!-- 3. FreshCart Logo -->
       <a href="index.html" class="brand-logo">
         <div class="logo-icon"><i class="fas fa-leaf"></i></div>
         <span>Fresh</span>Cart
       </a>
 
-      <!-- Header Search Bar -->
+      <!-- 4. Product Search Bar -->
       <div class="header-search">
-        <form>
-          <input type="text" placeholder="Search fresh fruits, vegetables, dairy, grains..." aria-label="Search products">
+        <form action="products.html" method="GET">
+          <input type="text" name="search" placeholder="Search fresh fruits, vegetables, dairy, grains..." aria-label="Search products">
           <button type="submit" aria-label="Search"><i class="fas fa-magnifying-glass"></i></button>
         </form>
       </div>
@@ -47,22 +53,28 @@
       <!-- Navigation Links -->
       <nav class="nav-menu">
         <a href="index.html" class="nav-link active">Home</a>
-        <a href="about.html" class="nav-link">About</a>
         <a href="products.html" class="nav-link">Products</a>
         <a href="products.html?category=fruits" class="nav-link">Categories</a>
+        <a href="about.html" class="nav-link">About</a>
         <a href="contact.html" class="nav-link">Contact</a>
       </nav>
 
-      <!-- Header Actions -->
+      <!-- Header Actions: Wishlist, Cart & Profile -->
       <div class="header-actions">
-        <a href="login.html" class="action-btn" title="Account / Sign In">
-          <i class="far fa-user"></i>
+        <!-- 5. Wishlist Icon -->
+        <a href="wishlist.html" class="action-btn" title="My Wishlist">
+          <i class="far fa-heart"></i>
+          <span class="badge-count wishlist-count-badge" style="display:none;">0</span>
         </a>
+
+        <!-- 6. Cart Icon with live count -->
         <a href="cart.html" class="action-btn" title="Shopping Cart">
           <i class="fas fa-basket-shopping"></i>
-          <span class="badge-count cart-count-badge" style="display: none;">0</span>
+          <span class="badge-count cart-count-badge" style="display:none;">0</span>
         </a>
-        <button class="mobile-toggle" aria-label="Open mobile menu">
+
+        <!-- Mobile Drawer Toggle -->
+        <button class="mobile-toggle" aria-label="Open mobile menu" onclick="toggleMobileDrawer()">
           <i class="fas fa-bars"></i>
         </button>
       </div>
@@ -70,487 +82,457 @@
   </header>
 
   <!-- Mobile Slide Drawer -->
-  <div class="drawer-overlay"></div>
-  <aside class="mobile-drawer">
+  <div class="drawer-overlay" onclick="toggleMobileDrawer()"></div>
+  <aside class="mobile-drawer" id="mobileDrawer">
     <div class="drawer-header">
-      <a href="index.html" class="brand-logo" style="font-size: 1.35rem;">
-        <div class="logo-icon" style="width: 32px; height: 32px; font-size: 1rem;"><i class="fas fa-leaf"></i></div>
+      <a href="index.html" class="brand-logo" style="font-size: 1.3rem;">
+        <div class="logo-icon" style="width:32px; height:32px; font-size:1rem;"><i class="fas fa-leaf"></i></div>
         <span>Fresh</span>Cart
       </a>
-      <button class="drawer-close" aria-label="Close menu"><i class="fas fa-times"></i></button>
+      <button class="drawer-close" onclick="toggleMobileDrawer()">&times;</button>
     </div>
-
-    <!-- Drawer Search -->
-    <div class="drawer-search" style="margin-bottom: 20px;">
-      <form class="header-search" style="display: block;">
-        <div style="display: flex; background: var(--bg-cream); border: 1px solid var(--border-color); border-radius: 999px; padding: 4px 8px 4px 14px;">
-          <input type="text" placeholder="Search groceries..." style="width: 100%; background: transparent;">
-          <button type="submit" style="background: var(--primary); color: white; width: 32px; height: 32px; border-radius: 50%;"><i class="fas fa-search"></i></button>
-        </div>
+    <div style="padding: 16px 20px;">
+      <form action="products.html" method="GET" style="margin-bottom: 20px;">
+        <input type="text" name="search" placeholder="Search groceries..." class="form-control" style="width:100%; padding:10px 14px; border:1px solid #ccc; border-radius:30px;">
       </form>
-    </div>
-
-    <!-- Drawer Links -->
-    <nav class="drawer-nav">
-      <a href="index.html" class="active"><i class="fas fa-home" style="margin-right: 10px; color: var(--primary);"></i> Home</a>
-      <a href="about.html"><i class="fas fa-info-circle" style="margin-right: 10px; color: var(--primary);"></i> About Us</a>
-      <a href="products.html"><i class="fas fa-boxes-stacked" style="margin-right: 10px; color: var(--primary);"></i> All Products</a>
-      <a href="cart.html"><i class="fas fa-basket-shopping" style="margin-right: 10px; color: var(--primary);"></i> Shopping Cart (<span class="cart-count-badge">0</span>)</a>
-      <a href="contact.html"><i class="fas fa-envelope" style="margin-right: 10px; color: var(--primary);"></i> Contact Us</a>
-      <a href="login.html"><i class="fas fa-user-circle" style="margin-right: 10px; color: var(--primary);"></i> Sign In / Register</a>
-    </nav>
-
-    <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-light); font-size: 0.85rem; color: var(--text-muted);">
-      <p><i class="fas fa-phone"></i> +91 98765 43210</p>
-      <p style="margin-top: 6px;"><i class="fas fa-truck"></i> Fast 2-Hour Delivery</p>
+      <nav class="drawer-nav" style="display:flex; flex-direction:column; gap:12px; font-size:1rem;">
+        <a href="index.html" class="active"><i class="fas fa-home" style="color:var(--primary); width:24px;"></i> Home</a>
+        <a href="products.html"><i class="fas fa-apple-whole" style="color:var(--primary); width:24px;"></i> All Groceries</a>
+        <a href="wishlist.html"><i class="fas fa-heart" style="color:var(--primary); width:24px;"></i> Wishlist</a>
+        <a href="cart.html"><i class="fas fa-basket-shopping" style="color:var(--primary); width:24px;"></i> Cart (<span class="cart-count-badge">0</span>)</a>
+        <a href="about.html"><i class="fas fa-circle-info" style="color:var(--primary); width:24px;"></i> About Us</a>
+        <a href="contact.html"><i class="fas fa-envelope" style="color:var(--primary); width:24px;"></i> Contact Us</a>
+        <hr style="border:0; border-top:1px solid #eee; margin:10px 0;">
+        <a href="customer-dashboard.html"><i class="fas fa-user-circle" style="color:var(--primary); width:24px;"></i> Customer Portal</a>
+        <a href="worker-dashboard.html"><i class="fas fa-clipboard-check" style="color:var(--primary); width:24px;"></i> Worker Portal</a>
+        <a href="owner-dashboard.html"><i class="fas fa-crown" style="color:var(--primary); width:24px;"></i> Owner Portal</a>
+      </nav>
     </div>
   </aside>
 
-  <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="container">
-      <div class="hero-card">
-        <div class="hero-content">
-          <div class="hero-tag">
-            <i class="fas fa-seedling"></i> 100% Certified Organic &amp; Farm Fresh
-          </div>
-          <h1 class="hero-title">
-            Fresh Groceries,
-            <span>Delivered to Your Door.</span>
-          </h1>
-          <p class="hero-desc">
-            Hand-picked organic fruits, farm-fresh vegetables, dairy, artisanal bakery items, and daily household essentials delivered straight from farmers to your kitchen in just 2 hours.
-          </p>
-          <div class="hero-actions">
-            <a href="products.html" class="btn btn-secondary btn-lg">
-              <i class="fas fa-bag-shopping"></i> Shop Now
-            </a>
-            <a href="#special-offers" class="btn btn-outline btn-lg" style="border-color: #ffffff; color: #ffffff;">
-              <i class="fas fa-tag"></i> Today's Deals
-            </a>
-          </div>
-
-          <div class="hero-features">
-            <div class="hero-feat-item">
-              <i class="fas fa-bolt"></i> 2-Hour Delivery
-            </div>
-            <div class="hero-feat-item">
-              <i class="fas fa-apple-whole"></i> 100% Farm Fresh
-            </div>
-            <div class="hero-feat-item">
-              <i class="fas fa-tags"></i> Best Market Price
-            </div>
-            <div class="hero-feat-item">
-              <i class="fas fa-arrows-rotate"></i> Easy Returns
-            </div>
-          </div>
+  <!-- 7, 8, 9, 10. Attractive Grocery Hero Section -->
+  <section class="hero-section" style="background: linear-gradient(135deg, #1B5E35 0%, #257945 100%); color:white; padding:70px 0 60px; position:relative; overflow:hidden;">
+    <div class="container" style="display:grid; grid-template-columns: 1.2fr 0.8fr; gap:40px; align-items:center;">
+      <div class="hero-content">
+        <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.15); padding:6px 16px; border-radius:999px; font-size:0.85rem; font-weight:600; margin-bottom:16px;">
+          <i class="fas fa-seedling" style="color:var(--accent);"></i> 100% Certified Organic & Fresh Farm Harvest
         </div>
-
-        <div class="hero-visual">
-          <div class="hero-img-wrap">
-            <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80" alt="Fresh Organic Vegetables and Fruits" onerror="this.onerror=null; this.src='images/banner/hero-banner.svg';">
-          </div>
-
-          <!-- Floating Badges -->
-          <div class="floating-badge floating-badge-1">
-            <div class="fb-icon fb-green"><i class="fas fa-leaf"></i></div>
-            <div class="fb-text">
-              <h4>100% Organic</h4>
-              <p>Chemical &amp; Pesticide Free</p>
-            </div>
-          </div>
-
-          <div class="floating-badge floating-badge-2">
-            <div class="fb-icon fb-orange"><i class="fas fa-clock"></i></div>
-            <div class="fb-text">
-              <h4>2-Hour Express</h4>
-              <p>Safe Temperature Delivery</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Featured Product Categories -->
-  <section class="categories-section">
-    <div class="container">
-      <div class="section-title-wrap">
-        <span class="section-badge">Explore Categories</span>
-        <h2 class="section-title">Shop by Category</h2>
-        <p class="section-subtitle">Discover our handpicked categories featuring daily essentials, organic harvests, and premium pantry staples.</p>
-      </div>
-
-      <div class="categories-grid">
-        <a href="products.html?category=fruits" class="category-card">
-          <div class="cat-icon-wrap">
-            <img src="images/categories/fruits.svg" alt="Fresh Fruits">
-          </div>
-          <h4 class="cat-name">Fruits</h4>
-          <span class="cat-count">4 Products</span>
-        </a>
-
-        <a href="products.html?category=vegetables" class="category-card">
-          <div class="cat-icon-wrap">
-            <img src="images/categories/vegetables.svg" alt="Green Vegetables">
-          </div>
-          <h4 class="cat-name">Vegetables</h4>
-          <span class="cat-count">4 Products</span>
-        </a>
-
-        <a href="products.html?category=dairy" class="category-card">
-          <div class="cat-icon-wrap">
-            <img src="images/categories/dairy.svg" alt="Dairy Products">
-          </div>
-          <h4 class="cat-name">Dairy</h4>
-          <span class="cat-count">4 Products</span>
-        </a>
-
-        <a href="products.html?category=bakery" class="category-card">
-          <div class="cat-icon-wrap">
-            <img src="images/categories/bakery.svg" alt="Bakery Items">
-          </div>
-          <h4 class="cat-name">Bakery</h4>
-          <span class="cat-count">4 Products</span>
-        </a>
-
-        <a href="products.html?category=snacks" class="category-card">
-          <div class="cat-icon-wrap">
-            <img src="images/categories/snacks.svg" alt="Snacks &amp; Munchies">
-          </div>
-          <h4 class="cat-name">Snacks</h4>
-          <span class="cat-count">4 Products</span>
-        </a>
-
-        <a href="products.html?category=beverages" class="category-card">
-          <div class="cat-icon-wrap">
-            <img src="images/categories/beverages.svg" alt="Cold Beverages">
-          </div>
-          <h4 class="cat-name">Beverages</h4>
-          <span class="cat-count">4 Products</span>
-        </a>
-
-        <a href="products.html?category=rice" class="category-card">
-          <div class="cat-icon-wrap">
-            <img src="images/categories/grains.svg" alt="Rice &amp; Grains">
-          </div>
-          <h4 class="cat-name">Rice &amp; Grains</h4>
-          <span class="cat-count">4 Products</span>
-        </a>
-
-        <a href="products.html?category=household" class="category-card">
-          <div class="cat-icon-wrap">
-            <img src="images/categories/household.svg" alt="Household Essentials">
-          </div>
-          <h4 class="cat-name">Household</h4>
-          <span class="cat-count">4 Products</span>
-        </a>
-
-        <a href="products.html?category=spices" class="category-card">
-          <div class="cat-icon-wrap">
-            <img src="images/categories/spices.svg" alt="Aromatic Spices">
-          </div>
-          <h4 class="cat-name">Spices</h4>
-          <span class="cat-count">4 Products</span>
-        </a>
-
-        <a href="products.html?category=personal%20care" class="category-card">
-          <div class="cat-icon-wrap">
-            <img src="images/categories/personal.svg" alt="Personal Care">
-          </div>
-          <h4 class="cat-name">Personal Care</h4>
-          <span class="cat-count">3 Products</span>
-        </a>
-
-        <a href="products.html?category=frozen%20foods" class="category-card">
-          <div class="cat-icon-wrap">
-            <img src="images/categories/frozen.svg" alt="Frozen Foods">
-          </div>
-          <h4 class="cat-name">Frozen Foods</h4>
-          <span class="cat-count">3 Products</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Popular Products Section -->
-  <section class="products-section">
-    <div class="container">
-      <div class="section-title-wrap">
-        <span class="section-badge">Customer Favorites</span>
-        <h2 class="section-title">Popular Grocery Products</h2>
-        <p class="section-subtitle">Top-rated items loved and frequently re-ordered by over 20,000+ satisfied households.</p>
-      </div>
-
-      <!-- Filter Tabs -->
-      <div class="tabs-nav">
-        <button class="tab-btn active" data-cat="all">All Products</button>
-        <button class="tab-btn" data-cat="fruits">Fruits</button>
-        <button class="tab-btn" data-cat="vegetables">Vegetables</button>
-        <button class="tab-btn" data-cat="dairy">Dairy Products</button>
-        <button class="tab-btn" data-cat="bakery">Bakery</button>
-      </div>
-
-      <!-- Products Grid -->
-      <div class="products-grid" id="popular-products-grid">
-        <!-- Dynamically rendered via products.js -->
-      </div>
-
-      <div style="text-align: center; margin-top: 40px;">
-        <a href="products.html" class="btn btn-primary btn-lg">
-          View All 32 Products <i class="fas fa-arrow-right"></i>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Today's Special Offers -->
-  <section class="offers-section" id="special-offers">
-    <div class="container">
-      <!-- Deals Countdown Banner -->
-      <div class="deals-banner">
-        <div class="deals-info">
-          <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">
-            ⚡ Flash Deals of the Day
-          </span>
-          <h3 style="margin-top: 8px;">Up to 30% OFF On Selected Produce!</h3>
-          <p>Hurry! These special farm-to-table promotional prices expire at midnight.</p>
-        </div>
-
-        <div class="countdown-box">
-          <div class="countdown-item">
-            <div class="countdown-num" id="deal-hours">08</div>
-            <div class="countdown-lbl">Hours</div>
-          </div>
-          <span style="font-size: 1.5rem; font-weight: 800; color: white;">:</span>
-          <div class="countdown-item">
-            <div class="countdown-num" id="deal-mins">45</div>
-            <div class="countdown-lbl">Mins</div>
-          </div>
-          <span style="font-size: 1.5rem; font-weight: 800; color: white;">:</span>
-          <div class="countdown-item">
-            <div class="countdown-num" id="deal-secs">20</div>
-            <div class="countdown-lbl">Secs</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Deals Grid -->
-      <div class="products-grid" id="deals-products-grid">
-        <!-- Dynamically populated via products.js -->
-      </div>
-    </div>
-  </section>
-
-  <!-- Why Choose Us Section -->
-  <section class="why-us-section">
-    <div class="container">
-      <div class="section-title-wrap">
-        <span class="section-badge">The FreshCart Advantage</span>
-        <h2 class="section-title">Why Choose FreshCart?</h2>
-        <p class="section-subtitle">We are committed to delivering the highest quality groceries with speed, care, and sustainability.</p>
-      </div>
-
-      <div class="features-grid">
-        <div class="feature-box">
-          <div class="feat-icon"><i class="fas fa-tractor"></i></div>
-          <h3 class="feat-title">Direct from Farms</h3>
-          <p class="feat-desc">We partner directly with certified organic farmers across India, cutting middlemen to ensure farm-gate freshness and fair prices.</p>
-        </div>
-
-        <div class="feature-box">
-          <div class="feat-icon"><i class="fas fa-truck-fast"></i></div>
-          <h3 class="feat-title">2-Hour Express Delivery</h3>
-          <p class="feat-desc">Equipped with specialized cold-chain vans, our delivery personnel ensure produce reaches you crisp, chilled, and damage-free.</p>
-        </div>
-
-        <div class="feature-box">
-          <div class="feat-icon"><i class="fas fa-certificate"></i></div>
-          <h3 class="feat-title">100% Quality Checked</h3>
-          <p class="feat-desc">Every piece of fruit, vegetable, and dairy undergoes a 3-stage quality inspection before being sealed in hygienic packaging.</p>
-        </div>
-
-        <div class="feature-box">
-          <div class="feat-icon"><i class="fas fa-hand-holding-heart"></i></div>
-          <h3 class="feat-title">No Questions Asked Returns</h3>
-          <p class="feat-desc">Not completely satisfied with the freshness of an item? Return it right at your doorstep for an instant refund or replacement.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Customer Testimonials -->
-  <section class="testimonials-section">
-    <div class="container">
-      <div class="section-title-wrap">
-        <span class="section-badge">Real Reviews</span>
-        <h2 class="section-title">What Our Customers Say</h2>
-        <p class="section-subtitle">Read feedback from everyday home cooks, working professionals, and health enthusiasts who trust FreshCart.</p>
-      </div>
-
-      <div class="testimonials-grid">
-        <div class="testimonial-card">
-          <div>
-            <div class="test-stars">
-              <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-            </div>
-            <p class="test-text">"FreshCart has completely changed how our family shops for groceries. The Devgad mangoes and A2 Gir cow milk were fresher than anything we get in supermarkets. And the 2-hour delivery was prompt!"</p>
-          </div>
-          <div class="test-author">
-            <div class="test-avatar">AN</div>
-            <div>
-              <h4>Ananya Nair</h4>
-              <p>Indiranagar, Bengaluru</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="testimonial-card">
-          <div>
-            <div class="test-stars">
-              <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-            </div>
-            <p class="test-text">"As a fitness enthusiast, finding truly pesticide-free broccoli and hydroponic spinach was always tough. FreshCart's quality is unmatched, and their unpolished pulses cook beautifully."</p>
-          </div>
-          <div class="test-author">
-            <div class="test-avatar">VK</div>
-            <div>
-              <h4>Vikram Kulkarni</h4>
-              <p>Koramangala, Bengaluru</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="testimonial-card">
-          <div>
-            <div class="test-stars">
-              <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-            </div>
-            <p class="test-text">"The sourdough bread and butter croissants taste like they were baked in a traditional French bakery. Plus the website is so clean, fast, and simple to order from."</p>
-          </div>
-          <div class="test-author">
-            <div class="test-avatar">SM</div>
-            <div>
-              <h4>Sneha Mukherjee</h4>
-              <p>Whitefield, Bengaluru</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Newsletter Subscription Section -->
-  <section class="newsletter-section">
-    <div class="container">
-      <div class="newsletter-card">
-        <div class="newsletter-info">
-          <h3>Get ₹100 Off Your First Order!</h3>
-          <p>Subscribe to our weekly newsletter for exclusive member discounts, fresh seasonal recipes, and notification of flash harvest sales.</p>
-        </div>
-        <div class="newsletter-form-wrap">
-          <form class="newsletter-form">
-            <input type="email" placeholder="Enter your email address" required aria-label="Email Address">
-            <button type="submit">Subscribe Now</button>
-          </form>
-          <div class="newsletter-note">
-            <i class="fas fa-shield-alt"></i> No spam ever. You can unsubscribe with one click anytime.
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Professional Footer -->
-  <footer class="main-footer">
-    <div class="container">
-      <div class="footer-grid">
-        <!-- Col 1: Brand Info -->
-        <div class="footer-col footer-brand">
-          <a href="index.html" class="brand-logo" style="color: #ffffff;">
-            <div class="logo-icon"><i class="fas fa-leaf"></i></div>
-            <span>Fresh</span>Cart
+        <h1 style="font-size:3rem; font-weight:800; line-height:1.15; margin-bottom:18px; letter-spacing:-0.5px;">
+          Fresh Groceries, Delivered to Your Door.
+        </h1>
+        <p style="font-size:1.15rem; color:#e0f2e9; margin-bottom:28px; line-height:1.6; max-width:540px;">
+          Hand-picked seasonal fruits, crisp farm vegetables, pure dairy, and kitchen essentials packaged with hygiene and delivered in 2 hours.
+        </p>
+        <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
+          <a href="products.html" class="btn btn-primary" style="background:var(--accent); color:#1B5E35; font-weight:700; padding:14px 32px; font-size:1rem; border:none; box-shadow:0 6px 20px rgba(0,0,0,0.15);">
+            <i class="fas fa-cart-shopping"></i> Shop Now
           </a>
-          <p>
-            FreshCart is India's premier online grocery platform connecting responsible organic farmers with conscious consumers. Freshness delivered within 2 hours.
-          </p>
-          <div class="footer-social">
-            <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
-            <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-          </div>
+          <a href="about.html" class="btn btn-outline" style="border-color:white; color:white; padding:14px 24px; font-weight:600;">
+            Our Farm Story
+          </a>
         </div>
 
-        <!-- Col 2: Quick Links -->
-        <div class="footer-col">
-          <h4>Quick Links</h4>
-          <div class="footer-links">
-            <a href="index.html">Home</a>
-            <a href="about.html">About Us</a>
-            <a href="products.html">All Products</a>
-            <a href="cart.html">View Cart</a>
-            <a href="contact.html">Contact Support</a>
-            <a href="login.html">My Account</a>
+        <div style="display:flex; gap:28px; margin-top:40px; border-top:1px solid rgba(255,255,255,0.2); padding-top:24px;">
+          <div>
+            <div style="font-size:1.6rem; font-weight:800; color:var(--accent);">42+</div>
+            <div style="font-size:0.8rem; color:#e0f2e9;">Curated Products</div>
           </div>
-        </div>
-
-        <!-- Col 3: Categories -->
-        <div class="footer-col">
-          <h4>Grocery Categories</h4>
-          <div class="footer-links">
-            <a href="products.html?category=fruits">Fresh Fruits</a>
-            <a href="products.html?category=vegetables">Green Vegetables</a>
-            <a href="products.html?category=dairy">Dairy &amp; Eggs</a>
-            <a href="products.html?category=bakery">Artisan Bakery</a>
-            <a href="products.html?category=beverages">Healthy Beverages</a>
-            <a href="products.html?category=household">Household Essentials</a>
+          <div>
+            <div style="font-size:1.6rem; font-weight:800; color:var(--accent);">11</div>
+            <div style="font-size:0.8rem; color:#e0f2e9;">Fresh Categories</div>
           </div>
-        </div>
-
-        <!-- Col 4: Contact & Hours -->
-        <div class="footer-col">
-          <h4>Store Information</h4>
-          <div class="footer-contact-list">
-            <div class="contact-item">
-              <i class="fas fa-location-dot"></i>
-              <span>#42, Green Park Boulevard, HSR Layout Sector 2, Bengaluru, Karnataka - 560102</span>
-            </div>
-            <div class="contact-item">
-              <i class="fas fa-phone"></i>
-              <span>+91 98765 43210 (Toll Free)</span>
-            </div>
-            <div class="contact-item">
-              <i class="fas fa-envelope"></i>
-              <span>orders@freshcart.com</span>
-            </div>
-            <div class="contact-item">
-              <i class="fas fa-clock"></i>
-              <span>Open 7 Days: 6:00 AM – 11:00 PM</span>
-            </div>
+          <div>
+            <div style="font-size:1.6rem; font-weight:800; color:var(--accent);">100%</div>
+            <div style="font-size:0.8rem; color:#e0f2e9;">Quality Guarantee</div>
           </div>
         </div>
       </div>
 
-      <!-- Bottom Bar -->
-      <div class="footer-bottom">
+      <div class="hero-image" style="text-align:center;">
+        <img src="images/banner/hero-banner.svg" alt="FreshCart Organic Groceries Basket" style="max-width:100%; height:auto; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.25)); border-radius:16px;">
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. Featured Categories Section -->
+  <section class="section-categories" style="padding:60px 0; background:var(--bg-cream);">
+    <div class="container">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:30px;">
         <div>
-          &copy; 2026 FreshCart Retail Pvt. Ltd. All rights reserved. Built with pure HTML5, CSS3 &amp; Vanilla JavaScript.
+          <span style="color:var(--primary); font-weight:700; text-transform:uppercase; font-size:0.8rem; letter-spacing:1px;">EXPLORE CATALOGUE</span>
+          <h2 style="font-size:2rem; font-weight:800; color:var(--text-dark); margin:4px 0 0;">Featured Categories</h2>
         </div>
-        <div class="payment-badges" title="Accepted Payment Methods">
-          <i class="fab fa-cc-visa"></i>
-          <i class="fab fa-cc-mastercard"></i>
-          <i class="fab fa-google-pay"></i>
-          <i class="fas fa-qrcode"></i>
-          <i class="fas fa-shield-halved"></i>
+        <a href="products.html" style="color:var(--primary); font-weight:600; text-decoration:none; display:flex; align-items:center; gap:6px;">
+          View All <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="category-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:18px;">
+        <a href="products.html?category=fruits" class="cat-card" style="background:white; border-radius:12px; padding:20px 12px; text-align:center; text-decoration:none; color:var(--text-dark); border:1px solid #e2e8f0; transition:all 0.3s ease;">
+          <img src="images/categories/fruits.svg" alt="Fruits" style="width:52px; height:52px; margin-bottom:10px;">
+          <div style="font-weight:700; font-size:0.9rem;">Fruits</div>
+          <small style="color:var(--text-muted); font-size:0.75rem;">Fresh Harvest</small>
+        </a>
+        <a href="products.html?category=vegetables" class="cat-card" style="background:white; border-radius:12px; padding:20px 12px; text-align:center; text-decoration:none; color:var(--text-dark); border:1px solid #e2e8f0; transition:all 0.3s ease;">
+          <img src="images/categories/vegetables.svg" alt="Vegetables" style="width:52px; height:52px; margin-bottom:10px;">
+          <div style="font-weight:700; font-size:0.9rem;">Vegetables</div>
+          <small style="color:var(--text-muted); font-size:0.75rem;">Farm Greens</small>
+        </a>
+        <a href="products.html?category=dairy" class="cat-card" style="background:white; border-radius:12px; padding:20px 12px; text-align:center; text-decoration:none; color:var(--text-dark); border:1px solid #e2e8f0; transition:all 0.3s ease;">
+          <img src="images/categories/dairy.svg" alt="Dairy" style="width:52px; height:52px; margin-bottom:10px;">
+          <div style="font-weight:700; font-size:0.9rem;">Dairy</div>
+          <small style="color:var(--text-muted); font-size:0.75rem;">Pure Milk & Ghee</small>
+        </a>
+        <a href="products.html?category=bakery" class="cat-card" style="background:white; border-radius:12px; padding:20px 12px; text-align:center; text-decoration:none; color:var(--text-dark); border:1px solid #e2e8f0; transition:all 0.3s ease;">
+          <img src="images/categories/bakery.svg" alt="Bakery" style="width:52px; height:52px; margin-bottom:10px;">
+          <div style="font-weight:700; font-size:0.9rem;">Bakery</div>
+          <small style="color:var(--text-muted); font-size:0.75rem;">Artisanal Breads</small>
+        </a>
+        <a href="products.html?category=snacks" class="cat-card" style="background:white; border-radius:12px; padding:20px 12px; text-align:center; text-decoration:none; color:var(--text-dark); border:1px solid #e2e8f0; transition:all 0.3s ease;">
+          <img src="images/categories/snacks.svg" alt="Snacks" style="width:52px; height:52px; margin-bottom:10px;">
+          <div style="font-weight:700; font-size:0.9rem;">Snacks</div>
+          <small style="color:var(--text-muted); font-size:0.75rem;">Healthy Bites</small>
+        </a>
+        <a href="products.html?category=beverages" class="cat-card" style="background:white; border-radius:12px; padding:20px 12px; text-align:center; text-decoration:none; color:var(--text-dark); border:1px solid #e2e8f0; transition:all 0.3s ease;">
+          <img src="images/categories/beverages.svg" alt="Beverages" style="width:52px; height:52px; margin-bottom:10px;">
+          <div style="font-weight:700; font-size:0.9rem;">Beverages</div>
+          <small style="color:var(--text-muted); font-size:0.75rem;">Juices & Tea</small>
+        </a>
+        <a href="products.html?category=grains" class="cat-card" style="background:white; border-radius:12px; padding:20px 12px; text-align:center; text-decoration:none; color:var(--text-dark); border:1px solid #e2e8f0; transition:all 0.3s ease;">
+          <img src="images/categories/grains.svg" alt="Grains" style="width:52px; height:52px; margin-bottom:10px;">
+          <div style="font-weight:700; font-size:0.9rem;">Grains</div>
+          <small style="color:var(--text-muted); font-size:0.75rem;">Rice & Pulses</small>
+        </a>
+        <a href="products.html?category=spices" class="cat-card" style="background:white; border-radius:12px; padding:20px 12px; text-align:center; text-decoration:none; color:var(--text-dark); border:1px solid #e2e8f0; transition:all 0.3s ease;">
+          <img src="images/categories/spices.svg" alt="Spices" style="width:52px; height:52px; margin-bottom:10px;">
+          <div style="font-weight:700; font-size:0.9rem;">Spices</div>
+          <small style="color:var(--text-muted); font-size:0.75rem;">Whole & Ground</small>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. Trending Products Section -->
+  <section class="section-products" style="padding:60px 0; background:white;">
+    <div class="container">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:30px;">
+        <div>
+          <span style="color:var(--primary); font-weight:700; text-transform:uppercase; font-size:0.8rem; letter-spacing:1px;">CUSTOMER FAVORITES</span>
+          <h2 style="font-size:2rem; font-weight:800; color:var(--text-dark); margin:4px 0 0;">Trending Products</h2>
+        </div>
+        <a href="products.html" style="color:var(--primary); font-weight:600; text-decoration:none;">View All Products &rarr;</a>
+      </div>
+
+      <div id="trending-products-container" class="product-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:24px;">
+        <!-- Injected dynamically by products.js / script.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- 15. Promotional Discount Banners -->
+  <section class="section-promo-banners" style="padding:40px 0; background:var(--bg-cream);">
+    <div class="container" style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+      <div style="background:linear-gradient(135deg, #1B5E35, #2E7D32); border-radius:16px; padding:32px; color:white; display:flex; justify-content:space-between; align-items:center; position:relative; overflow:hidden;">
+        <div>
+          <span style="background:var(--accent); color:#1B5E35; font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:999px;">WEEKEND SPECIAL</span>
+          <h3 style="font-size:1.6rem; font-weight:800; margin:12px 0 6px;">Fresh Organic Apples</h3>
+          <p style="color:#e0f2e9; font-size:0.9rem; margin-bottom:16px;">Flat 18% OFF directly from Shimla Orchards.</p>
+          <a href="product-details.html?id=1" class="btn btn-primary" style="background:white; color:#1B5E35; font-weight:700; padding:8px 20px; font-size:0.85rem; border:none;">Order Now</a>
+        </div>
+        <img src="images/banner/deal-banner.svg" alt="Deal" style="width:140px; height:auto; opacity:0.9;">
+      </div>
+
+      <div style="background:linear-gradient(135deg, #E65100, #F57C00); border-radius:16px; padding:32px; color:white; display:flex; justify-content:space-between; align-items:center; position:relative; overflow:hidden;">
+        <div>
+          <span style="background:white; color:#E65100; font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:999px;">USE CODE: HEALTHY10</span>
+          <h3 style="font-size:1.6rem; font-weight:800; margin:12px 0 6px;">10% OFF on Dairy</h3>
+          <p style="color:#ffe0b2; font-size:0.9rem; margin-bottom:16px;">Pure Gir Cow A2 Milk, Artisan Butter & Paneer.</p>
+          <a href="products.html?category=dairy" class="btn btn-primary" style="background:white; color:#E65100; font-weight:700; padding:8px 20px; font-size:0.85rem; border:none;">Explore Dairy</a>
+        </div>
+        <img src="images/categories/dairy.svg" alt="Dairy Deal" style="width:100px; height:100px; opacity:0.9;">
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 & 14. Best-Selling Products & Today's Special Offers -->
+  <section class="section-bestsellers" style="padding:60px 0; background:white;">
+    <div class="container">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:30px;">
+        <div>
+          <span style="color:var(--primary); font-weight:700; text-transform:uppercase; font-size:0.8rem; letter-spacing:1px;">TODAY'S SPECIAL OFFERS</span>
+          <h2 style="font-size:2rem; font-weight:800; color:var(--text-dark); margin:4px 0 0;">Best-Selling Groceries</h2>
+        </div>
+        <a href="products.html" style="color:var(--primary); font-weight:600; text-decoration:none;">See Catalogue &rarr;</a>
+      </div>
+
+      <div id="bestsellers-products-container" class="product-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:24px;">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- 16. Why Choose FreshCart Section -->
+  <section class="section-why-us" style="padding:60px 0; background:var(--bg-cream);">
+    <div class="container">
+      <div style="text-align:center; max-width:600px; margin:0 auto 40px;">
+        <span style="color:var(--primary); font-weight:700; text-transform:uppercase; font-size:0.8rem; letter-spacing:1px;">OUR PROMISE</span>
+        <h2 style="font-size:2.2rem; font-weight:800; color:var(--text-dark); margin:4px 0 8px;">Why Choose FreshCart?</h2>
+        <p style="color:var(--text-muted); font-size:0.95rem;">We combine farm-direct freshness with cutting-edge supermarket logistics.</p>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:24px;">
+        <div style="background:white; border-radius:12px; padding:28px 20px; text-align:center; border:1px solid #e2e8f0; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+          <div style="width:60px; height:60px; background:var(--primary-light); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--primary); font-size:1.5rem; margin:0 auto 16px;">
+            <i class="fas fa-truck-fast"></i>
+          </div>
+          <h4 style="font-size:1.1rem; font-weight:700; margin-bottom:8px;">2-Hour Express Delivery</h4>
+          <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5;">Pick your preferred delivery slot. We pack and dispatch with lightning precision.</p>
+        </div>
+
+        <div style="background:white; border-radius:12px; padding:28px 20px; text-align:center; border:1px solid #e2e8f0; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+          <div style="width:60px; height:60px; background:var(--primary-light); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--primary); font-size:1.5rem; margin:0 auto 16px;">
+            <i class="fas fa-shield-heart"></i>
+          </div>
+          <h4 style="font-size:1.1rem; font-weight:700; margin-bottom:8px;">100% Organic & Wax-Free</h4>
+          <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5;">Direct from verified organic farmer cooperatives with zero artificial chemicals.</p>
+        </div>
+
+        <div style="background:white; border-radius:12px; padding:28px 20px; text-align:center; border:1px solid #e2e8f0; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+          <div style="width:60px; height:60px; background:var(--primary-light); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--primary); font-size:1.5rem; margin:0 auto 16px;">
+            <i class="fas fa-box-open"></i>
+          </div>
+          <h4 style="font-size:1.1rem; font-weight:700; margin-bottom:8px;">Hygienic Eco-Packaging</h4>
+          <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5;">All products packed in sanitized, 100% recyclable and food-safe paper containers.</p>
+        </div>
+
+        <div style="background:white; border-radius:12px; padding:28px 20px; text-align:center; border:1px solid #e2e8f0; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+          <div style="width:60px; height:60px; background:var(--primary-light); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--primary); font-size:1.5rem; margin:0 auto 16px;">
+            <i class="fas fa-rotate-left"></i>
+          </div>
+          <h4 style="font-size:1.1rem; font-weight:700; margin-bottom:8px;">Doorstep Return Guarantee</h4>
+          <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5;">Not satisfied with freshness? Request an instant return or refund right on delivery.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 17. Customer Testimonials -->
+  <section class="section-testimonials" style="padding:60px 0; background:white;">
+    <div class="container">
+      <div style="text-align:center; max-width:600px; margin:0 auto 40px;">
+        <span style="color:var(--primary); font-weight:700; text-transform:uppercase; font-size:0.8rem; letter-spacing:1px;">HAPPY CUSTOMERS</span>
+        <h2 style="font-size:2.2rem; font-weight:800; color:var(--text-dark); margin:4px 0 8px;">What Shoppers Say</h2>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:24px;">
+        <div style="background:#fcfcfc; border:1px solid #e2e8f0; border-radius:12px; padding:24px;">
+          <div style="color:#FFA000; margin-bottom:12px;">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <p style="font-style:italic; font-size:0.9rem; color:#444; line-height:1.6; margin-bottom:16px;">
+            "The apples and leafy spinach were fresher than what I find at high-end supermarkets in Indiranagar. The delivery arrived in exactly 45 minutes!"
+          </p>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:50%; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-weight:700;">AS</div>
+            <div>
+              <div style="font-weight:700; font-size:0.9rem;">Ananya Sharma</div>
+              <small style="color:var(--text-muted);">HSR Layout, Bengaluru</small>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#fcfcfc; border:1px solid #e2e8f0; border-radius:12px; padding:24px;">
+          <div style="color:#FFA000; margin-bottom:12px;">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <p style="font-style:italic; font-size:0.9rem; color:#444; line-height:1.6; margin-bottom:16px;">
+            "Doorstep delivery OTP verification makes the delivery super safe and reliable. The online ordering and bill invoice are clean and professional."
+          </p>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:50%; background:#2E7D32; color:white; display:flex; align-items:center; justify-content:center; font-weight:700;">RP</div>
+            <div>
+              <div style="font-weight:700; font-size:0.9rem;">Ramesh Patel</div>
+              <small style="color:var(--text-muted);">Koramangala, Bengaluru</small>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#fcfcfc; border:1px solid #e2e8f0; border-radius:12px; padding:24px;">
+          <div style="color:#FFA000; margin-bottom:12px;">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <p style="font-style:italic; font-size:0.9rem; color:#444; line-height:1.6; margin-bottom:16px;">
+            "Gir cow A2 milk and fresh sourdough country bread were delivered warm and perfectly sealed. FreshCart is now my default grocery stop."
+          </p>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:50%; background:#E65100; color:white; display:flex; align-items:center; justify-content:center; font-weight:700;">SM</div>
+            <div>
+              <div style="font-weight:700; font-size:0.9rem;">Sneha Mukherjee</div>
+              <small style="color:var(--text-muted);">Whitefield, Bengaluru</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18. Newsletter Subscription -->
+  <section class="section-newsletter" style="padding:50px 0; background:linear-gradient(135deg, #1B5E35, #144728); color:white;">
+    <div class="container" style="text-align:center; max-width:600px; margin:0 auto;">
+      <i class="far fa-envelope-open" style="font-size:2.4rem; color:var(--accent); margin-bottom:12px;"></i>
+      <h3 style="font-size:1.8rem; font-weight:800; margin-bottom:8px;">Get ₹100 Off Your First Order</h3>
+      <p style="color:#e0f2e9; font-size:0.95rem; margin-bottom:24px;">Subscribe to receive weekly farm-fresh offers, seasonal harvest alerts, and healthy recipes.</p>
+      <form id="newsletter-form" onsubmit="handleNewsletter(event)" style="display:flex; gap:10px; max-width:480px; margin:0 auto;">
+        <input type="email" id="newsletter-email" class="form-control" placeholder="Enter your email address..." required style="flex:1; padding:12px 18px; border-radius:999px; border:none; font-size:0.95rem;">
+        <button type="submit" class="btn btn-primary" style="background:var(--accent); color:#1B5E35; font-weight:700; border:none; border-radius:999px; padding:12px 24px;">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 19. Professional Footer -->
+  <footer class="main-footer">
+    <div class="container footer-container">
+      <div class="footer-col">
+        <a href="index.html" class="brand-logo" style="color:white; margin-bottom:12px; display:inline-flex;">
+          <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+          <span>Fresh</span>Cart
+        </a>
+        <p style="color:#a5d6a7; font-size:0.85rem; line-height:1.6; margin-bottom:16px;">
+          FreshCart is your trusted local grocery management ecosystem connecting certified organic farmers, smart fulfillment staff, and happy households.
+        </p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-x-twitter"></i></a>
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-title">Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="products.html">All Products</a></li>
+          <li><a href="about.html">About FreshCart</a></li>
+          <li><a href="contact.html">Store Location</a></li>
+          <li><a href="wishlist.html">My Wishlist</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-title">System Portals</h4>
+        <ul class="footer-links">
+          <li><a href="customer-dashboard.html"><i class="fas fa-user"></i> Customer Dashboard</a></li>
+          <li><a href="worker-dashboard.html"><i class="fas fa-clipboard-check"></i> Worker Fulfillment Portal</a></li>
+          <li><a href="owner-dashboard.html"><i class="fas fa-crown"></i> Shop Owner Admin</a></li>
+          <li><a href="order-tracking.html"><i class="fas fa-location-crosshairs"></i> Live Order Tracking</a></li>
+          <li><a href="return-requests.html"><i class="fas fa-rotate-left"></i> Returns & Cancellations</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-title">Contact & Support</h4>
+        <p style="color:#a5d6a7; font-size:0.85rem; margin-bottom:8px;"><i class="fas fa-location-dot"></i> Plot 104, 14th Main, Sector 4, HSR Layout, Bengaluru</p>
+        <p style="color:#a5d6a7; font-size:0.85rem; margin-bottom:8px;"><i class="fas fa-phone"></i> +91 98765 43210</p>
+        <p style="color:#a5d6a7; font-size:0.85rem;"><i class="fas fa-envelope"></i> support@freshcart.com</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom-container">
+        <p>&copy; 2026 FreshCart Supermarket Pvt Ltd. All rights reserved. GSTIN: 29AABCF9876Q1Z2.</p>
+        <div class="footer-bottom-links">
+          <a href="javascript:void(0)" onclick="openBackendConfigModal()">Database Setup</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
         </div>
       </div>
     </div>
   </footer>
 
   <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/products.js"></script>
   <script src="js/cart.js"></script>
+  <script src="js/wishlist.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/inventory.js"></script>
   <script src="js/script.js"></script>
+  
+  <script>
+    function toggleMobileDrawer() {
+      const d = document.getElementById('mobileDrawer');
+      const o = document.querySelector('.drawer-overlay');
+      if (d && o) {
+        d.classList.toggle('open');
+        o.classList.toggle('open');
+      }
+    }
+
+    function handleNewsletter(e) {
+      e.preventDefault();
+      const email = document.getElementById('newsletter-email').value;
+      if (email) {
+        alert('Thank you for subscribing! Your ₹100 discount coupon code is WELCOME100.');
+        document.getElementById('newsletter-form').reset();
+      }
+    }
+
+    // Render Trending and Best-Selling product cards on Home page
+    document.addEventListener('DOMContentLoaded', () => {
+      const trendingContainer = document.getElementById('trending-products-container');
+      const bestsellersContainer = document.getElementById('bestsellers-products-container');
+      const products = typeof getProductsFromStorage === 'function' ? getProductsFromStorage() : INITIAL_PRODUCTS;
+
+      if (trendingContainer && products) {
+        const trending = products.slice(0, 4);
+        trendingContainer.innerHTML = trending.map(p => renderProductCardHtml(p)).join('');
+      }
+
+      if (bestsellersContainer && products) {
+        const best = products.slice(4, 8);
+        bestsellersContainer.innerHTML = best.map(p => renderProductCardHtml(p)).join('');
+      }
+
+      if (window.WishlistEngine) {
+        WishlistEngine.updateBadges();
+      }
+    });
+
+    function renderProductCardHtml(p) {
+      const isWish = window.WishlistEngine ? WishlistEngine.isInWishlist(p.id) : false;
+      return `
+        <div class="product-card">
+          <div class="product-badge">${p.badge || 'FRESH'}</div>
+          <button class="wishlist-btn ${isWish ? 'active' : ''}" data-wishlist-id="${p.id}" onclick="WishlistEngine.toggle(getProductById(${p.id}))" title="Save to Wishlist">
+            <i class="${isWish ? 'fas' : 'far'} fa-heart" ${isWish ? 'style="color:#e53935;"' : ''}></i>
+          </button>
+          <a href="product-details.html?id=${p.id}" class="product-image-wrap">
+            <img src="${p.localImage || p.image}" alt="${p.name}" class="product-image" onerror="this.src='images/categories/fruits.svg'">
+          </a>
+          <div class="product-content">
+            <span class="product-category">${p.category}</span>
+            <h3 class="product-title"><a href="product-details.html?id=${p.id}">${p.name}</a></h3>
+            <div class="product-unit">${p.unit}</div>
+            <div class="product-price-row">
+              <span class="price-current">₹${p.price}</span>
+              ${p.originalPrice && p.originalPrice > p.price ? `<span class="price-original">₹${p.originalPrice}</span>` : ''}
+              ${p.discount ? `<span class="price-discount">${p.discount}</span>` : ''}
+            </div>
+            <div class="product-rating">
+              <span class="rating-stars">★★★★☆</span>
+              <span class="rating-score">${p.rating || 4.8}</span>
+              <span class="reviews-count">(${p.reviewsCount || 42})</span>
+            </div>
+            <button class="add-to-cart-btn" onclick="addToCart(${p.id}, 1)" ${p.stock <= 0 ? 'disabled' : ''}>
+              <i class="fas fa-cart-plus"></i> ${p.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
+            </button>
+          </div>
+        </div>
+      `;
+    }
+  </script>
 </body>
 </html>

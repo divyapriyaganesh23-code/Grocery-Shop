@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stock Inventory & Movement Audit - FreshCart Owner Portal</title>
+  
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/owner.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <div class="owner-layout">
+    <aside class="owner-sidebar">
+      <a href="owner-dashboard.html" class="owner-brand">
+        <i class="fas fa-leaf" style="color:var(--accent);"></i>
+        <span>Fresh</span>Cart <span style="font-size:0.75rem; background:#2E7D32; padding:2px 6px; border-radius:4px;">ADMIN</span>
+      </a>
+
+      <ul class="owner-nav-list">
+        <li><a href="owner-dashboard.html" class="owner-nav-link"><i class="fas fa-gauge-high"></i> Dashboard</a></li>
+        <li><a href="manage-orders.html" class="owner-nav-link"><i class="fas fa-clipboard-list"></i> Order Management</a></li>
+        <li><a href="manage-employees.html" class="owner-nav-link"><i class="fas fa-users-gear"></i> Employee Master</a></li>
+        <li><a href="manage-products.html" class="owner-nav-link"><i class="fas fa-apple-whole"></i> Product Catalog</a></li>
+        <li><a href="inventory.html" class="owner-nav-link active"><i class="fas fa-boxes-stacked"></i> Stock Inventory</a></li>
+        <li><a href="suppliers.html" class="owner-nav-link"><i class="fas fa-truck-field"></i> Supplier Directory</a></li>
+        <li><a href="purchases.html" class="owner-nav-link"><i class="fas fa-receipt"></i> Purchase Orders</a></li>
+        <li><a href="attendance.html" class="owner-nav-link"><i class="fas fa-business-time"></i> Attendance Log</a></li>
+        <li><a href="expenses.html" class="owner-nav-link"><i class="fas fa-money-bill-transfer"></i> Operating Expenses</a></li>
+        <li><a href="reports.html" class="owner-nav-link"><i class="fas fa-chart-line"></i> Profit & Sales Reports</a></li>
+        <li><a href="manage-returns.html" class="owner-nav-link"><i class="fas fa-rotate-left"></i> Returns & Approvals</a></li>
+        <li><a href="invoices.html" class="owner-nav-link"><i class="fas fa-file-invoice"></i> Invoices Archive</a></li>
+        <li style="margin-top:20px; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;">
+          <a href="javascript:void(0)" class="owner-nav-link text-danger" onclick="AuthEngine.logout('owner-login.html')"><i class="fas fa-arrow-right-from-bracket"></i> Sign Out</a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="owner-main-stage">
+      <div class="owner-topbar">
+        <div>
+          <h1 style="font-size:1.8rem; font-weight:800; color:#113820; margin:0 0 4px;">Inventory Stock & Movement Audits</h1>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin:0;">Monitor shelf inventory, adjust stock levels, and inspect automated movement trails.</p>
+        </div>
+
+        <button class="btn btn-outline" onclick="window.location.reload()">
+          <i class="fas fa-rotate"></i> Refresh State
+        </button>
+      </div>
+
+      <!-- Current Stock Levels Table -->
+      <div class="admin-table-card">
+        <div class="admin-table-header">
+          <h3 style="font-size:1.15rem; font-weight:700; margin:0; color:#113820;">Physical Inventory Levels</h3>
+          <input type="text" id="inv-search-input" placeholder="Search product..." oninput="filterInventory()" style="padding:6px 12px; border:1px solid #ccc; border-radius:6px; font-size:0.85rem; width:220px;">
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Unit</th>
+                <th>Current Stock</th>
+                <th>Alert Threshold</th>
+                <th>Status</th>
+                <th style="text-align:right;">Manual Adjust</th>
+              </tr>
+            </thead>
+            <tbody id="inventory-tbody">
+              <!-- Populated by script -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Stock Movement Audit Log Table -->
+      <div class="admin-table-card">
+        <div class="admin-table-header">
+          <div>
+            <h3 style="font-size:1.15rem; font-weight:700; margin:0; color:#113820;"><i class="fas fa-clock-rotate-left"></i> Stock Movement Audit Trail</h3>
+            <p style="margin:2px 0 0; font-size:0.8rem; color:#666;">Trace every order deduction, purchase inward, and cancellation restore.</p>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Product</th>
+                <th>Movement Type</th>
+                <th>Qty Change</th>
+                <th>Stock After</th>
+                <th>Reference ID</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody id="audit-trail-tbody">
+              <!-- Populated by script -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/inventory.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    let productsList = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = window.AuthEngine ? AuthEngine.getCurrentUser() : null;
+      if (!user || user.role !== 'owner') {
+        window.location.href = 'owner-login.html';
+        return;
+      }
+
+      productsList = typeof getProductsFromStorage === 'function' ? getProductsFromStorage() : [];
+      renderInventoryTable(productsList);
+      renderAuditTrail();
+    });
+
+    function filterInventory() {
+      const q = document.getElementById('inv-search-input').value.toLowerCase().trim();
+      const filtered = productsList.filter(p => !q || p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
+      renderInventoryTable(filtered);
+    }
+
+    function renderInventoryTable(list) {
+      const tbody = document.getElementById('inventory-tbody');
+      tbody.innerHTML = list.map(p => `
+        <tr>
+          <td style="font-weight:700; color:#252525;">${p.name}</td>
+          <td>${p.category}</td>
+          <td>${p.unit}</td>
+          <td style="font-weight:800; font-size:1.05rem;">${p.stock}</td>
+          <td>${p.lowStockThreshold || 5} units</td>
+          <td>
+            <span class="badge ${p.stock <= (p.lowStockThreshold || 5) ? 'badge-stock-low' : 'badge-stock-good'}">
+              ${p.stock <= (p.lowStockThreshold || 5) ? 'Low Stock' : 'In Stock'}
+            </span>
+          </td>
+          <td style="text-align:right;">
+            <button class="btn btn-outline" style="padding:4px 10px; font-size:0.75rem;" onclick="promptAdjustStock(${p.id}, '${p.name}', ${p.stock})">
+              <i class="fas fa-pen-to-square"></i> Adjust
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderAuditTrail() {
+      const movements = InventoryEngine.getStockMovements();
+      const tbody = document.getElementById('audit-trail-tbody');
+      if (movements.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px; color:#888;">No stock movements recorded yet.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = movements.slice(0, 15).map(m => `
+        <tr>
+          <td style="font-size:0.8rem; color:#777;">${new Date(m.timestamp).toLocaleString()}</td>
+          <td style="font-weight:700;">${m.productName}</td>
+          <td><span class="badge ${m.change >= 0 ? 'badge-success' : 'badge-danger'}">${m.type}</span></td>
+          <td style="font-weight:800; color:${m.change >= 0 ? '#2E7D32' : '#c62828'};">${m.change > 0 ? '+' : ''}${m.change}</td>
+          <td style="font-weight:700;">${m.stockAfter}</td>
+          <td style="color:#666; font-family:monospace;">${m.referenceId || '-'}</td>
+          <td style="font-size:0.82rem; color:#555;">${m.notes || ''}</td>
+        </tr>
+      `).join('');
+    }
+
+    function promptAdjustStock(id, name, current) {
+      const val = prompt(`Set new physical stock quantity for "${name}" (Current: ${current}):`, current);
+      if (val !== null && !isNaN(val) && Number(val) >= 0) {
+        InventoryEngine.manualStockAdjustment(id, Number(val), 'Owner physical inventory audit adjustment');
+        alert('Stock updated successfully.');
+        window.location.reload();
+      }
+    }
+  </script>
+</body>
+</html>

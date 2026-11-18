@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Management & Dispatch - FreshCart Owner Portal</title>
+  
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/owner.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <div class="owner-layout">
+    <aside class="owner-sidebar">
+      <a href="owner-dashboard.html" class="owner-brand">
+        <i class="fas fa-leaf" style="color:var(--accent);"></i>
+        <span>Fresh</span>Cart <span style="font-size:0.75rem; background:#2E7D32; padding:2px 6px; border-radius:4px;">ADMIN</span>
+      </a>
+
+      <ul class="owner-nav-list">
+        <li><a href="owner-dashboard.html" class="owner-nav-link"><i class="fas fa-gauge-high"></i> Dashboard</a></li>
+        <li><a href="manage-orders.html" class="owner-nav-link active"><i class="fas fa-clipboard-list"></i> Order Management</a></li>
+        <li><a href="manage-employees.html" class="owner-nav-link"><i class="fas fa-users-gear"></i> Employee Master</a></li>
+        <li><a href="manage-products.html" class="owner-nav-link"><i class="fas fa-apple-whole"></i> Product Catalog</a></li>
+        <li><a href="inventory.html" class="owner-nav-link"><i class="fas fa-boxes-stacked"></i> Stock Inventory</a></li>
+        <li><a href="suppliers.html" class="owner-nav-link"><i class="fas fa-truck-field"></i> Supplier Directory</a></li>
+        <li><a href="purchases.html" class="owner-nav-link"><i class="fas fa-receipt"></i> Purchase Orders</a></li>
+        <li><a href="attendance.html" class="owner-nav-link"><i class="fas fa-business-time"></i> Attendance Log</a></li>
+        <li><a href="expenses.html" class="owner-nav-link"><i class="fas fa-money-bill-transfer"></i> Operating Expenses</a></li>
+        <li><a href="reports.html" class="owner-nav-link"><i class="fas fa-chart-line"></i> Profit & Sales Reports</a></li>
+        <li><a href="manage-returns.html" class="owner-nav-link"><i class="fas fa-rotate-left"></i> Returns & Approvals</a></li>
+        <li><a href="invoices.html" class="owner-nav-link"><i class="fas fa-file-invoice"></i> Invoices Archive</a></li>
+        <li style="margin-top:20px; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;">
+          <a href="javascript:void(0)" class="owner-nav-link text-danger" onclick="AuthEngine.logout('owner-login.html')"><i class="fas fa-arrow-right-from-bracket"></i> Sign Out</a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="owner-main-stage">
+      <div class="owner-topbar">
+        <div>
+          <h1 style="font-size:1.8rem; font-weight:800; color:#113820; margin:0 0 4px;">Store Order Management & Dispatch</h1>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin:0;">Assign fulfillment specialists, update status lifecycle, and review customer delivery details.</p>
+        </div>
+
+        <div style="display:flex; gap:10px;">
+          <input type="text" id="order-search-input" placeholder="Search by ID, Customer, Phone..." oninput="filterOrders()" style="padding:8px 14px; border:1px solid #ccc; border-radius:6px; font-size:0.85rem; width:260px;">
+          <select id="order-status-filter" onchange="filterOrders()" style="padding:8px 12px; border:1px solid #ccc; border-radius:6px; font-size:0.85rem;">
+            <option value="all">All Statuses</option>
+            <option value="New Order">New Order</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Packing">Packing</option>
+            <option value="Packed">Packed</option>
+            <option value="Ready for Delivery">Out for Delivery</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="admin-table-card">
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer & Address</th>
+                <th>Delivery Schedule</th>
+                <th>Items & Total</th>
+                <th>Payment</th>
+                <th>Fulfillment Staff</th>
+                <th>Status</th>
+                <th style="text-align:right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="all-orders-tbody">
+              <!-- Populated by script -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/owner.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    let allOrders = [];
+    let workers = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = window.AuthEngine ? AuthEngine.getCurrentUser() : null;
+      if (!user || user.role !== 'owner') {
+        window.location.href = 'owner-login.html';
+        return;
+      }
+
+      allOrders = OrdersEngine.getAllOrders();
+      const users = AuthEngine.getAllUsers();
+      workers = users.filter(u => u.role === 'worker');
+
+      renderOrdersTable(allOrders);
+    });
+
+    function filterOrders() {
+      const query = document.getElementById('order-search-input').value.toLowerCase().trim();
+      const statusFilter = document.getElementById('order-status-filter').value;
+
+      const filtered = allOrders.filter(o => {
+        const matchesQuery = !query || 
+          o.id.toLowerCase().includes(query) || 
+          o.customerName.toLowerCase().includes(query) || 
+          o.phone.includes(query) ||
+          o.deliveryAddress.toLowerCase().includes(query);
+
+        const matchesStatus = (statusFilter === 'all') || (o.status === statusFilter);
+
+        return matchesQuery && matchesStatus;
+      });
+
+      renderOrdersTable(filtered);
+    }
+
+    function renderOrdersTable(list) {
+      const tbody = document.getElementById('all-orders-tbody');
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:30px; color:#888;">No matching orders found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(o => `
+        <tr>
+          <td style="font-weight:700; color:#113820;">#${o.id}</td>
+          <td>
+            <div style="font-weight:700; color:#252525;">${o.customerName}</div>
+            <div style="font-size:0.8rem; color:#666;">Phone: ${o.phone}</div>
+            <div style="font-size:0.78rem; color:#777; max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${o.deliveryAddress}</div>
+          </td>
+          <td>
+            <div style="font-size:0.85rem; font-weight:600;">${o.deliveryDate}</div>
+            <small style="color:#666;">${o.deliverySlotText || 'Express'}</small>
+          </td>
+          <td>
+            <div style="font-weight:700;">₹${Number(o.grandTotal).toFixed(2)}</div>
+            <small style="color:#777;">${o.items.length} item(s)</small>
+          </td>
+          <td>
+            <span class="badge ${o.paymentStatus.includes('Paid') ? 'badge-success' : 'badge-warning'}">${o.paymentStatus}</span>
+            <div style="font-size:0.75rem; color:#777; margin-top:2px;">${o.paymentMethod}</div>
+          </td>
+          <td>
+            <select style="font-size:0.8rem; padding:4px 8px; border-radius:4px; border:1px solid #ccc; max-width:140px;" onchange="assignWorker('${o.id}', this.value)">
+              <option value="">-- Unassigned --</option>
+              ${workers.map(w => `<option value="${w.id}" ${o.assignedWorkerId === w.id ? 'selected' : ''}>${w.name}</option>`).join('')}
+            </select>
+          </td>
+          <td>
+            <select style="font-size:0.8rem; padding:4px 8px; border-radius:4px; border:1px solid #ccc;" onchange="changeStatus('${o.id}', this.value)">
+              <option value="New Order" ${o.status === 'New Order' ? 'selected' : ''}>New Order</option>
+              <option value="Confirmed" ${o.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
+              <option value="Preparing" ${o.status === 'Preparing' ? 'selected' : ''}>Preparing</option>
+              <option value="Packing" ${o.status === 'Packing' ? 'selected' : ''}>Packing</option>
+              <option value="Packed" ${o.status === 'Packed' ? 'selected' : ''}>Packed</option>
+              <option value="Ready for Delivery" ${o.status === 'Ready for Delivery' ? 'selected' : ''}>Out for Delivery</option>
+              <option value="Delivered" ${o.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+              <option value="Cancelled" ${o.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+            </select>
+          </td>
+          <td style="text-align:right;">
+            <a href="invoice.html?orderId=${o.id}" class="btn btn-outline" style="padding:4px 8px; font-size:0.75rem;" title="View Invoice"><i class="fas fa-file-invoice"></i></a>
+            <a href="order-tracking.html?orderId=${o.id}" class="btn btn-outline" style="padding:4px 8px; font-size:0.75rem;" title="View Live Tracking"><i class="fas fa-location-crosshairs"></i></a>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function assignWorker(orderId, workerId) {
+      if (!workerId) return;
+      const res = OwnerEngine.assignOrder(orderId, workerId, 45);
+      if (res.success) {
+        alert(`Order #${orderId} assigned to ${res.order.assignedWorkerName}!`);
+        window.location.reload();
+      }
+    }
+
+    function changeStatus(orderId, status) {
+      const ok = OrdersEngine.updateOrderStatus(orderId, status, `Owner manual transition to ${status}`);
+      if (ok) {
+        alert(`Order #${orderId} status updated to ${status}.`);
+        window.location.reload();
+      }
+    }
+  </script>
+</body>
+</html>

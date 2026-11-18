@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
+  <defs>
+    <linearGradient id="heroGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1B5E35" />
+      <stop offset="100%" stop-color="#2E7D32" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD54F" />
+      <stop offset="100%" stop-color="#FFA000" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="600" rx="30" fill="url(#heroGrad)"/>
+  <!-- Decorative circles -->
+  <circle cx="1050" cy="150" r="180" fill="#A5D66A" opacity="0.1"/>
+  <circle cx="1150" cy="450" r="220" fill="#ffffff" opacity="0.05"/>
+  <circle cx="150" cy="500" r="120" fill="#A5D66A" opacity="0.08"/>
+  
+  <!-- Grocery Basket Artwork -->
+  <g transform="translate(720, 100)">
+    <circle cx="200" cy="200" r="190" fill="#ffffff" opacity="0.1"/>
+    <circle cx="200" cy="200" r="160" fill="#ffffff" opacity="0.15"/>
+    <text x="200" y="210" font-size="140" text-anchor="middle" dominant-baseline="middle">🧺</text>
+    <text x="100" y="120" font-size="60">🥑</text>
+    <text x="280" y="110" font-size="60">🍎</text>
+    <text x="310" y="250" font-size="60">🥦</text>
+    <text x="90" y="280" font-size="55">🍊</text>
+  </g>
+
+  <!-- Left Content -->
+  <rect x="80" y="100" width="180" height="38" rx="19" fill="#A5D66A" opacity="0.25"/>
+  <text x="170" y="124" font-family="'Poppins', sans-serif" font-size="14" font-weight="600" fill="#A5D66A" text-anchor="middle">🌿 100% ORGANIC &amp; FRESH</text>
+  
+  <text x="80" y="210" font-family="'Poppins', sans-serif" font-size="54" font-weight="800" fill="#ffffff">Fresh Groceries,</text>
+  <text x="80" y="275" font-family="'Poppins', sans-serif" font-size="54" font-weight="800" fill="url(#goldGrad)">Delivered to Your Door.</text>
+  
+  <text x="80" y="340" font-family="'Poppins', sans-serif" font-size="18" fill="#E8F5E9" opacity="0.9">Farm-to-table goodness, hand-selected seasonal produce, and everyday</text>
+  <text x="80" y="370" font-family="'Poppins', sans-serif" font-size="18" fill="#E8F5E9" opacity="0.9">household essentials delivered straight to your doorstep in 2 hours.</text>
+  
+  <g transform="translate(80, 420)">
+    <rect width="200" height="54" rx="27" fill="#4CAF50"/>
+    <text x="100" y="34" font-family="'Poppins', sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="middle">Shop Now ➔</text>
+  </g>
+</svg>

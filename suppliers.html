@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supplier Management - FreshCart Owner Portal</title>
+  
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/owner.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <div class="owner-layout">
+    <aside class="owner-sidebar">
+      <a href="owner-dashboard.html" class="owner-brand">
+        <i class="fas fa-leaf" style="color:var(--accent);"></i>
+        <span>Fresh</span>Cart <span style="font-size:0.75rem; background:#2E7D32; padding:2px 6px; border-radius:4px;">ADMIN</span>
+      </a>
+
+      <ul class="owner-nav-list">
+        <li><a href="owner-dashboard.html" class="owner-nav-link"><i class="fas fa-gauge-high"></i> Dashboard</a></li>
+        <li><a href="manage-orders.html" class="owner-nav-link"><i class="fas fa-clipboard-list"></i> Order Management</a></li>
+        <li><a href="manage-employees.html" class="owner-nav-link"><i class="fas fa-users-gear"></i> Employee Master</a></li>
+        <li><a href="manage-products.html" class="owner-nav-link"><i class="fas fa-apple-whole"></i> Product Catalog</a></li>
+        <li><a href="inventory.html" class="owner-nav-link"><i class="fas fa-boxes-stacked"></i> Stock Inventory</a></li>
+        <li><a href="suppliers.html" class="owner-nav-link active"><i class="fas fa-truck-field"></i> Supplier Directory</a></li>
+        <li><a href="purchases.html" class="owner-nav-link"><i class="fas fa-receipt"></i> Purchase Orders</a></li>
+        <li><a href="attendance.html" class="owner-nav-link"><i class="fas fa-business-time"></i> Attendance Log</a></li>
+        <li><a href="expenses.html" class="owner-nav-link"><i class="fas fa-money-bill-transfer"></i> Operating Expenses</a></li>
+        <li><a href="reports.html" class="owner-nav-link"><i class="fas fa-chart-line"></i> Profit & Sales Reports</a></li>
+        <li><a href="manage-returns.html" class="owner-nav-link"><i class="fas fa-rotate-left"></i> Returns & Approvals</a></li>
+        <li><a href="invoices.html" class="owner-nav-link"><i class="fas fa-file-invoice"></i> Invoices Archive</a></li>
+        <li style="margin-top:20px; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;">
+          <a href="javascript:void(0)" class="owner-nav-link text-danger" onclick="AuthEngine.logout('owner-login.html')"><i class="fas fa-arrow-right-from-bracket"></i> Sign Out</a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="owner-main-stage">
+      <div class="owner-topbar">
+        <div>
+          <h1 style="font-size:1.8rem; font-weight:800; color:#113820; margin:0 0 4px;">Supplier & Farmer Cooperatives Directory</h1>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin:0;">Maintain supplier accounts, contact persons, and categories supplied.</p>
+        </div>
+
+        <button class="btn btn-primary" onclick="openAddSupplierModal()" style="background:#113820; border-color:#113820; font-weight:700;">
+          <i class="fas fa-plus"></i> Add New Supplier
+        </button>
+      </div>
+
+      <div class="admin-table-card">
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Supplier Code</th>
+                <th>Supplier Name</th>
+                <th>Contact Person</th>
+                <th>Phone & Email</th>
+                <th>Business Location</th>
+                <th>Categories Supplied</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="suppliers-tbody">
+              <!-- Populated by script -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Supplier Modal -->
+  <div id="add-supplier-modal" class="fresh-modal-backdrop" style="display:none;">
+    <div class="fresh-modal-dialog">
+      <div class="fresh-modal-header" style="background:#113820; color:white;">
+        <h3 style="color:white; margin:0;"><i class="fas fa-plus"></i> Add New Supplier</h3>
+        <button class="modal-close-btn" style="color:white;" onclick="closeAddSupplierModal()">&times;</button>
+      </div>
+      <div class="fresh-modal-body">
+        <form id="supplier-form" onsubmit="handleSaveSupplier(event)">
+          <div class="form-group" style="margin-bottom:12px;">
+            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Company / Cooperative Name *</label>
+            <input type="text" id="sup-name" class="form-control" placeholder="e.g. Malnad Organic Spice Cooperatives" required style="width:100%; padding:8px 12px; border:1px solid #ccc; border-radius:6px;">
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+            <div class="form-group">
+              <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Contact Person *</label>
+              <input type="text" id="sup-contact" class="form-control" placeholder="Key contact person" required style="width:100%; padding:8px 12px; border:1px solid #ccc; border-radius:6px;">
+            </div>
+            <div class="form-group">
+              <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Phone Number *</label>
+              <input type="tel" id="sup-phone" class="form-control" placeholder="10-digit number" required style="width:100%; padding:8px 12px; border:1px solid #ccc; border-radius:6px;">
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+            <div class="form-group">
+              <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Email Address</label>
+              <input type="email" id="sup-email" class="form-control" placeholder="supply@domain.com" style="width:100%; padding:8px 12px; border:1px solid #ccc; border-radius:6px;">
+            </div>
+            <div class="form-group">
+              <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Categories Supplied</label>
+              <input type="text" id="sup-categories" class="form-control" placeholder="e.g. Fruits, Organic Berries" style="width:100%; padding:8px 12px; border:1px solid #ccc; border-radius:6px;">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:16px;">
+            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Business Address</label>
+            <input type="text" id="sup-address" class="form-control" placeholder="Market yard, district, state" style="width:100%; padding:8px 12px; border:1px solid #ccc; border-radius:6px;">
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:10px;">
+            <button type="button" class="btn btn-outline" onclick="closeAddSupplierModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary" style="background:#113820; border-color:#113820;">Save Supplier</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/inventory.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = window.AuthEngine ? AuthEngine.getCurrentUser() : null;
+      if (!user || user.role !== 'owner') {
+        window.location.href = 'owner-login.html';
+        return;
+      }
+      renderSuppliers();
+    });
+
+    function renderSuppliers() {
+      const list = InventoryEngine.getSuppliers();
+      const tbody = document.getElementById('suppliers-tbody');
+      tbody.innerHTML = list.map(s => `
+        <tr>
+          <td style="font-weight:700; color:#113820;">${s.id}</td>
+          <td><div style="font-weight:700; color:#252525;">${s.name}</div></td>
+          <td>${s.contactPerson || '-'}</td>
+          <td>
+            <div>${s.phone}</div>
+            <small style="color:#777;">${s.email || ''}</small>
+          </td>
+          <td style="color:#555; font-size:0.85rem;">${s.address || '-'}</td>
+          <td><span class="badge badge-info">${s.categories || 'Groceries'}</span></td>
+          <td><span class="badge badge-success">Active</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function openAddSupplierModal() {
+      document.getElementById('supplier-form').reset();
+      document.getElementById('add-supplier-modal').style.display = 'flex';
+    }
+
+    function closeAddSupplierModal() {
+      document.getElementById('add-supplier-modal').style.display = 'none';
+    }
+
+    function handleSaveSupplier(e) {
+      e.preventDefault();
+      const payload = {
+        name: document.getElementById('sup-name').value,
+        contactPerson: document.getElementById('sup-contact').value,
+        phone: document.getElementById('sup-phone').value,
+        email: document.getElementById('sup-email').value,
+        categories: document.getElementById('sup-categories').value,
+        address: document.getElementById('sup-address').value
+      };
+
+      InventoryEngine.addSupplier(payload);
+      alert('Supplier saved successfully!');
+      closeAddSupplierModal();
+      renderSuppliers();
+    }
+  </script>
+</body>
+</html>

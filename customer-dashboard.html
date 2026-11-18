@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Dashboard - FreshCart</title>
+  
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/customer.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <!-- Top Notification Bar -->
+  <div class="top-bar">
+    <div class="container" style="display:flex; justify-content:space-between; align-items:center; font-size:0.85rem;">
+      <div><i class="fas fa-leaf"></i> FreshCart Customer Loyalty Portal</div>
+      <div>Customer Care: +91 98765 43210</div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="container header-container">
+      <a href="index.html" class="brand-logo">
+        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+        <span>Fresh</span>Cart
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="products.html" class="nav-link">Products</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="wishlist.html" class="action-btn" title="Wishlist">
+          <i class="far fa-heart"></i>
+          <span class="badge-count wishlist-count-badge" style="display:none;">0</span>
+        </a>
+        <a href="cart.html" class="action-btn" title="Cart">
+          <i class="fas fa-basket-shopping"></i>
+          <span class="badge-count cart-count-badge" style="display:none;">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="customer-portal-layout">
+      
+      <!-- Customer Sidebar -->
+      <aside class="customer-sidebar">
+        <div class="customer-user-badge">
+          <div class="customer-avatar-circle" id="user-avatar-initials">AS</div>
+          <h3 style="margin:0 0 4px; font-size:1.1rem; color:var(--text-dark);" id="user-display-name">Ananya Sharma</h3>
+          <span class="badge badge-success" style="font-size:0.75rem; padding:3px 10px;">Customer</span>
+          <p style="margin:6px 0 0; font-size:0.8rem; color:var(--text-muted);" id="user-display-email">customer@freshcart.com</p>
+        </div>
+
+        <nav class="portal-nav-links">
+          <a href="customer-dashboard.html" class="portal-nav-item active"><i class="fas fa-gauge-high"></i> Overview</a>
+          <a href="my-orders.html" class="portal-nav-item"><i class="fas fa-bag-shopping"></i> My Orders</a>
+          <a href="order-tracking.html" class="portal-nav-item"><i class="fas fa-location-crosshairs"></i> Order Tracking</a>
+          <a href="wishlist.html" class="portal-nav-item"><i class="fas fa-heart"></i> Saved Wishlist</a>
+          <a href="return-requests.html" class="portal-nav-item"><i class="fas fa-rotate-left"></i> Returns & Refunds</a>
+          <a href="profile.html" class="portal-nav-item"><i class="fas fa-id-card"></i> Profile & Addresses</a>
+          <hr style="border:0; border-top:1px solid #eee; margin:12px 0;">
+          <a href="javascript:void(0)" class="portal-nav-item text-danger" onclick="AuthEngine.logout()"><i class="fas fa-arrow-right-from-bracket"></i> Sign Out</a>
+        </nav>
+      </aside>
+
+      <!-- Customer Main Stage -->
+      <section class="customer-portal-content">
+        <div style="margin-bottom:24px;">
+          <h1 style="font-size:1.8rem; font-weight:800; color:var(--text-dark); margin:0 0 6px;">Welcome Back, <span id="welcome-name">Ananya</span>!</h1>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin:0;">Track live deliveries, manage addresses, and review past tax invoices.</p>
+        </div>
+
+        <!-- Metric Cards -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:16px; margin-bottom:28px;">
+          <div class="fresh-card" style="background:white; padding:20px; border-radius:12px; border:1px solid #e2e8f0;">
+            <div style="font-size:0.8rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Active Orders</div>
+            <div style="font-size:1.8rem; font-weight:800; color:var(--primary); margin:4px 0;" id="metric-active-orders">0</div>
+            <small style="color:var(--secondary); font-weight:600;"><i class="fas fa-truck-ramp-box"></i> In fulfillment</small>
+          </div>
+
+          <div class="fresh-card" style="background:white; padding:20px; border-radius:12px; border:1px solid #e2e8f0;">
+            <div style="font-size:0.8rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Delivered Orders</div>
+            <div style="font-size:1.8rem; font-weight:800; color:#2E7D32; margin:4px 0;" id="metric-delivered-orders">0</div>
+            <small style="color:#666;"><i class="fas fa-circle-check"></i> Completed</small>
+          </div>
+
+          <div class="fresh-card" style="background:white; padding:20px; border-radius:12px; border:1px solid #e2e8f0;">
+            <div style="font-size:0.8rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Wishlist Items</div>
+            <div style="font-size:1.8rem; font-weight:800; color:#E53935; margin:4px 0;" id="metric-wishlist-count">0</div>
+            <small style="color:#666;"><i class="fas fa-heart"></i> Saved for later</small>
+          </div>
+
+          <div class="fresh-card" style="background:white; padding:20px; border-radius:12px; border:1px solid #e2e8f0;">
+            <div style="font-size:0.8rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Saved Addresses</div>
+            <div style="font-size:1.8rem; font-weight:800; color:#0288D1; margin:4px 0;" id="metric-addresses-count">1</div>
+            <small style="color:#666;"><i class="fas fa-location-dot"></i> Bengaluru delivery</small>
+          </div>
+        </div>
+
+        <!-- Latest Active Order Highlight Card -->
+        <div id="active-order-banner" style="display:none; background:linear-gradient(135deg, #e8f5e9, #f1f8e9); border:1px solid #c8e6c9; border-radius:12px; padding:20px; margin-bottom:28px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <div>
+              <span class="badge badge-primary" style="font-size:0.75rem;">LIVE ORDER IN PROGRESS</span>
+              <h3 style="font-size:1.2rem; font-weight:700; margin:6px 0 2px;" id="active-order-title">Order #FC-849201</h3>
+              <p style="margin:0; font-size:0.85rem; color:#444;" id="active-order-status-desc">Packing groceries in store.</p>
+            </div>
+            <div style="display:flex; gap:10px;">
+              <a href="#" id="active-order-track-link" class="btn btn-primary" style="padding:10px 18px; font-size:0.85rem;">
+                <i class="fas fa-location-crosshairs"></i> Live Tracking
+              </a>
+              <a href="#" id="active-order-invoice-link" class="btn btn-outline" style="padding:10px 18px; font-size:0.85rem;">
+                <i class="fas fa-file-invoice"></i> View Invoice
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Orders Table -->
+        <div class="fresh-card" style="background:white; border-radius:12px; padding:24px; border:1px solid #e2e8f0;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+            <h3 style="font-size:1.2rem; font-weight:700; margin:0; color:var(--text-dark);">Recent Orders</h3>
+            <a href="my-orders.html" style="color:var(--primary); font-weight:600; font-size:0.85rem; text-decoration:none;">View All Orders &rarr;</a>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table class="admin-table" style="width:100%;">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Date & Slot</th>
+                  <th>Items</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th style="text-align:right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="customer-recent-orders-tbody">
+                <!-- Rendered by script -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="main-footer" style="margin-top:60px;">
+    <div class="container footer-bottom-container">
+      <p>&copy; 2026 FreshCart Supermarket Pvt Ltd. All rights reserved.</p>
+      <a href="index.html" style="color:#a5d6a7;">Back to Store</a>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/wishlist.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Guard: Ensure user is signed in
+      const user = window.AuthEngine ? AuthEngine.getCurrentUser() : null;
+      if (!user) {
+        window.location.href = 'customer-login.html';
+        return;
+      }
+
+      // Populate user info
+      document.getElementById('user-display-name').textContent = user.name;
+      document.getElementById('welcome-name').textContent = user.name.split(' ')[0];
+      document.getElementById('user-display-email').textContent = user.email;
+      
+      const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+      document.getElementById('user-avatar-initials').textContent = initials;
+
+      // Populate counts
+      const allOrders = typeof OrdersEngine !== 'undefined' ? OrdersEngine.getAllOrders() : [];
+      const userOrders = allOrders.filter(o => o.customerId === user.id || user.role === 'owner');
+
+      const active = userOrders.filter(o => ['New Order', 'Confirmed', 'Preparing', 'Packing', 'Packed', 'Ready for Delivery'].includes(o.status));
+      const delivered = userOrders.filter(o => o.status === 'Delivered');
+
+      document.getElementById('metric-active-orders').textContent = active.length;
+      document.getElementById('metric-delivered-orders').textContent = delivered.length;
+      
+      const wishItems = window.WishlistEngine ? WishlistEngine.getItems() : [];
+      document.getElementById('metric-wishlist-count').textContent = wishItems.length;
+
+      const addrCount = (user.addresses && user.addresses.length) ? user.addresses.length : 1;
+      document.getElementById('metric-addresses-count').textContent = addrCount;
+
+      // Active order banner
+      if (active.length > 0) {
+        const topActive = active[0];
+        const banner = document.getElementById('active-order-banner');
+        banner.style.display = 'block';
+        document.getElementById('active-order-title').textContent = `Order #${topActive.id} (${topActive.items.length} items)`;
+        document.getElementById('active-order-status-desc').textContent = `Current Stage: ${topActive.status} | Scheduled: ${topActive.deliverySlotText || 'Today'}`;
+        document.getElementById('active-order-track-link').href = `order-tracking.html?orderId=${topActive.id}`;
+        document.getElementById('active-order-invoice-link').href = `invoice.html?orderId=${topActive.id}`;
+      }
+
+      // Populate Table
+      const tbody = document.getElementById('customer-recent-orders-tbody');
+      if (userOrders.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:30px; color:#888;">No orders placed yet. <a href="products.html" style="color:var(--primary); font-weight:700;">Start Shopping &rarr;</a></td></tr>';
+      } else {
+        tbody.innerHTML = userOrders.slice(0, 5).map(o => `
+          <tr>
+            <td style="font-weight:700; color:var(--primary);">#${o.id}</td>
+            <td>
+              <div>${o.deliveryDate}</div>
+              <small style="color:#777;">${o.deliverySlotText || 'Express'}</small>
+            </td>
+            <td>${o.items.length} item(s)</td>
+            <td style="font-weight:700;">₹${Number(o.grandTotal).toFixed(2)}</td>
+            <td><span class="badge ${getStatusBadge(o.status)}">${o.status}</span></td>
+            <td style="text-align:right;">
+              <a href="order-tracking.html?orderId=${o.id}" class="btn btn-outline" style="padding:4px 10px; font-size:0.75rem;">Track</a>
+              <a href="invoice.html?orderId=${o.id}" class="btn btn-outline" style="padding:4px 10px; font-size:0.75rem;"><i class="fas fa-file-invoice"></i></a>
+            </td>
+          </tr>
+        `).join('');
+      }
+    });
+
+    function getStatusBadge(status) {
+      if (status === 'Delivered') return 'badge-success';
+      if (status === 'Cancelled') return 'badge-danger';
+      return 'badge-info';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Registration - FreshCart</title>
+  
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/customer.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body style="background:var(--bg-cream); min-height:100vh; display:flex; flex-direction:column;">
+
+  <!-- Header -->
+  <header class="main-header" style="background:white; border-bottom:1px solid #e2e8f0;">
+    <div class="container header-container" style="justify-content:space-between;">
+      <a href="index.html" class="brand-logo">
+        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+        <span>Fresh</span>Cart
+      </a>
+      <a href="index.html" style="color:var(--primary); text-decoration:none; font-weight:600; font-size:0.9rem;">
+        <i class="fas fa-store"></i> Back to Store
+      </a>
+    </div>
+  </header>
+
+  <main class="container" style="flex:1; display:flex; align-items:center; justify-content:center; padding:40px 16px;">
+    <div style="background:white; border-radius:16px; border:1px solid #e2e8f0; box-shadow:var(--shadow-md); width:100%; max-width:480px; padding:36px 32px;">
+      
+      <div style="text-align:center; margin-bottom:24px;">
+        <div style="width:54px; height:54px; border-radius:50%; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; font-size:1.5rem; margin:0 auto 12px;">
+          <i class="fas fa-user-plus"></i>
+        </div>
+        <h1 style="font-size:1.6rem; font-weight:800; color:var(--text-dark); margin:0 0 6px;">Create Customer Account</h1>
+        <p style="color:var(--text-muted); font-size:0.88rem; margin:0;">Join FreshCart for fast grocery delivery & exclusive savings.</p>
+      </div>
+
+      <form id="customer-register-form" onsubmit="handleCustomerRegister(event)">
+        <div class="form-group" style="margin-bottom:14px;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Full Name *</label>
+          <input type="text" id="reg-name" class="form-control" placeholder="e.g. Priya Sharma" required style="width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:6px;">
+        </div>
+
+        <div class="form-group" style="margin-bottom:14px;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Email Address *</label>
+          <input type="email" id="reg-email" class="form-control" placeholder="name@domain.com" required style="width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:6px;">
+        </div>
+
+        <div class="form-group" style="margin-bottom:14px;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Mobile Number *</label>
+          <input type="tel" id="reg-phone" class="form-control" placeholder="10-digit mobile number" required style="width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:6px;">
+        </div>
+
+        <div class="form-group" style="margin-bottom:14px;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Default Delivery Address</label>
+          <input type="text" id="reg-address" class="form-control" placeholder="Flat, Street, Area, Bengaluru" style="width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:6px;">
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;" class="form-row">
+          <div class="form-group">
+            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Password *</label>
+            <input type="password" id="reg-password" class="form-control" placeholder="At least 6 chars" required style="width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:6px;">
+          </div>
+          <div class="form-group">
+            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Confirm Password *</label>
+            <input type="password" id="reg-confirm-password" class="form-control" placeholder="Re-type password" required style="width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:6px;">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%; padding:12px; font-weight:700; border-radius:6px; font-size:1rem;">
+          <i class="fas fa-check-circle"></i> Create Customer Account
+        </button>
+      </form>
+
+      <div style="text-align:center; margin-top:20px; font-size:0.88rem; color:var(--text-muted);">
+        Already have an account? <a href="customer-login.html" style="color:var(--primary); font-weight:700; text-decoration:none;">Sign In</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      FormValidator.bindRealTime(document.getElementById('customer-register-form'), {
+        '#reg-name': 'name',
+        '#reg-email': 'email',
+        '#reg-phone': 'phone',
+        '#reg-password': 'password',
+        '#reg-confirm-password': () => {
+          return FormValidator.validatePasswordConfirm(
+            document.getElementById('reg-password'),
+            document.getElementById('reg-confirm-password')
+          );
+        }
+      });
+    });
+
+    async function handleCustomerRegister(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('reg-name');
+      const email = document.getElementById('reg-email');
+      const phone = document.getElementById('reg-phone');
+      const address = document.getElementById('reg-address');
+      const pass = document.getElementById('reg-password');
+      const confirm = document.getElementById('reg-confirm-password');
+
+      const isNameOk = FormValidator.validateName(name);
+      const isEmailOk = FormValidator.validateEmail(email);
+      const isPhoneOk = FormValidator.validatePhone(phone);
+      const isPassOk = FormValidator.validatePassword(pass);
+      const isConfirmOk = FormValidator.validatePasswordConfirm(pass, confirm);
+
+      if (!isNameOk || !isEmailOk || !isPhoneOk || !isPassOk || !isConfirmOk) {
+        alert('Please correct the highlighted fields before submitting.');
+        return;
+      }
+
+      const result = await AuthEngine.registerCustomer(
+        name.value,
+        email.value,
+        phone.value,
+        pass.value,
+        address.value
+      );
+
+      if (result.success) {
+        if (typeof showToast === 'function') {
+          showToast('Account Created!', `Welcome to FreshCart, ${result.user.name}!`, 'success');
+        }
+        setTimeout(() => {
+          window.location.href = 'customer-dashboard.html';
+        }, 500);
+      } else {
+        alert(result.message);
+      }
+    }
+  </script>
+</body>
+</html>

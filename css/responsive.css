@@ -1,0 +1,165 @@
+/* ==========================================================================
+   FreshCart - Global Responsive Design Stylesheet
+   Ensures seamless UX across Desktops, Laptops, Tablets, and Mobile Devices.
+   Eliminates unwanted horizontal scrolling and optimizes touch targets.
+   ========================================================================== */
+
+/* ---------- Tablet Breakpoint (max-width: 992px) ---------- */
+@media (max-width: 992px) {
+  /* Layout Adjustments */
+  .customer-portal-layout,
+  .worker-app-layout,
+  .owner-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .owner-sidebar {
+    height: auto;
+    position: static;
+  }
+
+  .owner-nav-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-height: none;
+    gap: 8px;
+  }
+
+  .owner-nav-link {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+  }
+
+  .owner-main-stage,
+  .worker-main-content {
+    padding: 20px 16px;
+    max-height: none;
+  }
+
+  /* Stepper on Tablet */
+  .stepper-node .node-desc {
+    display: none;
+  }
+
+  .node-icon-circle {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .stepper-connector {
+    top: 20px;
+  }
+}
+
+/* ---------- Mobile Phones Breakpoint (max-width: 768px) ---------- */
+@media (max-width: 768px) {
+  /* Stepper turns into vertical stack on mobile for crystal clear legibility */
+  .tracking-stepper {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .stepper-node {
+    flex-direction: row;
+    text-align: left;
+    width: 100%;
+    gap: 16px;
+  }
+
+  .stepper-connector {
+    display: none;
+  }
+
+  .node-icon-circle {
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+
+  .stepper-node .node-desc {
+    display: block;
+    max-width: none;
+  }
+
+  /* Table Horizontal Scrolling wrapper */
+  .admin-table-card {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .admin-table {
+    min-width: 600px;
+  }
+
+  /* Form Grids */
+  .form-row,
+  .delivery-slot-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* KPI Grid */
+  .kpi-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .kpi-value {
+    font-size: 1.3rem;
+  }
+
+  /* Invoice Print Layout */
+  .fresh-invoice-card {
+    padding: 16px;
+  }
+}
+
+/* ---------- Small Mobile Breakpoint (max-width: 480px) ---------- */
+@media (max-width: 480px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header-actions {
+    gap: 8px;
+  }
+
+  .action-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .digital-clock {
+    font-size: 1.8rem;
+  }
+
+  .otp-digit-input {
+    width: 140px;
+    font-size: 1.2rem;
+  }
+}
+
+/* ---------- Print Stylesheet ---------- */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .no-print,
+  .main-header,
+  .main-footer,
+  .top-bar,
+  .backend-mode-banner,
+  .mobile-drawer,
+  .drawer-overlay {
+    display: none !important;
+  }
+
+  .fresh-invoice-card {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+}

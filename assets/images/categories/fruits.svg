@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <rect width="200" height="200" rx="24" fill="#FFEBEE"/>
+  <circle cx="100" cy="85" r="45" fill="#E53935" opacity="0.15"/>
+  <text x="100" y="102" font-size="52" text-anchor="middle" dominant-baseline="middle">🍎</text>
+  <text x="100" y="160" font-family="'Poppins', sans-serif" font-size="14" font-weight="600" fill="#252525" text-anchor="middle">Fresh Fruits</text>
+</svg>

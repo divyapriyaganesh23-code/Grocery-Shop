@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Returns & Cancellations - FreshCart</title>
+  
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/customer.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="container" style="display:flex; justify-content:space-between; align-items:center; font-size:0.85rem;">
+      <div><i class="fas fa-rotate-left"></i> FreshCart 100% Quality & Freshness Guarantee</div>
+      <div>Support: +91 98765 43210</div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="container header-container">
+      <a href="index.html" class="brand-logo">
+        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+        <span>Fresh</span>Cart
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="products.html" class="nav-link">Products</a>
+        <a href="customer-dashboard.html" class="nav-link">Dashboard</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="cart.html" class="action-btn" title="Cart">
+          <i class="fas fa-basket-shopping"></i>
+          <span class="badge-count cart-count-badge" style="display:none;">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="customer-portal-layout">
+      
+      <!-- Customer Sidebar -->
+      <aside class="customer-sidebar">
+        <div class="customer-user-badge">
+          <div class="customer-avatar-circle" id="user-avatar-initials">AS</div>
+          <h3 style="margin:0 0 4px; font-size:1.1rem; color:var(--text-dark);" id="user-display-name">Ananya Sharma</h3>
+          <span class="badge badge-success" style="font-size:0.75rem; padding:3px 10px;">Customer</span>
+          <p style="margin:6px 0 0; font-size:0.8rem; color:var(--text-muted);" id="user-display-email">customer@freshcart.com</p>
+        </div>
+
+        <nav class="portal-nav-links">
+          <a href="customer-dashboard.html" class="portal-nav-item"><i class="fas fa-gauge-high"></i> Overview</a>
+          <a href="my-orders.html" class="portal-nav-item"><i class="fas fa-bag-shopping"></i> My Orders</a>
+          <a href="order-tracking.html" class="portal-nav-item"><i class="fas fa-location-crosshairs"></i> Order Tracking</a>
+          <a href="wishlist.html" class="portal-nav-item"><i class="fas fa-heart"></i> Saved Wishlist</a>
+          <a href="return-requests.html" class="portal-nav-item active"><i class="fas fa-rotate-left"></i> Returns & Refunds</a>
+          <a href="profile.html" class="portal-nav-item"><i class="fas fa-id-card"></i> Profile & Addresses</a>
+          <hr style="border:0; border-top:1px solid #eee; margin:12px 0;">
+          <a href="javascript:void(0)" class="portal-nav-item text-danger" onclick="AuthEngine.logout()"><i class="fas fa-arrow-right-from-bracket"></i> Sign Out</a>
+        </nav>
+      </aside>
+
+      <!-- Main Stage -->
+      <section class="customer-portal-content">
+        <div style="margin-bottom:24px;">
+          <h1 style="font-size:1.8rem; font-weight:800; color:var(--text-dark); margin:0 0 6px;">Returns & Order Cancellations</h1>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin:0;">Submit and track requests under our fair Freshness & Quality Policy.</p>
+        </div>
+
+        <!-- Submit Request Card -->
+        <div class="fresh-card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; padding:24px; margin-bottom:30px;">
+          <h3 style="font-size:1.2rem; font-weight:700; color:var(--primary); margin:0 0 16px; display:flex; align-items:center; gap:8px;">
+            <i class="fas fa-pen-to-square"></i> Submit a New Request
+          </h3>
+
+          <form id="return-submit-form" onsubmit="handleReturnSubmit(event)">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:14px;" class="form-row">
+              <div class="form-group">
+                <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Select Order *</label>
+                <select id="ret-order-select" class="form-control" required style="width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:6px;" onchange="updateEligibleOptions()">
+                  <!-- Populated by script -->
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Request Type *</label>
+                <select id="ret-type-select" class="form-control" required style="width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:6px;">
+                  <option value="cancellation">Order Cancellation (Before Out for Delivery)</option>
+                  <option value="return">Product Return & Refund (After Delivery)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom:14px;">
+              <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Reason for Request *</label>
+              <select id="ret-reason-select" class="form-control" required style="width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:6px;">
+                <option value="Packaging damaged or unsealed">Packaging damaged or unsealed</option>
+                <option value="Freshness / quality defect in produce">Freshness / quality defect in produce</option>
+                <option value="Incorrect or missing item received">Incorrect or missing item received</option>
+                <option value="Delivery delayed beyond scheduled time">Delivery delayed beyond scheduled time</option>
+                <option value="Ordered by mistake / plans changed">Ordered by mistake / plans changed</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom:16px;">
+              <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Additional Details / Specific Items Affected</label>
+              <textarea id="ret-details" class="form-control" rows="2" placeholder="Describe the issue in detail..." style="width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:6px;"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="padding:12px 24px; font-weight:700;">
+              <i class="fas fa-paper-plane"></i> Submit Request for Owner Review
+            </button>
+          </form>
+        </div>
+
+        <!-- Requests History Table -->
+        <div class="fresh-card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; padding:24px;">
+          <h3 style="font-size:1.2rem; font-weight:700; margin:0 0 16px; color:var(--text-dark);">Your Request History</h3>
+          
+          <div style="overflow-x:auto;">
+            <table class="admin-table" style="width:100%;">
+              <thead>
+                <tr>
+                  <th>Request ID</th>
+                  <th>Order ID</th>
+                  <th>Type</th>
+                  <th>Reason</th>
+                  <th>Status</th>
+                  <th>Submitted At</th>
+                  <th>Owner Notes</th>
+                </tr>
+              </thead>
+              <tbody id="return-history-tbody">
+                <!-- Rendered by script -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="main-footer" style="margin-top:60px;">
+    <div class="container footer-bottom-container">
+      <p>&copy; 2026 FreshCart Supermarket Pvt Ltd. All rights reserved.</p>
+      <a href="index.html" style="color:#a5d6a7;">Back to Store</a>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/inventory.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = window.AuthEngine ? AuthEngine.getCurrentUser() : null;
+      if (!user) {
+        window.location.href = 'customer-login.html';
+        return;
+      }
+
+      document.getElementById('user-display-name').textContent = user.name;
+      document.getElementById('user-display-email').textContent = user.email;
+      const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+      document.getElementById('user-avatar-initials').textContent = initials;
+
+      // Populate Orders Dropdown
+      const allOrders = typeof OrdersEngine !== 'undefined' ? OrdersEngine.getAllOrders() : [];
+      const userOrders = allOrders.filter(o => o.customerId === user.id || user.role === 'owner');
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const prefillOrderId = urlParams.get('orderId');
+      const prefillType = urlParams.get('type');
+
+      const selectEl = document.getElementById('ret-order-select');
+      selectEl.innerHTML = userOrders.map(o => `
+        <option value="${o.id}" ${prefillOrderId === o.id ? 'selected' : ''}>
+          #${o.id} - ${o.status} (₹${Number(o.grandTotal).toFixed(0)})
+        </option>
+      `).join('');
+
+      if (prefillType) {
+        document.getElementById('ret-type-select').value = prefillType;
+      }
+
+      renderHistory();
+    });
+
+    function updateEligibleOptions() {
+      const orderId = document.getElementById('ret-order-select').value;
+      const order = OrdersEngine.getOrderById(orderId);
+      if (!order) return;
+
+      const typeSelect = document.getElementById('ret-type-select');
+      if (order.status === 'Delivered') {
+        typeSelect.value = 'return';
+      } else {
+        typeSelect.value = 'cancellation';
+      }
+    }
+
+    function renderHistory() {
+      const user = AuthEngine.getCurrentUser();
+      const allReqs = typeof OrdersEngine !== 'undefined' ? OrdersEngine.getAllReturnRequests() : [];
+      const userReqs = allReqs.filter(r => r.customerId === user.id || user.role === 'owner');
+
+      const tbody = document.getElementById('return-history-tbody');
+      if (userReqs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:30px; color:#888;">No return or cancellation requests submitted.</td></tr>';
+      } else {
+        tbody.innerHTML = userReqs.map(r => `
+          <tr>
+            <td style="font-weight:700; color:var(--primary);">${r.id}</td>
+            <td><a href="order-tracking.html?orderId=${r.orderId}" style="color:var(--primary); font-weight:600;">#${r.orderId}</a></td>
+            <td><span class="badge ${r.type === 'cancellation' ? 'badge-danger' : 'badge-info'}" style="text-transform:capitalize;">${r.type}</span></td>
+            <td>${r.reason}</td>
+            <td><span class="badge ${getStatusBadge(r.status)}">${r.status}</span></td>
+            <td>${new Date(r.submittedAt).toLocaleDateString()}</td>
+            <td style="font-size:0.8rem; color:#666;">${r.ownerNotes || 'Pending Owner Review'}</td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    function getStatusBadge(status) {
+      if (status === 'Approved' || status === 'Refunded') return 'badge-success';
+      if (status === 'Rejected') return 'badge-danger';
+      return 'badge-warning';
+    }
+
+    function handleReturnSubmit(e) {
+      e.preventDefault();
+      const user = AuthEngine.getCurrentUser();
+      const orderId = document.getElementById('ret-order-select').value;
+      const type = document.getElementById('ret-type-select').value;
+      const reason = document.getElementById('ret-reason-select').value;
+      const details = document.getElementById('ret-details').value;
+
+      const result = OrdersEngine.submitReturnOrCancel(orderId, user.id, type, reason, details);
+      if (result.success) {
+        alert(`Your ${type} request (#${result.request.id}) has been submitted for store owner review.`);
+        document.getElementById('return-submit-form').reset();
+        renderHistory();
+      } else {
+        alert(result.message);
+      }
+    }
+  </script>
+</body>
+</html>

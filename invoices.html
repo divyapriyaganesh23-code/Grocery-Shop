@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tax Invoices Archive - FreshCart</title>
+  
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/owner.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body style="background:#f4f7f6;">
+
+  <div class="owner-layout">
+    <aside class="owner-sidebar">
+      <a href="owner-dashboard.html" class="owner-brand">
+        <i class="fas fa-leaf" style="color:var(--accent);"></i>
+        <span>Fresh</span>Cart <span style="font-size:0.75rem; background:#2E7D32; padding:2px 6px; border-radius:4px;">ADMIN</span>
+      </a>
+
+      <ul class="owner-nav-list">
+        <li><a href="owner-dashboard.html" class="owner-nav-link"><i class="fas fa-gauge-high"></i> Dashboard</a></li>
+        <li><a href="manage-orders.html" class="owner-nav-link"><i class="fas fa-clipboard-list"></i> Order Management</a></li>
+        <li><a href="manage-employees.html" class="owner-nav-link"><i class="fas fa-users-gear"></i> Employee Master</a></li>
+        <li><a href="manage-products.html" class="owner-nav-link"><i class="fas fa-apple-whole"></i> Product Catalog</a></li>
+        <li><a href="inventory.html" class="owner-nav-link"><i class="fas fa-boxes-stacked"></i> Stock Inventory</a></li>
+        <li><a href="suppliers.html" class="owner-nav-link"><i class="fas fa-truck-field"></i> Supplier Directory</a></li>
+        <li><a href="purchases.html" class="owner-nav-link"><i class="fas fa-receipt"></i> Purchase Orders</a></li>
+        <li><a href="attendance.html" class="owner-nav-link"><i class="fas fa-business-time"></i> Attendance Log</a></li>
+        <li><a href="expenses.html" class="owner-nav-link"><i class="fas fa-money-bill-transfer"></i> Operating Expenses</a></li>
+        <li><a href="reports.html" class="owner-nav-link"><i class="fas fa-chart-line"></i> Profit & Sales Reports</a></li>
+        <li><a href="manage-returns.html" class="owner-nav-link"><i class="fas fa-rotate-left"></i> Returns & Approvals</a></li>
+        <li><a href="invoices.html" class="owner-nav-link active"><i class="fas fa-file-invoice"></i> Invoices Archive</a></li>
+        <li style="margin-top:20px; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;">
+          <a href="javascript:void(0)" class="owner-nav-link text-danger" onclick="AuthEngine.logout('owner-login.html')"><i class="fas fa-arrow-right-from-bracket"></i> Sign Out</a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="owner-main-stage">
+      <div class="owner-topbar">
+        <div>
+          <h1 style="font-size:1.8rem; font-weight:800; color:#113820; margin:0 0 4px;">Tax Invoices & Billing Archive</h1>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin:0;">Complete record of GST-compliant tax invoices generated for all confirmed orders.</p>
+        </div>
+
+        <input type="text" id="invoice-search" placeholder="Search invoice or customer..." oninput="filterInvoices()" style="padding:8px 14px; border:1px solid #ccc; border-radius:6px; font-size:0.85rem; width:260px;">
+      </div>
+
+      <div class="admin-table-card">
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Invoice Number</th>
+                <th>Order Ref</th>
+                <th>Date Generated</th>
+                <th>Customer Name</th>
+                <th>Payment Mode</th>
+                <th>Taxable Subtotal</th>
+                <th>CGST (2.5%)</th>
+                <th>SGST (2.5%)</th>
+                <th>Grand Total</th>
+                <th style="text-align:right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="invoices-archive-tbody">
+              <!-- Populated by script -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/billing.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    let ordersList = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = window.AuthEngine ? AuthEngine.getCurrentUser() : null;
+      if (!user) {
+        window.location.href = 'customer-login.html';
+        return;
+      }
+
+      ordersList = OrdersEngine.getAllOrders();
+      renderInvoicesTable(ordersList);
+    });
+
+    function filterInvoices() {
+      const q = document.getElementById('invoice-search').value.toLowerCase().trim();
+      const filtered = ordersList.filter(o => {
+        return !q || 
+          (o.invoiceNumber && o.invoiceNumber.toLowerCase().includes(q)) || 
+          o.id.toLowerCase().includes(q) || 
+          o.customerName.toLowerCase().includes(q);
+      });
+      renderInvoicesTable(filtered);
+    }
+
+    function renderInvoicesTable(list) {
+      const tbody = document.getElementById('invoices-archive-tbody');
+      tbody.innerHTML = list.map(o => {
+        const cgst = Number(o.cgst || (o.subtotal * 0.025)).toFixed(2);
+        const sgst = Number(o.sgst || (o.subtotal * 0.025)).toFixed(2);
+
+        return `
+          <tr>
+            <td style="font-weight:700; color:#113820;">${o.invoiceNumber || 'INV-' + o.id}</td>
+            <td><a href="manage-orders.html" style="color:var(--primary); font-weight:600;">#${o.id}</a></td>
+            <td>${new Date(o.createdAt).toLocaleDateString()}</td>
+            <td>
+              <div style="font-weight:600;">${o.customerName}</div>
+              <small style="color:#777;">${o.phone}</small>
+            </td>
+            <td><span class="badge ${o.paymentStatus.includes('Paid') ? 'badge-success' : 'badge-warning'}">${o.paymentMethod}</span></td>
+            <td>₹${Number(o.subtotal).toFixed(2)}</td>
+            <td style="color:#777;">₹${cgst}</td>
+            <td style="color:#777;">₹${sgst}</td>
+            <td style="font-weight:800; color:#1B5E35; font-size:1.05rem;">₹${Number(o.grandTotal).toFixed(2)}</td>
+            <td style="text-align:right;">
+              <a href="invoice.html?orderId=${o.id}" class="btn btn-primary" style="padding:4px 10px; font-size:0.75rem; background:#113820; border-color:#113820;">
+                <i class="fas fa-print"></i> View / Print
+              </a>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+  </script>
+</body>
+</html>

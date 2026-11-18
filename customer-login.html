@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Sign In - FreshCart</title>
+  
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/customer.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body style="background:var(--bg-cream); min-height:100vh; display:flex; flex-direction:column;">
+
+  <!-- Header -->
+  <header class="main-header" style="background:white; border-bottom:1px solid #e2e8f0;">
+    <div class="container header-container" style="justify-content:space-between;">
+      <a href="index.html" class="brand-logo">
+        <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+        <span>Fresh</span>Cart
+      </a>
+      <a href="index.html" style="color:var(--primary); text-decoration:none; font-weight:600; font-size:0.9rem;">
+        <i class="fas fa-store"></i> Back to Store
+      </a>
+    </div>
+  </header>
+
+  <main class="container" style="flex:1; display:flex; align-items:center; justify-content:center; padding:40px 16px;">
+    <div style="background:white; border-radius:16px; border:1px solid #e2e8f0; box-shadow:var(--shadow-md); width:100%; max-width:440px; padding:36px 32px;">
+      
+      <div style="text-align:center; margin-bottom:24px;">
+        <div style="width:54px; height:54px; border-radius:50%; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; font-size:1.5rem; margin:0 auto 12px;">
+          <i class="fas fa-user-lock"></i>
+        </div>
+        <h1 style="font-size:1.6rem; font-weight:800; color:var(--text-dark); margin:0 0 6px;">Customer Sign In</h1>
+        <p style="color:var(--text-muted); font-size:0.88rem; margin:0;">Access your FreshCart orders, tracking, and wishlist.</p>
+      </div>
+
+      <!-- Quick Demo Fill -->
+      <div style="background:#e8f5e9; border:1px dashed #4CAF50; border-radius:8px; padding:10px 14px; margin-bottom:20px; font-size:0.82rem; color:#1B5E35; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <strong>Demo Customer:</strong><br>
+          customer@freshcart.com / customer123
+        </div>
+        <button type="button" class="btn btn-outline" style="padding:4px 10px; font-size:0.75rem; background:white;" onclick="fillDemoCustomer()">Auto Fill</button>
+      </div>
+
+      <form id="customer-login-form" onsubmit="handleCustomerLogin(event)">
+        <div class="form-group" style="margin-bottom:16px;">
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Email Address</label>
+          <input type="email" id="login-email" class="form-control" placeholder="name@domain.com" required style="width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:6px;">
+        </div>
+
+        <div class="form-group" style="margin-bottom:20px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+            <label style="font-size:0.85rem; font-weight:600;">Password</label>
+            <a href="javascript:void(0)" onclick="alert('Password reset link simulated. Please sign in with demo password: customer123')" style="font-size:0.8rem; color:var(--primary); text-decoration:none;">Forgot?</a>
+          </div>
+          <input type="password" id="login-password" class="form-control" placeholder="••••••••" required style="width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:6px;">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%; padding:12px; font-weight:700; border-radius:6px; font-size:1rem;">
+          <i class="fas fa-right-to-bracket"></i> Sign In to Account
+        </button>
+      </form>
+
+      <div style="text-align:center; margin-top:20px; font-size:0.88rem; color:var(--text-muted);">
+        Don't have a FreshCart account? <a href="customer-register.html" style="color:var(--primary); font-weight:700; text-decoration:none;">Register Now</a>
+      </div>
+
+      <hr style="border:0; border-top:1px solid #eee; margin:24px 0 16px;">
+
+      <div style="font-size:0.78rem; color:#777; text-align:center;">
+        Are you a store worker or shop owner?<br>
+        <div style="display:flex; justify-content:center; gap:16px; margin-top:6px;">
+          <a href="worker-login.html" style="color:var(--primary); font-weight:600; text-decoration:underline;">Worker Portal</a>
+          <a href="owner-login.html" style="color:var(--primary); font-weight:600; text-decoration:underline;">Owner Admin Portal</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    function fillDemoCustomer() {
+      document.getElementById('login-email').value = 'customer@freshcart.com';
+      document.getElementById('login-password').value = 'customer123';
+    }
+
+    async function handleCustomerLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const pass = document.getElementById('login-password').value;
+
+      const result = await AuthEngine.login(email, pass, 'customer');
+      if (result.success) {
+        if (typeof showToast === 'function') {
+          showToast('Welcome Back!', `Signed in as ${result.user.name}`, 'success');
+        }
+        setTimeout(() => {
+          window.location.href = 'customer-dashboard.html';
+        }, 500);
+      } else {
+        alert(result.message);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Attendance Log - FreshCart Owner Portal</title>
+  
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/owner.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <div class="owner-layout">
+    <aside class="owner-sidebar">
+      <a href="owner-dashboard.html" class="owner-brand">
+        <i class="fas fa-leaf" style="color:var(--accent);"></i>
+        <span>Fresh</span>Cart <span style="font-size:0.75rem; background:#2E7D32; padding:2px 6px; border-radius:4px;">ADMIN</span>
+      </a>
+
+      <ul class="owner-nav-list">
+        <li><a href="owner-dashboard.html" class="owner-nav-link"><i class="fas fa-gauge-high"></i> Dashboard</a></li>
+        <li><a href="manage-orders.html" class="owner-nav-link"><i class="fas fa-clipboard-list"></i> Order Management</a></li>
+        <li><a href="manage-employees.html" class="owner-nav-link"><i class="fas fa-users-gear"></i> Employee Master</a></li>
+        <li><a href="manage-products.html" class="owner-nav-link"><i class="fas fa-apple-whole"></i> Product Catalog</a></li>
+        <li><a href="inventory.html" class="owner-nav-link"><i class="fas fa-boxes-stacked"></i> Stock Inventory</a></li>
+        <li><a href="suppliers.html" class="owner-nav-link"><i class="fas fa-truck-field"></i> Supplier Directory</a></li>
+        <li><a href="purchases.html" class="owner-nav-link"><i class="fas fa-receipt"></i> Purchase Orders</a></li>
+        <li><a href="attendance.html" class="owner-nav-link active"><i class="fas fa-business-time"></i> Attendance Log</a></li>
+        <li><a href="expenses.html" class="owner-nav-link"><i class="fas fa-money-bill-transfer"></i> Operating Expenses</a></li>
+        <li><a href="reports.html" class="owner-nav-link"><i class="fas fa-chart-line"></i> Profit & Sales Reports</a></li>
+        <li><a href="manage-returns.html" class="owner-nav-link"><i class="fas fa-rotate-left"></i> Returns & Approvals</a></li>
+        <li><a href="invoices.html" class="owner-nav-link"><i class="fas fa-file-invoice"></i> Invoices Archive</a></li>
+        <li style="margin-top:20px; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;">
+          <a href="javascript:void(0)" class="owner-nav-link text-danger" onclick="AuthEngine.logout('owner-login.html')"><i class="fas fa-arrow-right-from-bracket"></i> Sign Out</a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="owner-main-stage">
+      <div class="owner-topbar">
+        <div>
+          <h1 style="font-size:1.8rem; font-weight:800; color:#113820; margin:0 0 4px;">Employee Attendance & Shift Hours</h1>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin:0;">Monitor daily worker attendance, check-in timestamps, working hours, and generate shift reports.</p>
+        </div>
+
+        <button class="btn btn-primary" onclick="window.print()" style="background:#113820; border-color:#113820; font-size:0.85rem;">
+          <i class="fas fa-print"></i> Export Report
+        </button>
+      </div>
+
+      <!-- Attendance Table -->
+      <div class="admin-table-card">
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Employee Name</th>
+                <th>Emp ID</th>
+                <th>Check In Time</th>
+                <th>Check Out Time</th>
+                <th>Shift Duration</th>
+                <th>Status</th>
+                <th>Shift Notes</th>
+              </tr>
+            </thead>
+            <tbody id="owner-attendance-tbody">
+              <!-- Populated by script -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/worker.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = window.AuthEngine ? AuthEngine.getCurrentUser() : null;
+      if (!user || user.role !== 'owner') {
+        window.location.href = 'owner-login.html';
+        return;
+      }
+      renderAllAttendance();
+    });
+
+    function renderAllAttendance() {
+      const records = WorkerEngine.getAllAttendance();
+      const tbody = document.getElementById('owner-attendance-tbody');
+      tbody.innerHTML = records.map(a => `
+        <tr>
+          <td style="font-weight:700;">${a.workDate}</td>
+          <td>
+            <div style="font-weight:700; color:#252525;">${a.workerName}</div>
+          </td>
+          <td style="color:#666; font-family:monospace;">${a.employeeId || 'EMP-101'}</td>
+          <td style="color:#2E7D32; font-weight:600;">${new Date(a.checkIn).toLocaleTimeString()}</td>
+          <td style="color:#c62828; font-weight:600;">${a.checkOut ? new Date(a.checkOut).toLocaleTimeString() : '<span style="color:#ff9800;">In Progress</span>'}</td>
+          <td style="font-weight:700;">${a.workingHours ? a.workingHours + ' hrs' : '-'}</td>
+          <td><span class="badge badge-success">${a.status}</span></td>
+          <td style="font-size:0.82rem; color:#666;">${a.notes || 'Normal shift'}</td>
+        </tr>
+      `).join('');
+    }
+  </script>
+</body>
+</html>

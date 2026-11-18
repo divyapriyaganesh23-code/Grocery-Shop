@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Returns & Cancellations - FreshCart Owner Portal</title>
+  
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/owner.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <div class="owner-layout">
+    <aside class="owner-sidebar">
+      <a href="owner-dashboard.html" class="owner-brand">
+        <i class="fas fa-leaf" style="color:var(--accent);"></i>
+        <span>Fresh</span>Cart <span style="font-size:0.75rem; background:#2E7D32; padding:2px 6px; border-radius:4px;">ADMIN</span>
+      </a>
+
+      <ul class="owner-nav-list">
+        <li><a href="owner-dashboard.html" class="owner-nav-link"><i class="fas fa-gauge-high"></i> Dashboard</a></li>
+        <li><a href="manage-orders.html" class="owner-nav-link"><i class="fas fa-clipboard-list"></i> Order Management</a></li>
+        <li><a href="manage-employees.html" class="owner-nav-link"><i class="fas fa-users-gear"></i> Employee Master</a></li>
+        <li><a href="manage-products.html" class="owner-nav-link"><i class="fas fa-apple-whole"></i> Product Catalog</a></li>
+        <li><a href="inventory.html" class="owner-nav-link"><i class="fas fa-boxes-stacked"></i> Stock Inventory</a></li>
+        <li><a href="suppliers.html" class="owner-nav-link"><i class="fas fa-truck-field"></i> Supplier Directory</a></li>
+        <li><a href="purchases.html" class="owner-nav-link"><i class="fas fa-receipt"></i> Purchase Orders</a></li>
+        <li><a href="attendance.html" class="owner-nav-link"><i class="fas fa-business-time"></i> Attendance Log</a></li>
+        <li><a href="expenses.html" class="owner-nav-link"><i class="fas fa-money-bill-transfer"></i> Operating Expenses</a></li>
+        <li><a href="reports.html" class="owner-nav-link"><i class="fas fa-chart-line"></i> Profit & Sales Reports</a></li>
+        <li><a href="manage-returns.html" class="owner-nav-link active"><i class="fas fa-rotate-left"></i> Returns & Approvals</a></li>
+        <li><a href="invoices.html" class="owner-nav-link"><i class="fas fa-file-invoice"></i> Invoices Archive</a></li>
+        <li style="margin-top:20px; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;">
+          <a href="javascript:void(0)" class="owner-nav-link text-danger" onclick="AuthEngine.logout('owner-login.html')"><i class="fas fa-arrow-right-from-bracket"></i> Sign Out</a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="owner-main-stage">
+      <div class="owner-topbar">
+        <div>
+          <h1 style="font-size:1.8rem; font-weight:800; color:#113820; margin:0 0 4px;">Return & Cancellation Approvals</h1>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin:0;">Review customer claims, verify defect reasons, issue refunds, and manage inventory restock.</p>
+        </div>
+
+        <button class="btn btn-outline" onclick="window.location.reload()">
+          <i class="fas fa-rotate"></i> Refresh Claims
+        </button>
+      </div>
+
+      <div class="admin-table-card">
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Request ID</th>
+                <th>Order Ref</th>
+                <th>Customer</th>
+                <th>Claim Type</th>
+                <th>Reason & Details</th>
+                <th>Claim Amount</th>
+                <th>Status</th>
+                <th style="text-align:right;">Owner Decision</th>
+              </tr>
+            </thead>
+            <tbody id="owner-returns-tbody">
+              <!-- Populated by script -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/inventory.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = window.AuthEngine ? AuthEngine.getCurrentUser() : null;
+      if (!user || user.role !== 'owner') {
+        window.location.href = 'owner-login.html';
+        return;
+      }
+      renderReturnsTable();
+    });
+
+    function renderReturnsTable() {
+      const list = OrdersEngine.getAllReturnRequests();
+      const tbody = document.getElementById('owner-returns-tbody');
+
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:30px; color:#888;">No pending customer return or cancellation claims.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(r => `
+        <tr>
+          <td style="font-weight:700; color:#113820;">${r.id}</td>
+          <td><a href="manage-orders.html" style="color:var(--primary); font-weight:700;">#${r.orderId}</a></td>
+          <td>
+            <div style="font-weight:700;">${r.customerName}</div>
+            <small style="color:#777;">${r.customerPhone}</small>
+          </td>
+          <td><span class="badge ${r.type === 'cancellation' ? 'badge-danger' : 'badge-info'}" style="text-transform:capitalize;">${r.type}</span></td>
+          <td style="max-width:240px;">
+            <div style="font-weight:600; color:#333;">${r.reason}</div>
+            <small style="color:#666;">${r.details || 'No additional note'}</small>
+          </td>
+          <td style="font-weight:800; color:#1B5E35;">₹${Number(r.refundAmount).toFixed(2)}</td>
+          <td><span class="badge ${getStatusBadge(r.status)}">${r.status}</span></td>
+          <td style="text-align:right;">
+            ${r.status === 'Submitted' || r.status === 'Under Review' ? `
+              <div style="display:flex; justify-content:flex-end; gap:6px;">
+                <button class="btn btn-primary" style="padding:4px 8px; font-size:0.75rem; background:#2E7D32; border-color:#2E7D32;" onclick="decideClaim('${r.id}', 'Approved')">
+                  <i class="fas fa-check"></i> Approve & Restock
+                </button>
+                <button class="btn btn-outline text-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="decideClaim('${r.id}', 'Rejected')">
+                  <i class="fas fa-times"></i> Reject
+                </button>
+              </div>
+            ` : `
+              <span style="font-size:0.8rem; color:#666;">Resolved: <strong>${r.status}</strong></span>
+            `}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function decideClaim(reqId, decision) {
+      const note = prompt(`Enter resolution note for customer regarding this ${decision} decision:`, decision === 'Approved' ? 'Claim verified. Refund processed and inventory adjusted.' : 'Condition does not meet return eligibility criteria.');
+      if (note !== null) {
+        OrdersEngine.resolveReturnRequest(reqId, decision, note);
+        alert(`Claim ${reqId} marked as ${decision}!`);
+        renderReturnsTable();
+      }
+    }
+
+    function getStatusBadge(status) {
+      if (status === 'Approved' || status === 'Refunded') return 'badge-success';
+      if (status === 'Rejected') return 'badge-danger';
+      return 'badge-warning';
+    }
+  </script>
+</body>
+</html>

@@ -1333,21 +1333,20 @@ function renderProductCard(product) {
   `;
 }
 
-// Wishlist toggle helper
+// Wishlist toggle helper connected to persistent WishlistEngine
 function toggleWishlist(btn, productId) {
-  btn.classList.toggle('active');
-  const icon = btn.querySelector('i');
-  if (btn.classList.contains('active')) {
-    icon.classList.remove('far');
-    icon.classList.add('fas');
-    if (typeof showToast === 'function') {
-      showToast('Added to Wishlist', 'Item saved to your favorites.', 'info');
-    }
-  } else {
-    icon.classList.remove('fas');
-    icon.classList.add('far');
-    if (typeof showToast === 'function') {
-      showToast('Removed from Wishlist', 'Item removed from favorites.', 'info');
+  const prod = getProductById(productId);
+  if (prod && window.WishlistEngine) {
+    const isAdded = WishlistEngine.toggle(prod);
+    if (btn) {
+      const icon = btn.querySelector('i');
+      if (isAdded) {
+        btn.classList.add('active');
+        if (icon) { icon.classList.remove('far'); icon.classList.add('fas'); icon.style.color = '#e53935'; }
+      } else {
+        btn.classList.remove('active');
+        if (icon) { icon.classList.remove('fas'); icon.classList.add('far'); icon.style.color = ''; }
+      }
     }
   }
 }

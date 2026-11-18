@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doorstep Delivery & OTP Verification - FreshCart Worker Portal</title>
+  
+  <link rel="icon" href="images/categories/fruits.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/worker.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body style="background:#f4f6f8;">
+
+  <header class="main-header" style="background:white; border-bottom:1px solid #e2e8f0;">
+    <div class="container header-container" style="justify-content:space-between;">
+      <a href="worker-dashboard.html" class="brand-logo">
+        <div class="logo-icon" style="background:linear-gradient(135deg, #0288D1, #03A9F4);"><i class="fas fa-truck-ramp-box"></i></div>
+        <span>Fresh</span>Cart <span style="font-size:0.8rem; background:#e1f5fe; color:#0288D1; padding:2px 8px; border-radius:4px; margin-left:6px;">Delivery Station</span>
+      </a>
+      <a href="worker-dashboard.html" style="color:var(--text-muted); text-decoration:none; font-size:0.85rem;">
+        <i class="fas fa-arrow-left"></i> Dashboard
+      </a>
+    </div>
+  </header>
+
+  <div class="worker-app-layout">
+    <aside class="worker-sidebar">
+      <nav style="display:flex; flex-direction:column; gap:4px;">
+        <a href="worker-dashboard.html" class="portal-nav-item"><i class="fas fa-gauge-high"></i> Dashboard</a>
+        <a href="worker-orders.html" class="portal-nav-item"><i class="fas fa-clipboard-list"></i> My Assigned Orders</a>
+        <a href="packing-tasks.html" class="portal-nav-item"><i class="fas fa-box-open"></i> Packing Station</a>
+        <a href="delivery-tasks.html" class="portal-nav-item active" style="color:#0288D1; background:#e1f5fe; font-weight:600;"><i class="fas fa-truck-ramp-box"></i> Doorstep Deliveries</a>
+        <a href="worker-attendance.html" class="portal-nav-item"><i class="fas fa-business-time"></i> My Attendance</a>
+        <hr style="border:0; border-top:1px solid #eee; margin:16px 0;">
+        <a href="javascript:void(0)" class="portal-nav-item text-danger" onclick="AuthEngine.logout('worker-login.html')"><i class="fas fa-arrow-right-from-bracket"></i> Sign Out</a>
+      </nav>
+    </aside>
+
+    <main class="worker-main-content">
+      <div style="margin-bottom:24px;">
+        <h1 style="font-size:1.8rem; font-weight:800; color:var(--text-dark); margin:0 0 4px;">Doorstep Delivery Tasks</h1>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin:0;">Hand over packaged groceries to customers and verify using the 6-digit delivery OTP.</p>
+      </div>
+
+      <!-- Deliveries Container -->
+      <div id="deliveries-container">
+        <!-- Rendered by script -->
+      </div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/worker.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = window.AuthEngine ? AuthEngine.getCurrentUser() : null;
+      if (!user || (user.role !== 'worker' && user.role !== 'owner')) {
+        window.location.href = 'worker-login.html';
+        return;
+      }
+      renderDeliveryTasks();
+    });
+
+    function renderDeliveryTasks() {
+      const myOrders = WorkerEngine.getMyAssignedOrders();
+      // Delivery tasks are those Packed, Ready for Delivery, or Out for Delivery
+      const deliveryTasks = myOrders.filter(o => ['Packed', 'Ready for Delivery', 'Delivered'].includes(o.status));
+
+      const container = document.getElementById('deliveries-container');
+
+      if (deliveryTasks.length === 0) {
+        container.innerHTML = `
+          <div class="fresh-card" style="background:white; border-radius:12px; border:1px solid #e2e8f0; padding:50px; text-align:center; color:#888;">
+            <i class="fas fa-truck" style="font-size:3rem; color:#ccc; margin-bottom:12px;"></i>
+            <h3>No Active Deliveries</h3>
+            <p>Once orders are packed in the packing station, they will appear here for doorstep dispatch.</p>
+            <a href="packing-tasks.html" class="btn btn-outline" style="margin-top:12px;">Go to Packing Station</a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = deliveryTasks.map(order => {
+        const isDelivered = order.status === 'Delivered';
+        const isOutForDelivery = order.status === 'Ready for Delivery';
+        const isCod = order.paymentMethod.includes('Cash');
+
+        return `
+          <div class="delivery-task-card" id="task-card-${order.id}">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; border-bottom:1px solid #eee; padding-bottom:14px;">
+              <div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <h3 style="margin:0; font-size:1.3rem; color:var(--primary);">Order #${order.id}</h3>
+                  <span class="badge ${isDelivered ? 'badge-success' : 'badge-info'}">${order.status}</span>
+                  ${isCod ? '<span class="badge badge-warning">CASH ON DELIVERY</span>' : '<span class="badge badge-success">PRE-PAID ONLINE</span>'}
+                </div>
+                <div style="font-size:0.85rem; color:#666; margin-top:4px;">
+                  Delivery Slot: <strong>${order.deliverySlotText || 'Express'}</strong> &bull; Scheduled Date: ${order.deliveryDate}
+                </div>
+              </div>
+
+              <div style="text-align:right;">
+                <div style="font-size:1.3rem; font-weight:800; color:#252525;">₹${Number(order.grandTotal).toFixed(2)}</div>
+                <small style="color:${isDelivered ? '#2E7D32' : (isCod ? '#E65100' : '#2E7D32')}; font-weight:700;">
+                  ${order.paymentStatus}
+                </small>
+              </div>
+            </div>
+
+            <!-- Customer Destination Grid -->
+            <div style="display:grid; grid-template-columns:1.2fr 0.8fr; gap:20px;" class="form-row">
+              <div>
+                <h4 style="font-size:0.95rem; margin:0 0 8px; color:#333; display:flex; align-items:center; gap:6px;">
+                  <i class="fas fa-location-dot" style="color:#c62828;"></i> Destination Details
+                </h4>
+                <div style="font-size:1rem; font-weight:700; color:#222;">${order.customerName}</div>
+                <div style="font-size:0.88rem; color:#555; margin:4px 0;">${order.deliveryAddress}</div>
+                <div style="font-size:0.85rem; color:#333; margin-top:6px;">
+                  <i class="fas fa-phone-volume" style="color:var(--primary);"></i> 
+                  <a href="tel:${order.phone}" style="color:var(--primary); font-weight:700; text-decoration:none;">${order.phone}</a>
+                </div>
+                ${order.specialInstructions ? `
+                  <div style="background:#fffde7; border-left:3px solid #fbc02d; padding:6px 10px; border-radius:4px; font-size:0.8rem; margin-top:8px;">
+                    <strong>Instructions:</strong> "${order.specialInstructions}"
+                  </div>
+                ` : ''}
+              </div>
+
+              <div>
+                <h4 style="font-size:0.95rem; margin:0 0 8px; color:#333; display:flex; align-items:center; gap:6px;">
+                  <i class="fas fa-box" style="color:#0288D1;"></i> Package Manifest
+                </h4>
+                <ul style="margin:0; padding-left:16px; font-size:0.82rem; color:#666; max-height:90px; overflow-y:auto;">
+                  ${order.items.map(i => `<li>${i.name} &times; ${i.quantity}</li>`).join('')}
+                </ul>
+              </div>
+            </div>
+
+            <!-- OTP Verification & Dispatch Actions -->
+            ${!isDelivered ? `
+              <div class="otp-verification-box">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                  <div>
+                    <h4 style="margin:0 0 4px; color:#b78103; display:flex; align-items:center; gap:8px;">
+                      <i class="fas fa-shield-halved"></i> Doorstep Customer OTP Verification
+                    </h4>
+                    <p style="margin:0; font-size:0.82rem; color:#666;">
+                      Ask the recipient for their 6-digit delivery code shown on their tracking page.
+                    </p>
+                  </div>
+
+                  ${!isOutForDelivery ? `
+                    <button class="btn btn-outline" onclick="markOutForDelivery('${order.id}')" style="background:white; font-size:0.85rem;">
+                      <i class="fas fa-truck-fast"></i> Start Transit / Out for Delivery
+                    </button>
+                  ` : ''}
+                </div>
+
+                <div style="display:flex; align-items:center; gap:12px; margin-top:16px; flex-wrap:wrap;">
+                  <input type="text" id="otp-input-${order.id}" class="otp-digit-input" placeholder="••••••" maxlength="6">
+                  
+                  ${isCod ? `
+                    <label style="display:flex; align-items:center; gap:6px; font-size:0.85rem; font-weight:700; color:#1B5E35; cursor:pointer;">
+                      <input type="checkbox" id="cod-collect-check-${order.id}" checked style="accent-color:#1B5E35; width:18px; height:18px;">
+                      Cash ₹${Number(order.grandTotal).toFixed(0)} Collected
+                    </label>
+                  ` : ''}
+
+                  <button class="btn btn-primary" onclick="verifyOtpSubmit('${order.id}', ${isCod})" style="background:#2E7D32; border-color:#2E7D32; font-weight:700; padding:10px 20px;">
+                    <i class="fas fa-check-circle"></i> Verify OTP & Mark Delivered
+                  </button>
+                </div>
+              </div>
+            ` : `
+              <div style="background:#e8f5e9; border:1px solid #c8e6c9; border-radius:8px; padding:14px; display:flex; justify-content:space-between; align-items:center;">
+                <div style="color:#2e7d32; font-weight:700; display:flex; align-items:center; gap:8px;">
+                  <i class="fas fa-circle-check" style="font-size:1.3rem;"></i>
+                  Order Delivered & Verified via Doorstep OTP on ${new Date(order.deliveredAt).toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' })}
+                </div>
+                <span class="badge badge-success">Completed</span>
+              </div>
+            `}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function markOutForDelivery(orderId) {
+      const ok = WorkerEngine.startDelivery(orderId);
+      if (ok) renderDeliveryTasks();
+    }
+
+    function verifyOtpSubmit(orderId, isCod) {
+      const input = document.getElementById(`otp-input-${orderId}`);
+      if (!input || !input.value) {
+        alert('Please enter the 6-digit delivery OTP provided by the customer.');
+        return;
+      }
+
+      if (isCod) {
+        const codCheck = document.getElementById(`cod-collect-check-${orderId}`);
+        if (codCheck && !codCheck.checked) {
+          alert('Please collect the cash payment before completing delivery.');
+          return;
+        }
+      }
+
+      const res = WorkerEngine.verifyAndDeliver(orderId, input.value);
+      if (res.success) {
+        alert(res.message);
+        renderDeliveryTasks();
+      } else {
+        alert(res.message);
+      }
+    }
+  </script>
+</body>
+</html>
